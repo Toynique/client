@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../Css/profile.css";
+import "../../Css/Profile.css";
 import Navbar from "../Header/Navbar";
 import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router-dom";
