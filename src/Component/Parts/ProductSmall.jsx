@@ -63,6 +63,33 @@ const ProductSmall = (props) => {
         localStorage.setItem('locationHistory', window.location.pathname)
         navigation('/login')
     }
+
+    const addMyCart = async(product)=>{ 
+      if(product){
+        const products= localStorage.getItem('cartProducts')
+        if(products ){
+          const allProducts = await JSON.parse(products)
+          console.log("my all cart ", allProducts); 
+          const isAlready = await allProducts.find(d=>d._id === product._id) 
+          if(!isAlready){ 
+            allProducts.push({...product, quantity : 1})
+            localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
+          }
+          else{
+            console.log("already axist");
+          }
+        }
+        else{
+          let productArr = [{...product, quantity: 1}]
+          productArr = await JSON.stringify(productArr) 
+          localStorage.setItem('cartProducts',productArr ) 
+        }
+        
+
+        
+        
+      }
+    }
     
     const ratingData = ratingAllData.find(data=>data.productId === productData._id)
   return (
@@ -97,13 +124,17 @@ const ProductSmall = (props) => {
             <Link to={`/productview/${productData.slug}/${productData._id}`} className='pt-2 d-block text-center mb-2 fs-xs-10'>{productData.productName}</Link>
         </div>
         
-        <div className='d-flex align-items-end justify-content-center gap-2'>
+        <div className='d-flex align-items-end justify-content-center gap-2 mb-2'>
             
             {productData.discount > 0 && <p className='text-decoration-line-through mb-0 fw-normal fs-14 fs-xs-10'>Rs. {productData.salePrice}</p>   } 
 
             <p className='mb-0 fs-xs-10 fw-bold'>  Rs.  {productData.discount > 0 ? productData.salePrice - Math.ceil(productData.salePrice * productData.discount/100) : productData.salePrice}</p>
 
             {productData.discount > 0 && <p className='mb-0 fw-normal textPrimarySecond fs-14 fs-xs-10'>({productData.discount} % off)</p>   } 
+        </div>
+        <div className='text-end gap-3 d-flex justify-content-between align-items-center'> 
+          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " onClick={()=>addMyCart(productData)} >Add to Cart</button>
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " >Buy Now</Link>
         </div>
 
         {ratingData &&

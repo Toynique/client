@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import user from "../../assets/img/user.jpg"
+// import user from "../../assets/img/user.jpg" 
 import logo from "/assets/img/logo-dark.png"
 import { useDispatch, useSelector } from 'react-redux'
 import userAvatar from '/assets/icon/userAvatar.webp'

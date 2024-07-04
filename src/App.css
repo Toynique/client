@@ -156,14 +156,17 @@ a:hover{
 .cl-blue{
   color: var(--blue) !important;
 }
+.fs-10{
+  font-size: 10px !important;
+}
 .fs-12{
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .fs-14{
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .fs-20{
-  font-size: 20px ;
+  font-size: 20px !important;
 }
 .text-justify{
   text-align: justify !important;
@@ -777,11 +780,11 @@ input[type="radio"]:checked {
 } 
 
 /* categorywise page css start  */
-.categorywise-banner{
+/* .categorywise-banner{ */
   /* background-repeat: no-repeat; */
   /* background-position: center; */
   /* background-size: cover; */
-}
+/* } */
 .categorywise-banner-text-box{
   display: inline-block; 
   backdrop-filter: blur(4px);
