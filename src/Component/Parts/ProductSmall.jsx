@@ -68,8 +68,7 @@ const ProductSmall = (props) => {
       if(product){
         const products= localStorage.getItem('cartProducts')
         if(products ){
-          const allProducts = await JSON.parse(products)
-          console.log("my all cart ", allProducts); 
+          const allProducts = await JSON.parse(products) 
           const isAlready = await allProducts.find(d=>d._id === product._id) 
           if(!isAlready){ 
             allProducts.push({...product, quantity : 1})

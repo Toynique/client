@@ -30,6 +30,7 @@ const stringToSlug = (str) => {
 const Navbar = () => {
   const cartAlldata = useSelector(store => store.cart.data)
 
+
   const categoryalldata = useSelector(store => store.category.data)
   const subcategoryalldata = useSelector(store => store.subcategory.data)
   const characteralldata = useSelector(store => store.character.data)
@@ -41,6 +42,7 @@ const Navbar = () => {
   const [navDropValue, setNavDropValue] = useState('')
   const [searchData, setSearchData] = useState([])
   const [searchValue, setSearchValue] = useState('')
+  const [cartProducts, setCartProducts] = useState([])
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -107,6 +109,13 @@ const Navbar = () => {
     else { setNavDropValue(value) }
 
   }
+  const localCartFunc = async() => {
+    const localCart = localStorage.getItem('cartProducts')
+    if (localCart) {
+      const localCartArr = await JSON.parse(localCart)
+      setCartProducts(localCartArr)
+    }
+  }
 
   useEffect(() => {
     let checkAuth = localStorage.getItem('usertoken')
@@ -117,6 +126,9 @@ const Navbar = () => {
       setIsLogin(false)
     }
   })
+  useEffect(()=>{
+    localCartFunc()
+  }, [])
 
   return (
     <>
@@ -208,8 +220,13 @@ const Navbar = () => {
                     <img src={cartIcon} alt="image" />
                     {cartAlldata.length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill cl-pink ">{cartAlldata.length} </span>}
                   </Link>}
-
-                {!isLogin && <Link to={'/login'} className="">Login/Register</Link>}
+ 
+                {!isLogin &&
+                  <Link className="position-relative" to='/my-cart'>
+                    <img src={cartIcon} alt="image" />
+                    {cartProducts?.length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill cl-pink ">{cartProducts?.length} </span>}
+                  </Link>}
+                {!isLogin && <Link to={'/login'} className="">Login</Link>}
 
 
               </div>
