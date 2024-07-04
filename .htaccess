@@ -1,6 +1,15 @@
-File name : .htaccess
+# File name : .htaccess
 
-Options -MultiViews
+# Options -MultiViews
+#     RewriteEngine On
+#     RewriteCond %{REQUEST_FILENAME} !-f
+#     RewriteRule ^ index.html [QSA,L]
+
+
+
     RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.html [QSA,L]
+RewriteBase /  # Adjust this if your app is in a subdirectory
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
