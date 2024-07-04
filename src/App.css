@@ -44,9 +44,7 @@ h1, h2, h3, h4, h5, h6, p, ul{
   margin: 0px;
   padding: 0px
 }
-.fs-42{
-  font-size: 42px !important;
-}
+
 
 a{
   text-decoration: none !important;
@@ -156,18 +154,7 @@ a:hover{
 .cl-blue{
   color: var(--blue) !important;
 }
-.fs-10{
-  font-size: 10px !important;
-}
-.fs-12{
-  font-size: 12px !important;
-}
-.fs-14{
-  font-size: 14px !important;
-}
-.fs-20{
-  font-size: 20px !important;
-}
+
 .text-justify{
   text-align: justify !important;
 }
@@ -253,9 +240,7 @@ input[type="radio"]:checked {
 .h-200px{
   height: 200px;
 }
-.fs-32{
-  font-size: 32px;
-}
+
 
 
 
@@ -267,12 +252,24 @@ input[type="radio"]:checked {
 }
 .fs-9{
   font-size: 9px;
-}
+} 
 .fs-10{
-  font-size: 10px;
-}
+  font-size: 10px !important;
+} 
 .fs-12{
-  font-size: 12px;
+  font-size: 12px !important;
+}
+.fs-14{
+  font-size: 14px !important;
+}
+.fs-20{
+  font-size: 20px !important;
+}
+.fs-32{
+  font-size: 32px;
+}
+.fs-42{
+  font-size: 42px !important;
 }
 @media (max-width:991px){
   .no-product-wrap{
@@ -290,6 +287,9 @@ input[type="radio"]:checked {
   .fs-sm-12{
     font-size: 12px !important;
   }
+  .fs-sm-14{
+    font-size: 14px !important;
+  }
 }
 @media (max-width:567px){
   .no-product-wrap{
@@ -306,6 +306,9 @@ input[type="radio"]:checked {
   }
   .fs-xs-12{
     font-size: 12px !important;
+  }
+  .fs-xs-14{
+    font-size: 14px !important;
   }
 }
 
@@ -865,3 +868,14 @@ input[type="radio"]:checked {
 /* #add-card-container{
   position: fixed !important;
 } */
+
+
+/* my cart, cartWithoutAuth , my-cart css start  */
+.myCartImg{
+  width: 120px;
+} 
+@media (max-width : 768px){
+  .myCartImg{
+    width: 40px;
+  }
+}

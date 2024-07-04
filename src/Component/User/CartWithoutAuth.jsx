@@ -21,9 +21,7 @@ import AddAddressModel from "../Parts/AddAddressModel";
 export default function CartWithoutAuth() {
 
   const dispatch = useDispatch()
-  const navigate = useNavigate();
-  //   const auth = localStorage.getItem("usertoken");
-  // const userdata = localStorage.getItem("userdata") 
+  const navigate = useNavigate(); 
 
   const [cartAllData, setCartAllData] = useState([])
   const [mrp, setMrp] = useState(0)
@@ -124,14 +122,14 @@ export default function CartWithoutAuth() {
                                 <div key={productValue._id}>
                                   <div className="d-lg-flex d-block justify-content-between border-bottom mb-2 pb-2" >
                                     <div className="d-flex flex-row align-items-center">
-                                      <div>
+                                      <div className="mb-md-0 mb-2 ">
                                         <Link to={`/productview/${productValue.slug}/${productValue._id}`}>
-                                          <img src={`${productValue.thumbnailImage}`} alt={productValue.altTag} style={{ width: "120px" }} />
+                                          <img src={`${productValue.thumbnailImage}`} alt={productValue.altTag} className="myCartImg" />
                                         </Link>
                                       </div>
                                       <div className="ms-3 me-3">
                                         <MDBTypography tag="h6" className="cl-blue">
-                                          <Link to={`/productview/${productValue.slug}/${productValue._id}`}>
+                                          <Link to={`/productview/${productValue.slug}/${productValue._id}`} className="fs-sm-14 text-capitalize">
                                             {productValue.productName}
                                           </Link>
                                         </MDBTypography>
@@ -210,13 +208,7 @@ export default function CartWithoutAuth() {
                                   - <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {offer}
                                 </p>
                               </div> : null}
-
-                            {/* <div className="d-flex justify-content-between">
-                            <p className="mb-2">GST <sapn className="text-muted">({gst}%)</sapn> </p>
-                            <p className="mb-2">  
-                              <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {Math.floor(totalSalePrice * gst/100)}
-                            </p> 
-                          </div> */}
+ 
 
                             <div className="d-flex justify-content-between">
                               <p className="mb-2">Shiping Charge</p>
