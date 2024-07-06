@@ -44,6 +44,7 @@ import ProductsCategory from './Component/User/ProductsCategory';
 import ProductsCharacter from './Component/User/ProductsCharacter';
 import { ratingdata } from './redux/slice/rating';
 import CartWithoutAuth from './Component/User/CartWithoutAuth';
+import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
 
 function App() {
   const dispatch = useDispatch()
@@ -93,6 +94,7 @@ function App() {
       </Route> 
 
       <Route path="/my-cart" element={<CartWithoutAuth/>} />
+      <Route path="/checkout" element={<CheckoutWithoutAuth/>} />
       <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
       <Route path="/term" element={<Term/>} />
       <Route path="/refund-cancellation" element={<Refund/>} />

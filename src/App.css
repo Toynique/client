@@ -158,6 +158,26 @@ a:hover{
 .text-justify{
   text-align: justify !important;
 }
+
+.btn-outline-primary{
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+.btn-outline-primary:hover{
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+.btn-primary{
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  border-color: var(--primary) !important;
+}
+.btn-primary:hover{
+  border-color: var(--primary) !important;
+  background-color: transparent !important;
+  color: var(--primary) !important;
+}
+
 .btn-outline-blue{
   border-color: var(--blue) !important;
   color: var(--blue) !important;
@@ -175,6 +195,7 @@ a:hover{
   background-color: transparent !important;
   color: var(--blue) !important;
 }
+
 .no-outline:focus, .no-outline:focus-visible {
   outline: none;
 } 
@@ -248,10 +269,10 @@ input[type="radio"]:checked {
   height: 200px;
 }
 .fs-8{
-  font-size: 8px;
+  font-size: 8px !important;
 }
 .fs-9{
-  font-size: 9px;
+  font-size: 9px !important;
 } 
 .fs-10{
   font-size: 10px !important;

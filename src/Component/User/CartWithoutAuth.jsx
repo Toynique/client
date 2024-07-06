@@ -223,25 +223,28 @@ export default function CartWithoutAuth() {
                               <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckout} </p>
                             </div>
                             <hr />
-                            <div className="mb-2">
+                            {/* <div className="mb-4">
                               <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e => checkoutModel()}>CheckOut <i className="fa-solid fa-arrow-right-long"></i></button>
+                            </div> */}
+                            <div className="mb-4">
+                              <Link className="btn btn-blu btn-outline-primary  px-2 me-3 py-1" to={"/checkout"}  >CheckOut <i className="fa-solid fa-arrow-right-long"></i></Link>
                             </div>
 
 
 
-                            <p className="small">Card type</p>
-                            <a href="#!" type="submit" className="">
+                            {/* <p className="small">Card type</p> */}
+                            <span>
                               <MDBIcon fab icon="cc-mastercard fa-2x me-2" />
-                            </a>
-                            <a href="#!" type="submit" className="">
+                            </span>
+                            <span>
                               <MDBIcon fab icon="cc-visa fa-2x me-2" />
-                            </a>
-                            <a href="#!" type="submit" className="">
+                            </span>
+                            <span>
                               <MDBIcon fab icon="cc-amex fa-2x me-2" />
-                            </a>
-                            <a href="#!" type="submit" className="">
+                            </span>
+                            <span>
                               <MDBIcon fab icon="cc-paypal fa-2x me-2" />
-                            </a>
+                            </span>
                           </MDBCardBody>
                         </MDBCard>
                       </MDBCol>
