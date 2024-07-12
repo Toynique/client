@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Rating from '@mui/material/Rating';
 import { Modal, Button } from 'react-bootstrap'; 
@@ -20,7 +20,22 @@ const ProductSmall = (props) => {
     const ratingAllData = useSelector(store=>store.rating.data)
     const {productData, newActive, saleActive=true} = props
     const [showModal, setShowModal] = useState(false)
+    const [auth, setAuth]= useState(false)
 
+    useEffect(()=>{
+      authCheck()
+    },[])
+
+    const authCheck = ()=>{
+      const userdata = localStorage.getItem('userdata') 
+        const usertoken = localStorage.getItem('usertoken')
+        if(userdata && usertoken){
+          setAuth(true)
+        }
+        else{
+          setAuth(false)
+        }
+    }
     const addWishlistFunc = async(productId)=>{ 
         const userdata = localStorage.getItem('userdata')  
         const usertoken = localStorage.getItem('usertoken')  
@@ -73,24 +88,25 @@ const ProductSmall = (props) => {
           if(!isAlready){ 
             allProducts.push({...product, quantity : 1})
             localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
+            toast.success("Product add to cart",  {autoClose: 1500,})
           }
           else{
             console.log("already axist");
+            toast.warning("Product already in cart",  {autoClose: 1500,})
           }
         }
         else{
           let productArr = [{...product, quantity: 1}]
           productArr = await JSON.stringify(productArr) 
           localStorage.setItem('cartProducts',productArr ) 
-        }
-        
-
-        
-        
+          toast.success("Product add to cart",  {autoClose: 1500,})
+        } 
       }
     }
     
     const ratingData = ratingAllData.find(data=>data.productId === productData._id)
+
+   
   return (
     <div className=" p-2 "> 
         <div className='text-center d-block product-img-box'>
@@ -98,14 +114,17 @@ const ProductSmall = (props) => {
                 <img src={`${productData.thumbnailImage}`} alt={productData.altTag || "image"} className='img-fluid h-100 w-100'/>
             </Link>
             <div className="saveicon">
-            <button className=' btn border-0 p-1 lh-1 text-muted wishicon d-block' onClick={()=>addWishlistFunc(productData._id)} >
-              {/* <i className="fa-regular cl-darkLight fa-heart  fs-20 fs-sm-15 "></i> */}
+              {auth &&
+            <button className=' btn border-0 p-1 lh-1 text-muted wishicon d-block' onClick={()=>addWishlistFunc(productData._id)} > 
               <img src={wishlistIcon} alt="image" />
-              </button>
-            <button className=' btn border-0 p-1 lh-1 text-muted carticon d-block' onClick={()=>addtocart(productData)}>
-              {/* <i className="fa-solid fa-cart-shopping cl-darkLight fs-sm-15 fs-20 "></i> */}
+              </button>}
+              {auth? 
+            <button className=' btn border-0 p-1 lh-1 text-muted carticon d-block' onClick={()=>addtocart(productData)}> 
               <img src={cartIcon} alt="image" />
-              </button>
+              </button> : 
+            <button className=' btn border-0 p-1 lh-1 text-muted carticon d-block' onClick={()=>addMyCart(productData)}> 
+              <img src={cartIcon} alt="image" />
+              </button> }
             </div>
 
             {newActive && <div className="newIcon position-absolute top-0 start-0 bgPrimary text-white py-0 px-1 fs-12 text-uppercase"> 
@@ -132,8 +151,8 @@ const ProductSmall = (props) => {
             {productData.discount > 0 && <p className='mb-0 fw-normal textPrimarySecond fs-14 fs-xs-10'>({productData.discount} % off)</p>   } 
         </div>
         <div className='text-end gap-3 d-flex justify-content-between align-items-center'> 
-          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " onClick={()=>addMyCart(productData)} >Add to Cart</button>
-          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " >Buy Now</Link>
+          {/* <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " onClick={()=>addMyCart(productData)} >Add to Cart</button> */}
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " to={`/checkout?productId=${productData._id}`} >Buy Now</Link>
         </div>
 
         {ratingData &&

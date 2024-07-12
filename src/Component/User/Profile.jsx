@@ -11,6 +11,7 @@ import axios from "axios";
 import { ImageUrl, Url } from "../../url/url";
 import UserAddressUpdateModel from "../Parts/UserAddressUpdateModel";
 import { ToastContainer } from 'react-toastify';
+import { addressdata } from "/src/redux/slice/address";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -72,7 +73,16 @@ const Profile = () => {
   };
   const handleCloseUpdateAddressModel = () => setShowUpdateAddressModel(false)
 
+  const cartDispatch = ()=>{
+    const userData = localStorage.getItem('userdata')
+    if(userData){
+      const userJson = JSON.parse(userData)
+      const userId = userJson._id  
+      dispatch(addressdata(userId))
+    }
+  }
   useEffect(() => {
+    cartDispatch()
     orderListFunc();
     addressListFunc();
   }, []);
@@ -184,9 +194,10 @@ const Profile = () => {
                               <p className="mb-1">Order Id :- {orderValue._id}</p>
                               <p className="mb-1">Order Date :- {orderValue.createdAt}</p>
                             </div>
-                            <div>
-                              {/* <p className="mb-1">Order Status :- {orderValue.orderStatus}</p> */}
-                              <p className="mb-1">Payment Status :- {orderValue.paymentStatus}</p>
+                            <div> 
+                              {orderValue?.paymentType == 'cod'? 
+                               <p className="mb-1">Payment Status :- Cash On Delivery</p>
+                              :<p className="mb-1">Payment Status :- <span > {orderValue.paymentStatus} </span></p>}
                             </div>
                           </div>
                           <div className="row py-3 border-bottom">
@@ -230,11 +241,12 @@ const Profile = () => {
                               <p className="mb-1">
                                 Shipping Fee : &#8377;{orderValue?.diliveryCharge}
                               </p>
+                              {orderValue?.totalGst &&
                               <p className="mb-1">
                                 GST : &#8377;{orderValue?.totalGst}
-                              </p>
+                              </p>}
                               <p className="mb-1">
-                                Product Price : &#8377;{orderValue?.totalproductPrice}
+                                Product Price : &#8377;{orderValue?.totalproductPrice - orderValue?.offerDiscount}
                               </p>
                             </div>
                           </div>

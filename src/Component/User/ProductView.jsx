@@ -32,6 +32,7 @@ const ProductView = () => {
   const [product, setProduct] = useState();
   const [rating, setRating] = useState([]);
   const [ratingData, setRatingData] = useState();
+  const [auth, setAuth]= useState(false)
   const stringToSlug = (str) => {
     return str
       .toLowerCase()
@@ -40,6 +41,21 @@ const ProductView = () => {
       .replace(/--+/g, "-")
       .trim();
   };
+
+  useEffect(()=>{
+    authCheck()
+  },[])
+
+  const authCheck = ()=>{
+    const userdata = localStorage.getItem('userdata') 
+      const usertoken = localStorage.getItem('usertoken')
+      if(userdata && usertoken){
+        setAuth(true)
+      }
+      else{
+        setAuth(false)
+      }
+  }
 
   const addtocart = async (productDetails) => {
     if(productDetails.totalProduct > 0){
@@ -66,6 +82,31 @@ const ProductView = () => {
       });
     }
   };
+
+  const addMyCart = async(product)=>{ 
+    if(product){
+      const products= localStorage.getItem('cartProducts')
+      if(products ){
+        const allProducts = await JSON.parse(products) 
+        const isAlready = await allProducts.find(d=>d._id === product._id) 
+        if(!isAlready){ 
+          allProducts.push({...product, quantity : 1})
+          localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
+          toast.success("Product add to cart",  {autoClose: 1500,})
+        }
+        else{
+          console.log("already axist");
+          toast.warning("Product already in cart",  {autoClose: 1500,})
+        }
+      }
+      else{
+        let productArr = [{...product, quantity: 1}]
+        productArr = await JSON.stringify(productArr) 
+        localStorage.setItem('cartProducts',productArr ) 
+        toast.success("Product add to cart",  {autoClose: 1500,})
+      } 
+    }
+  }
 
   const productShowFunc = async () => {
     setRatingData();
@@ -202,7 +243,7 @@ const ProductView = () => {
                           Go to cart{" "}
                           <i className="fa-solid fa-cart-shopping"></i>
                         </Link>
-                      ) : (
+                      ) : auth? (
                         <button
                           className="btn btn-blue  me-3 fw-bold"
                           onClick={() => addtocart(product)}
@@ -210,10 +251,24 @@ const ProductView = () => {
                           Add to cart{" "}
                           <i className="fa-solid fa-cart-shopping"></i>
                         </button>
-                      )}
+                      ) :(
+                        <button
+                          className="btn btn-blue  me-3 fw-bold"
+                          onClick={() => addMyCart(product)}
+                        >
+                          Add to cart{" "}
+                          <i className="fa-solid fa-cart-shopping"></i>
+                        </button>
+                      )
+                      
+                      }
+                      {auth?
                       <Link className="btn btn-outline-blue fw-bold" to={'/cart'} onClick={() => addtocart(product)}>
                         Buy Now <i className="fa-solid fa-bag-shopping"></i>
-                      </Link>
+                      </Link>:
+                      <Link className="btn btn-outline-blue fw-bold" to={`/checkout?productId=${product._id}`} >
+                        Buy Now <i className="fa-solid fa-bag-shopping"></i>
+                      </Link>}
                     </div> : <button
                           className="btn btn-blue my-2  me-3 fw-bold"
                           onClick={() => addtocart(product)}

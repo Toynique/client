@@ -1,16 +1,61 @@
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../Header/Navbar";
 import Footer from "../Footer/Footer";
 import { countries } from 'countries-list';
 import ReactCountryFlag from "react-country-flag";
+import axios from "axios";
+// import { Url } from "src/url/url";
+import { Url } from "../../url/url";
 
-const userDefaultValue = {"country": { value: 'IN', label: 'India', code: '+91' }, phone:'' }
+const userDefaultValue = { "country": { value: 'IN', label: 'India', code: '+91' } }
+const allStateArr = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Lakshadweep",
+    "Delhi",
+    "Puducherry",
+    "Jammu and Kashmir",
+    "Ladakh",
+];
 export default function CheckoutWithoutAuth() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const productId = queryParams.get('productId');
+    const productAllData = useSelector(d => d.product.data)
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -23,14 +68,51 @@ export default function CheckoutWithoutAuth() {
     const [diliveryCharge, setDiliveryCharge] = useState(50)
     const [totalCheckout, setTotalCheckout] = useState(0)
 
-    const [userValue, setUserValue] = useState(userDefaultValue)
 
-    const findCartData = async () => {
+    const [userValue, setUserValue] = useState(userDefaultValue)
+    const [showOTP, setSHowOTP] = useState(false)
+    const [otp, setOTP] = useState('')
+    const [otpSuccess, setOTPSuccess] = useState(false)
+    const [loadingVerify, setLoadingVerify] = useState(false)
+    const [otpError, setOTPError] = useState("")
+    const [guestAddress, setGuestAddress] = useState(userDefaultValue)
+    const [user, serUser] = useState()
+    const [paymentType, setPaymentType] = useState('')
+
+    const cartProductsFunc = async()=>{
         const products = localStorage.getItem('cartProducts')
         if (products) {
-            const productsArr = await JSON.parse(products)
+            const productsArr = await JSON.parse(products)  
             setCartAllData(productsArr)
             priceUpdateFunc()
+        }
+    }
+    const findCartData = async () => { 
+        if (productId && productAllData) { 
+            const product = await productAllData.filter(data => data._id === productId) 
+            if(product?.length > 0){
+                const quantityProducts = product.map(d=>{ return {...d, quantity :1}})
+            setCartAllData(quantityProducts) 
+            priceUpdateFunc()
+            }
+            else{
+                await cartProductsFunc()
+            }
+        }
+        else{
+            await cartProductsFunc()
+        }
+        
+        const guestUser = localStorage.getItem('guestUser')
+        const guestUserAddress = localStorage.getItem('guestUserAddress')
+        
+        if (guestUser) {
+            const userData = await JSON.parse(guestUser)
+            serUser(userData)
+        }
+        if (guestUserAddress) {
+            const userAddressData = await JSON.parse(guestUserAddress)
+            setGuestAddress(userAddressData)
         }
     }
 
@@ -62,34 +144,137 @@ export default function CheckoutWithoutAuth() {
         );
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
         findCartData()
-    };
-
+    }; 
     const removeProduct = (id) => {
-        const updatedProducts = cartAllData.filter(product => product._id !== id);
+        const updatedProducts = cartAllData.filter(product => product._id !== id); 
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
         findCartData()
-    };
- 
-    const inputUserHandle = (e)=>{
+      };
+
+    const inputUserHandle = (e) => {
         const name = e.target.name;
-        const value = e.target.value; 
-        setUserValue({...userValue, [name]: value});
-      }
+        const value = e.target.value;
+        setUserValue({ ...userValue, [name]: value });
+    }
 
-    const handleCountryChange = (selectedCountry) => {   
-        const countryObj = {value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}`} 
-        setUserValue({...userValue, ['country']: countryObj});
+    const handleCountryChange = (selectedCountry) => {
+        const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
+        setUserValue({ ...userValue, ['country']: countryObj });
     };
+    const handleCountryGuest = (selectedCountry) => {
+        const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
+        setGuestAddress({ ...guestAddress, ['country']: countryObj });
+    };
+    const handleGuestUser = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setGuestAddress({ ...guestAddress, [name]: value });
+    }
 
-    const submitUserProfile = (e)=>{
+    const submitUserProfile = async (e) => {
         e.preventDefault()
-        console.log("userValue", userValue);
+        setSHowOTP(false)
+        setLoadingVerify(true)
+        // console.log("userValue", userValue);
+        try {
+            const response = await axios.post(`${Url}/user/create`, userValue)
+            if (response) {
+                toast.success("OTP has send your Phone", { autoClose: 1500, })
+                setLoadingVerify(false)
+                setSHowOTP(true)
+            }
+            setLoadingVerify(false)
+        } catch (error) {
+            setSHowOTP(false)
+            setLoadingVerify(false)
+            console.log(error);
+        }
+    }
+    const checkOTPFunc = async (e) => {
+        e.preventDefault()
+        setOTPError('')
+        setOTPSuccess(false)
+        try {
+            const response = await axios.post(`${Url}/user/verifyOTP`, { ...userValue, otp })
+            console.log("response checkotp", response);
+            console.log("response status", response.status);
+            if (response.status === 200) {
+                console.log("otp success", response);
+                const responseString = JSON.stringify(response.data);
+                localStorage.setItem("guestUser", responseString);
+                toast.success("Mobile number verified", { autoClose: 1500, })
+                setGuestAddress({ ...guestAddress, receiver: userValue?.name, country: userValue?.country, primaryNumber: userValue?.phone })
+                setOTPSuccess(true)
+                setSHowOTP(false)
+                serUser(response.data)
+            }
+            else if (response.status === 204) {
+                console.log("otp not match");
+                setOTPError('Wrong OTP ')
+            }
+            else {
+                console.log("otp other error");
+            }
+            setOTP('')
+        } catch (error) {
+            setOTPError('')
+            setOTP('')
+            console.log(error);
+            console.log("error status", error.status);
+        }
+
+    }
+    const guestAddressFunc = async (e) => {
+        e.preventDefault()
+        const product = await cartAllData.map((productValue) => {
+            return {
+                productId: productValue._id,
+                productQuantity: productValue.quantity,
+                price: Math.ceil(productValue.salePrice - ((productValue.salePrice * productValue.discount) / 100))
+            }
+        })
+        const checkoutProductList = { product, totalproductPrice: mrp - discount, totalDiscount: discount, offerDiscount: offer, diliveryCharge: diliveryCharge, currency: 'INR', paymentType }
+        try {
+            if (user && paymentType == 'cod') {
+                await axios.post(`${Url}/api/address`, { ...guestAddress, userId: user._id })
+                const addressString = JSON.stringify(guestAddress);
+                localStorage.setItem("guestUserAddress", addressString);
+                const responseOrder = await axios.post(`${Url}/api/order/checkoutcod`, { ...checkoutProductList, userId: user._id, address: { ...guestAddress, userId: user._id } })
+                if (responseOrder?.status == 200) {
+                    toast.success("Order placed successfully", { autoClose: 1500, })
+                    console.log("data token received", responseOrder);
+
+
+                    const userStr = JSON.stringify(user);
+                    localStorage.setItem("usertoken", responseOrder?.token);
+                    localStorage.setItem("userdata", userStr);
+                    localStorage.removeItem('cartProducts')
+                    localStorage.removeItem('guestUser')
+                    localStorage.removeItem('guestUserAddress')
+                    // setCartAllData([])
+                    // setMrp(0)
+                    // setSalePrice(0)
+                    // setDiscount(0)
+                    // setOffer(0)
+                    // setTotalCheckout(0)
+                    // setGuestAddress(userDefaultValue)
+                    navigate('/profile')
+                }
+                else {
+                    toast.warning("warning else", { autoClose: 1500, })
+                }
+            }
+            else {
+                console.log("paymentType online", paymentType);
+            }
+        } catch (error) {
+            toast.error("error", { autoClose: 1500, })
+        }
     }
 
     useEffect(() => {
         findCartData()
-
-    }, [])
+    }, [productAllData])
     useEffect(() => {
         priceUpdateFunc()
     }, [cartAllData])
@@ -109,57 +294,158 @@ export default function CheckoutWithoutAuth() {
                                 <MDBCard>
                                     <MDBCardBody className="p-4">
                                         <MDBRow>
-                                            <MDBCol lg="7"> 
+                                            <MDBCol lg="7">
 
                                                 <MDBCard className="mb-3">
                                                     <MDBCardBody>
-                                                        <form  onSubmit={(e)=>submitUserProfile(e)}>
-                                                            <div className="row align-items-end">
-                                                                <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                    <label htmlFor="name">Full Name</label>
-                                                                    <input type="text" name="name" className="form-control" onChange={e => inputUserHandle(e)} required />
-                                                                </div>
-                                                                <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                    <label htmlFor="name">Email</label>
-                                                                    <input type="email" name="email" className="form-control" onChange={e => inputUserHandle(e)} required />
-                                                                </div>
-                                                                {/* <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                    <label htmlFor="name">Phone</label>
-                                                                    <input type="number" name="phone" className="form-control" required />
-                                                                </div> */}
-                                                                <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                    <div className="form-group">
-                                                                        <label  htmlFor="primaryNumber" className="text-muted mb-1 text-capitalize fs-14" >
-                                                                            phone number
-                                                                        </label>
-                                                                        <div className="d-flex align-item-center p-0 overflow-hidden form-control">
-                                                                            <select name="" id="" value={userValue.country.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryChange(e.target.value)} required>
-                                                                                {countryOptions.map((countryCode) => {
-                                                                                    return (
-                                                                                        <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
-                                                                                    )
-                                                                                })}
-                                                                            </select>
-                                                                            <input
-                                                                                type="number"
-                                                                                name="phone"
-                                                                                className="form-control border-0 shadow-sm outline-none border-none" 
-                                                                                placeholder="Number"
-                                                                                onChange={e => inputUserHandle(e)}
-                                                                                value={userValue.phone}
-                                                                                minLength={10}
-                                                                                maxLength={10}
-                                                                                required
-                                                                            />
+                                                        {!otpSuccess &&
+                                                            <form onSubmit={(e) => submitUserProfile(e)}>
+                                                                <div className="row align-items-end">
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="name">Full Name</label>
+                                                                        <input type="text" name="name" className="form-control" onChange={e => inputUserHandle(e)} required />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="name">Email</label>
+                                                                        <input type="email" name="email" className="form-control" onChange={e => inputUserHandle(e)} required />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="primaryNumber" className="text-muted mb-1 text-capitalize fs-14" >
+                                                                                phone number
+                                                                            </label>
+                                                                            <div className="d-flex align-item-center p-0 overflow-hidden form-control">
+                                                                                <select name="" id="" value={userValue.country.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryChange(e.target.value)} required>
+                                                                                    {countryOptions.map((countryCode) => {
+                                                                                        return (
+                                                                                            <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
+                                                                                        )
+                                                                                    })}
+                                                                                </select>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    name="phone"
+                                                                                    className="form-control border-0 shadow-sm outline-none border-none"
+                                                                                    placeholder="Number"
+                                                                                    onChange={e => inputUserHandle(e)}
+                                                                                    value={userValue.phone}
+                                                                                    minLength={10}
+                                                                                    maxLength={10}
+                                                                                    required
+                                                                                />
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+                                                                    {!showOTP &&
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2 ">
+                                                                            <button className="btn btn-primary" type="submit" disabled={loadingVerify}>Verify your number</button>
+                                                                        </div>}
+
                                                                 </div>
-                                                                <div className="col-lg-6 col-md-6 col-12 mb-2 ">
-                                                                    <button className="btn btn-primary" type="submit">Verify your number</button>
+                                                            </form>
+                                                        }
+                                                        {showOTP &&
+                                                            <form action="" onSubmit={(e) => checkOTPFunc(e)}>
+                                                                <small className="text-danger fs-12">{otpError}</small>
+                                                                <div className="row align-items-end">
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+
+                                                                        <label htmlFor="otp">Enter OTP</label>
+                                                                        <input type="phone" name="otp" className="form-control" onChange={e => setOTP(e.target.value)} required />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <button className="btn btn-success me-3" type="submit">Sumbit</button>
+                                                                        <span className="border-0 no-border bg-transparent pointer">resend OTP</span>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </form>
-                                                    </MDBCardBody> 
+                                                            </form>}
+
+                                                        {otpSuccess &&
+                                                            <form action="" onSubmit={e => guestAddressFunc(e)}>
+                                                                <div className="row">
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="receiver">Receiver Name</label>
+                                                                        <input type="text" name="receiver" value={guestAddress?.receiver} className="form-control" onChange={e => handleGuestUser(e)} required />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="primaryNumber" className=" text-capitalize  " >
+                                                                                Primary number
+                                                                            </label>
+
+                                                                            <div className="d-flex align-item-center p-0 overflow-hidden form-control">
+                                                                                <select name="" id="" value={guestAddress?.country?.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryGuest(e.target.value)} required>
+                                                                                    {countryOptions.map((countryCode) => {
+                                                                                        return (
+                                                                                            <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
+                                                                                        )
+                                                                                    })}
+                                                                                </select>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    name="primaryNumber"
+                                                                                    className="form-control border-0 shadow-sm outline-none border-none"
+                                                                                    placeholder="1234567890"
+                                                                                    onChange={e => handleGuestUser(e)}
+                                                                                    value={guestAddress?.primaryNumber}
+                                                                                    minLength={10}
+                                                                                    maxLength={10}
+                                                                                    required
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
+                                                                        <input type="number" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.secondaryNumber} />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
+                                                                        <input type="text" name="nearBy" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.nearBy} />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="address">Full Address</label>
+                                                                        <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.address} />
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="pincode">Pincode</label>
+                                                                        <input type="number" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.pincode} />
+                                                                    </div>
+                                                                    {/* <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="state">State</label>
+                                                                        <input type="text" name="state" className="form-control" onChange={e => handleGuestUser(e)} required  value={guestAddress?.state}/>
+                                                                    </div> */}
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                        <label htmlFor="state">State</label>
+                                                                        <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress?.state} required >
+                                                                            <option className="text-muted" disabled={guestAddress?.state}>choose</option>
+                                                                            {allStateArr.map((stateName) => {
+                                                                                return (
+                                                                                    <option value={stateName} key={stateName}>{stateName}</option>
+                                                                                )
+                                                                            })}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div className="col-lg-6 col-md-6 col-12 mb-4">
+                                                                        <label htmlFor="city">City</label>
+                                                                        <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.city} required />
+                                                                    </div>
+                                                                    <div className="d-flex align-items-center mb-2">
+                                                                        <input type="radio" name="paymentType" value={"cod"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'cod'} required />
+                                                                        <label htmlFor="paymentType">Cash On Delivery</label>
+                                                                    </div>
+                                                                    <div className="d-flex align-items-center mb-2 pb-2">
+                                                                        <input type="radio" name="paymentType" value={"online"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'online'} required />
+                                                                        <label htmlFor="paymentType">Pay now</label>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div>
+                                                                        <button className="btn btn-blu btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        }
+                                                    </MDBCardBody>
                                                 </MDBCard>
 
                                             </MDBCol>
@@ -195,21 +481,8 @@ export default function CheckoutWithoutAuth() {
                                                                                 <button className="btn  btn-sm p-1 fs-8 btn-blue btn-outline-blue ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
                                                                                     <i className="fa-solid fa-plus "></i>
                                                                                 </button>
-                                                                            </div>
-                                                                            {/* <div style={{ width: "80px" }}>
-                                        <MDBTypography tag="h5" className="mb-0">
-                                          <i className="fa-solid fa-indian-rupee-sign"></i>{" "}
-                                          <span className="text-muted"> {Math.ceil(productValue.salePrice - ((productValue.salePrice * productValue.discount) / 100)) * productValue.quantity} </span>
-                                        </MDBTypography>
-                                      </div> */}
-                                                                            {/* <a href="#!" style={{ color: "#cecece" }} onClick={() => removeProduct(productValue._id) }>
-                                        <MDBIcon
-                                          fas
-                                          icon="trash-alt"
-                                          className="text-danger"
-                                        />
-                                      </a> */}
-                                                                            <a href="#!" className="text-danger">Remove</a>
+                                                                            </div> 
+                                                                            <span  className="text-danger pointer" onClick={()=>removeProduct(productValue._id)}>Remove</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -217,23 +490,10 @@ export default function CheckoutWithoutAuth() {
                                                         })}
                                                     </MDBCardBody>
                                                     <MDBCardBody>
-                                                        {/* <div className="d-flex justify-content-between align-items-center mb-4">
-                              <MDBTypography tag="h5" className="mb-0 cl-pink">
-                                CheckOut ({cartAllData.length} Items)
-                              </MDBTypography>
-                            </div> */}
-
-                                                        {/* <hr /> */}
 
                                                         <div className="d-flex justify-content-between">
                                                             <p className="mb-1">Product Price</p>
                                                             <p className="mb-1">
-
-                                                                {/* {(mrp > salePrice) ? <p className="text-decoration-line-through mb-1"><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {mrp}</p> : null}
-                                {(mrp > salePrice) &&
-                                <p className="mb-1">
-                                  - <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {discount}
-                                </p>} */}
                                                                 <p className="text-end mb-1"><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {salePrice}</p>
                                                             </p>
                                                         </div>
@@ -261,26 +521,10 @@ export default function CheckoutWithoutAuth() {
                                                             <p className="mb-2">Total(Incl. taxes)</p>
                                                             <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckout} </p>
                                                         </div>
-                                                        <hr />
-                                                        <div>
+                                                        {/* <hr /> */}
+                                                        {/* <div>
                                                             <Link className="btn btn-blu btn-outline-primary  px-2 me-3 py-1"  >Complete <i className="fa-solid fa-arrow-right-long"></i></Link>
-                                                        </div>
-
-
-
-                                                        {/* <p className="small">Card type</p> */}
-                                                        {/* <span>
-                              <MDBIcon fab icon="cc-mastercard fa-2x me-2" />
-                            </span>
-                            <span>
-                              <MDBIcon fab icon="cc-visa fa-2x me-2" />
-                            </span>
-                            <span>
-                              <MDBIcon fab icon="cc-amex fa-2x me-2" />
-                            </span>
-                            <span>
-                              <MDBIcon fab icon="cc-paypal fa-2x me-2" />
-                            </span> */}
+                                                        </div> */}
                                                     </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>

@@ -28,13 +28,7 @@ const stringToSlug = (str) => {
 
 
 const Navbar = () => {
-  const cartAlldata = useSelector(store => store.cart.data)
-
-
-  const categoryalldata = useSelector(store => store.category.data)
-  const subcategoryalldata = useSelector(store => store.subcategory.data)
-  const characteralldata = useSelector(store => store.character.data)
-  const subcharacteralldata = useSelector(store => store.subcharacter.data)
+  const cartAlldata = useSelector(store => store.cart.data) 
   const wishlistalldata = useSelector(store => store.wishlist.data)
   const [active, setActive] = useState(false)
   const [isLogin, setIsLogin] = useState(false)
@@ -156,18 +150,10 @@ const Navbar = () => {
                   <li className={`nav-item ${navDropValue === 'Shop' && 'nav-active'}`} onClick={() => dropdownFunc('Shop')}>
                     <span className='text-capitalize cl-darkLight  '>Shop
                     </span>
-                  </li>
-                  {/* <li className={`nav-item `} onClick={()=>dropdownFunc("")}>
-                          <span className='text-capitalize cl-darkLight ' >Theme</span>
-                        </li>  
-                        <li className={`nav-item `} onClick={()=>dropdownFunc("")}>
-                          <span className='text-capitalize cl-darkLight ' >Community</span>
-                        </li> */}
+                  </li> 
                   <li className={`nav-item `} onClick={() => dropdownFunc("")}>
-                    <Link className='text-capitalize cl-darkLight item-link' >Blog</Link>
-                  </li>
-
-
+                    <Link className='text-capitalize cl-darkLight item-link' to={"/blog"}>Blog</Link>
+                  </li> 
                 </ul>
               </div>
               <div className='nav-side-cut text-end w-100 pe-4 py-3'>
@@ -191,8 +177,7 @@ const Navbar = () => {
                       <div className="pt-3">
                         <div className=" rounded-3 overflow-auto shadow" style={{ "maxHeight": "350px", "width": "200px" }}>
                           <ul className="list-group">
-                            {searchData?.map((productValue) => (
-                              // <li className='list-group-item list-group-item-action'>{value.productName}</li>
+                            {searchData?.map((productValue) => ( 
                               <li className='list-group-item list-group-item-action d-flex align-ites-top gap-2'>
                                 <Link to={`/productview/${productValue.slug}/${productValue._id}`} onClick={removeSearchFunc}>
                                   <img src={productValue.thumbnailImage} alt={productValue.altTag} width={40} />
