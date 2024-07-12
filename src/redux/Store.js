@@ -10,6 +10,7 @@ import UserSlice from './slice/user'
 import BlogSlice from './slice/blog'  
 import AddressSlice from './slice/address'  
 import RatingSlice from './slice/rating'  
+import BannerSlice from './slice/banner'  
 
 export  const store = configureStore({
     reducer : {
@@ -24,5 +25,6 @@ export  const store = configureStore({
         "blog" : BlogSlice,
         "address" : AddressSlice,
         "rating" : RatingSlice,
+        "banner" : BannerSlice,
     }
 })

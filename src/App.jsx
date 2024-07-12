@@ -45,6 +45,7 @@ import ProductsCharacter from './Component/User/ProductsCharacter';
 import { ratingdata } from './redux/slice/rating';
 import CartWithoutAuth from './Component/User/CartWithoutAuth';
 import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
+import { bannerdata } from './redux/slice/banner';
 
 function App() {
   const dispatch = useDispatch()
@@ -63,6 +64,7 @@ function App() {
   }
 
   useEffect(()=>{
+    dispatch(bannerdata())  
     dispatch(categorydata())  
     dispatch(subcategorydata())  
     dispatch(characterdata())  
