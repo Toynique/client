@@ -54,7 +54,7 @@ const Index = () => {
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-md-0 ">
               <div>
-                <img src="/assets/img/toynique-about.png" alt="image alt tag" className='img-fluid w-100' />
+                <img src="/assets/img/aboutSec.png" alt="image alt tag" className='img-fluid w-100' />
               </div>
             </div>
           </div>

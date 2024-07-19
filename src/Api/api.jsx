@@ -71,7 +71,9 @@ export const userAccountVerify = async(id)=>{
 
 export const loginUser = async(data) =>{
     try {
+
         const response = await axios.post(`${Url}/user/login`, data) 
+        console.log("response check", response);
         return {"data" :response.data, "status" :response.status} 
     } catch (error) { 
         Swal.fire({
@@ -81,7 +83,7 @@ export const loginUser = async(data) =>{
             showConfirmButton: false,
             timer: 1500
         }) 
-        return false
+        return error
     }
 }
 export const resendVerifyMail = async(id) => {

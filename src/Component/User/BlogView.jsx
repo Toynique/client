@@ -54,7 +54,7 @@ const BlogView = () => {
             <div className="row">
                 <div className="col-lg-9 col-md-8 col-12 mb-3">
                     <div className='mb-5 border-bottom pb-3'>
-                        <h1>{blogData && blogData.title} Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi necessitatibus incidunt minima! </h1>
+                        <h1>{blogData && blogData.title} </h1>
                     </div>
                     <div>
                         <img src={`${blogData && blogData.image}`} className='w-50 m-auto d-block img-fluid' alt={blogData && blogData.altTag} />

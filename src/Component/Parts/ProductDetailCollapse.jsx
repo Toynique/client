@@ -12,17 +12,7 @@ const ProductDetailCollapse = (props) => {
     <>
     {product && 
     <div className="collapse-wrap">
-        {product.keyFeature !== '<p><br></p>' && product.keyFeature !== null && product.keyFeature &&
-        <div className='collapse-item-box'>
-            <div className='collapse-item d-flex align-items-center justify-content-between' onClick={e=>setFeature(!feature)} >
-                <h3 className='mb-0'>Key Features</h3>
-                <span>{!feature? <><h3 className='fw-bold mb-0'>+</h3></> :  <><h3 className='fw-bold mb-0'>-</h3></>}</span>
-            </div>
-            {feature ? 
-            <div>
-                <p>{parse(product && product.keyFeature)}</p>
-            </div> : null }
-        </div>} 
+        
         {product.description !== '<p><br></p>' && product.description !== null && product.description &&
         <div className='collapse-item-box'>
             <div className='collapse-item d-flex align-items-center justify-content-between' onClick={e=>setDescription(!description)} >
@@ -34,6 +24,17 @@ const ProductDetailCollapse = (props) => {
                 {parse(product && product.description)}
             </div> : null }
         </div>}
+        {product.keyFeature !== '<p><br></p>' && product.keyFeature !== null && product.keyFeature &&
+        <div className='collapse-item-box'>
+            <div className='collapse-item d-flex align-items-center justify-content-between' onClick={e=>setFeature(!feature)} >
+                <h3 className='mb-0'>Key Features</h3>
+                <span>{!feature? <><h3 className='fw-bold mb-0'>+</h3></> :  <><h3 className='fw-bold mb-0'>-</h3></>}</span>
+            </div>
+            {feature ? 
+            <div>
+                <p>{parse(product && product.keyFeature)}</p>
+            </div> : null }
+        </div>} 
         {product.specification !== '<p><br></p>' && product.specification !== null && product.specification &&
         <div className='collapse-item-box'> 
             <div className='collapse-item d-flex align-items-center justify-content-between' onClick={e=>setSpecifications(!specifications)} >

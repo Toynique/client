@@ -43,14 +43,16 @@ const HeaderSlider = () => {
           })}
         </Slider> */}
         <Slider {...settings} className='w-100'>
-          {bannerAllData.map((bannerValue, i) => {
+          {bannerAllData.map((bannerValue, i) => { 
             return (
               <div className='header-slider' key={i}>
                 <div key={i} className=''> 
                   <picture> 
-                    <source srcSet={bannerValue.bannerSm} media="(max-width: 476px)" />
+                    
+                    
+                    <source srcSet={bannerValue.bannerSm} media="(max-width: 576px)" />
                     <source srcSet={bannerValue.bannerMd} media="(max-width: 768px)" />
-                    <img src={bannerValue.bannerLg} alt="Banner Image" loading='lazy' className='img-fluid w-100' />
+                    <img src={bannerValue.bannerLg} alt="Banner Image" loading='lazy' className='img-fluid w-100' /> 
                   </picture>
 
                 </div>
@@ -58,7 +60,7 @@ const HeaderSlider = () => {
             )
           })}
         </Slider>
-        <div className=' position-absolute  top-50 top-0  start-0 translate-middle-y w-100 py-md-0 py-4'>
+        {/* <div className=' position-absolute  top-50 top-0  start-0 translate-middle-y w-100 py-md-0 py-4'>
           <div className="container">
             <div className="row">
               <div className="col-lg-5 col-md-8 col-sm-10 col-12">
@@ -68,7 +70,7 @@ const HeaderSlider = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
     </>
   )

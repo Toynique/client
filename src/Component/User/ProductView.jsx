@@ -181,12 +181,13 @@ const ProductView = () => {
                 <div className="col-xl-5 col-lg-5 col-md-6 col-12">
                   <div className="">
                     <div className="iconbox text-end">
+                      {auth &&
                       <button
                         className="btn border-0"
                         onClick={() => addWishlistFunc(product._id)}
                       >
                         <i className="fa-regular text-muted fa-heart fa-lg me-2"></i>
-                      </button>
+                      </button>}
                       <i className="fa-solid fa-share fa-lg cl-blue"></i>
                     </div>
                     <p className="cl-blue text-uppercase">

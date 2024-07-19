@@ -360,6 +360,21 @@ input[type="radio"]:checked {
     width: 90px;
   }
 }
+
+.dropdown-character{
+  position: absolute;
+  left: 0px;
+  width: 100vw;
+  z-index: 999;
+  top: 45px; 
+  display: none;
+}
+.nav-item:hover .dropdown-character{
+  display: block;
+  }
+  .nav-item li{
+    height: 100%;
+  }
 .nav-user{ 
   overflow: hidden;
   text-align: center;
@@ -382,7 +397,7 @@ input[type="radio"]:checked {
   /* margin-right: 12px; */
   font-size: 16px; 
   font-weight: 500;
-  position: relative;
+  /* position: relative; */
   /* padding-bottom: 15px; */
   cursor: pointer;
 }
@@ -583,7 +598,7 @@ input[type="radio"]:checked {
     margin-right: 12px;
     font-size: 16px;
     padding: 5px 0px;
-    position: relative;
+    /* position: relative; */
   }
   .nav-drop{
     position: static;

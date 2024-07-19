@@ -138,8 +138,11 @@ const ProductSmall = (props) => {
             {!(productData.totalProduct > 0) ?
             <div className="position-absolute bottom-0 start-50 translate-middle-x bgPrimarySecond text-white px-3 text-uppercase max-width">out of stock</div>:null}
         </div>
+        <div className='category-name-box '> 
+            <Link to={`/productview/${productData.slug}/${productData._id}`} className='pt-2 d-block text-center fs-xs-10 fw-bold'>{productData.productName}</Link>
+        </div>
         <div className='category-name-box'> 
-            <Link to={`/productview/${productData.slug}/${productData._id}`} className='pt-2 d-block text-center mb-2 fs-xs-10'>{productData.productName}</Link>
+            <Link to={`/productview/${productData.slug}/${productData._id}`} className='pt-2 d-block  mb-2 fs-xs-10 text-ellipsis'>{productData.shortDescription}</Link>
         </div>
         
         <div className='d-flex align-items-end justify-content-center gap-2 mb-2'>
@@ -151,8 +154,8 @@ const ProductSmall = (props) => {
             {productData.discount > 0 && <p className='mb-0 fw-normal textPrimarySecond fs-14 fs-xs-10'>({productData.discount} % off)</p>   } 
         </div>
         <div className='text-end gap-3 d-flex justify-content-between align-items-center'> 
-          {/* <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " onClick={()=>addMyCart(productData)} >Add to Cart</button> */}
-          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " to={`/checkout?productId=${productData._id}`} >Buy Now</Link>
+          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " onClick={()=>addMyCart(productData)} >Add to beg</button>
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 " to={`/checkout?productId=${productData._id}`} >Quick buy</Link>
         </div>
 
         {ratingData &&

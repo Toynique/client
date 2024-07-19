@@ -11,7 +11,7 @@ const Footer = () => {
     const characterAllData = useSelector(store => store.character.data)
   return (
     <>
-    <section className='footer-top-wrap bg-dark pt-5 pb-4 d-none'>
+    <section className='footer-top-wrapLLLLL bg-dark pt-5 pb-4 '>
         <div className="container">
             <div className="row">
                 <div className="col-lg-3 col-md-6 col-6">

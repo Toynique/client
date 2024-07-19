@@ -45,7 +45,7 @@ const Blog = () => {
                                     <small className='text-muted fs-12'> {formatDate(cv.createdAt)}  </small> 
                                 </div>
                                 <div className='category-name-box '>
-                                    <Link to={`/blog/${cv.slug}/${cv._id}`} className='pt-2 d-block '><p  className='fs-sm-14 mb-2'>  {cv.title}</p></Link>
+                                    <Link to={`/blog/${cv.slug}/${cv._id}`} className='pt-2 d-block '><p  className='fs-sm-10 fs-14 mb-2'>  {cv.title}</p></Link>
                                 </div>
                                 
                                 </div>
