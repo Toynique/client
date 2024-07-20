@@ -98,9 +98,9 @@ const Index = () => {
       {productAllData.length > 0 ?
         <section className='py-5'>
           <div className="container">
-            <div className="d-flex justify-centent-center align-items-center  mb-5">
+            <div className="d-flex justify-centent-center align-items-center  mb-lg-5 mb-md-3 mb-2">
               <div className=" flex-grow-1 border borderPrimarySecond "></div>
-              <h2 className="  text-center px-2 text-uppercase fw-bold fs-42 cl-welcome">cradle cudders</h2>
+              <h2 className="  text-center px-2 text-uppercase fw-bold fs-42 fs-sm-24 cl-welcome">cradle cudders</h2>
               <div className=" flex-grow-1 border borderPrimarySecond"></div>
             </div>
             <div className="row">
@@ -146,7 +146,7 @@ const Index = () => {
                       </Link>
                       <div className='p-1'>
                         <Link to={`/blog/${blogValue.title}/${blogValue._id}`}>
-                          <h5 className='textPrimary'>{blogValue.title}</h5>
+                          <h5 className='textPrimary fs-14'>{blogValue.title}</h5>
                         </Link>
                         <p className='mb-0'>{blogValue.shortDescription}</p>
                       </div>

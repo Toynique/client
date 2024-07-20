@@ -11,10 +11,10 @@ const Footer = () => {
     const characterAllData = useSelector(store => store.character.data)
   return (
     <>
-    <section className='footer-top-wrapLLLLL bg-dark pt-5 pb-4 '>
+    <section className='footer-top-wrap bg-dark pt-5 pb-4 '>
         <div className="container">
             <div className="row">
-                <div className="col-lg-3 col-md-6 col-6">
+                <div className="col-lg-3 col-md-6 col-12">
                     {/* <h3>Heading</h3> */}
                     <ul className='text-white'>
                         <li><Link className='text-white' to="/privacy-policy">Privacy Policy</Link></li>
@@ -24,7 +24,7 @@ const Footer = () => {
                         <li><Link className='text-white' to="/blog" >blog</Link></li> 
                     </ul>
                 </div>
-                <div className="col-lg-3 col-md-6 col-6">
+                <div className="col-lg-3 col-md-6 col-12">
                     {/* <h3>Heading</h3> */}
                     <ul>
                         {characterAllData && characterAllData.map((cv, i)=>{ 
@@ -38,7 +38,7 @@ const Footer = () => {
                         })} 
                     </ul>
                 </div>
-                <div className="col-lg-3 col-md-6 col-6">
+                <div className="col-lg-3 col-md-6 col-12">
                     {/* <h3>Heading</h3> */}
                     <ul>
                         {categoryAllData && categoryAllData.map((cv, i)=>{ 
@@ -53,7 +53,7 @@ const Footer = () => {
                         })} 
                     </ul>
                 </div>
-                <div className="col-lg-3 col-md-6 col-6">
+                <div className="col-lg-3 col-md-6 col-12">
                     {/* <h3>Heading</h3> */}
                     <ul className='text-white'> 
                         <li className='d-flex gap-2'><p className=' max-width'><i className="fa-solid fa-location-dot text-white"></i> : </p> <p className=''> Sector - 65, Noida, Uttar Pradesh (INDIA)</p></li>

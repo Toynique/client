@@ -132,7 +132,7 @@ const Navbar = () => {
     <>
       <nav className='bg-light-gra border bg-white position-relative shadow-sm'>
         <div className="container ">
-          <div className="d-flex py-lg-3 nav-container align-items-center justify-content-between h-100 nav-wrap">
+          <div className="d-flex py-lg-3 align-items-center justify-content-between h-100 nav-wrap">
 
             <div className='logo-box'>
               <Link to="/" onClick={() => dropdownFunc()}>
@@ -144,23 +144,23 @@ const Navbar = () => {
               <button type='button' className='btn' onClick={activesidebar}><i className="fa-solid fa-bars" ></i></button>
             </div>
 
-            <div className={`d-flex align-items-center justify-content-between flex-grow-1 h-100 nav-link-box ${activeClass}`} id='nav-link-box'>
+            <div className={`d-flex align-items-cente justify-content-between flex-grow-1 h-100 nav-link-box ${activeClass}`} id='nav-link-box'>
 
               <div className='flex-grow-1 navbar-list-wrap  '>
                 <ul className='navbar-list-box align-items-end flex-grow-1 gap-4 w-100 mb-0'>
                   <li className={`nav-item `} >
                     <span className='text-capitalize cl-darkLight '>Plus Toys</span>
-                    <div className='dropdown-character shadow-sm border-bottom pt-4'>
-                      <div className="border-top bg-white pt-4">
+                    <div className='dropdown-character shadow-sm border-bottom pt-lg-4 mt-lg-0 mt-2'>
+                      <div className="border-top bg-white pt-lg-4 pt-2">
                         <div className="container">
                           <div className="row">
                             {characteralldata && characteralldata.map(characterValue => {
                               return (
-                                <div className="col-lg-3 col-sm-6 col-12" key={characterValue._id}>
+                                <div className="col-lg-3  col-12" key={characterValue._id}>
                                   <div className="heading pe-5 fw-bold">
                                     <h3 className='text-capitalize border-bottom border-dark border-2 mb-3 pb-2 cl-blue'>{characterValue.character}</h3>
                                   </div>
-                                  <div className="heading-list mb-4">
+                                  <div className="heading-list mb-lg-4 mb-2">
                                     <div>
                                       <Link to={`/products/character/${stringToSlug(characterValue.character)}`} onClick={() => dropdownFunc('')}>All</Link>
                                     </div>
@@ -184,18 +184,18 @@ const Navbar = () => {
                     </div>
                   </li>
                   <li className={`nav-item `} >
-                    <span className='text-capitalize cl-darkLight  '>Shop </span>
-                    <div className='dropdown-character shadow-sm border-bottom pt-4'>
-                      <div className="border-top bg-white pt-4">
+                    <span className='text-capitalize cl-darkLight'>Shop </span>
+                    <div className='dropdown-character shadow-sm border-bottom pt-lg-4 mt-lg-0 mt-2'>
+                      <div className="border-top bg-white pt-lg-4 pt-2">
                         <div className="container">
                           <div className="row">
                             {categoryalldata && categoryalldata.map(categoryValue => {
                               return (
-                                <div className="col-lg-3 col-md-4 col-sm-6 col-12" key={categoryValue._id}>
+                                <div className="col-lg-3 col-12" key={categoryValue._id}>
                                   <div className="heading pe-5">
                                     <h3 className='text-capitalize cl-blue border-bottom border-dark border-2 mb-3 pb-2 '>{categoryValue.category}</h3>
                                   </div>
-                                  <div className="heading-list mb-4">
+                                  <div className="heading-list mb-lg-4 mb-2">
                                     <div>
                                       <Link to={`/products/category/${stringToSlug(categoryValue.category)}`} onClick={() => dropdownFunc('')}>All</Link>
                                     </div>
