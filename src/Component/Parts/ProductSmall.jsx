@@ -154,8 +154,8 @@ const ProductSmall = (props) => {
             {productData.discount > 0 && <p className='mb-0 fw-normal textPrimarySecond fs-14 fs-xs-10'>({productData.discount} % off)</p>   } 
         </div>
         <div className='text-end gap-lg-3 gap-1 d-flex justify-content-between align-items-center'> 
-          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8" onClick={()=>addMyCart(productData)} >Add to beg</button>
-          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8" to={`/checkout?productId=${productData._id}`} >Quick buy</Link>
+          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" onClick={()=>addMyCart(productData)} >Add to beg</button>
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`/checkout?productId=${productData._id}`} >Quick buy</Link>
         </div>
 
         {ratingData &&
