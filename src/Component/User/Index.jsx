@@ -40,8 +40,7 @@ const Index = () => {
       <ToastContainer />
       <Navbar />
       <HeaderSlider />
-
-      <main className='main-section'>
+ 
       <section className='py-md-0 py-4'>
         <div className="container">
           <div className="row align-items-center">
@@ -96,8 +95,10 @@ const Index = () => {
       </section> */}
       {/* <Cta /> */}
 
+
+
       {productAllData.length > 0 ?
-        <section className='py-5'>
+        <section className='py-5 home-product-section'>
           <div className="container">
             <div className="d-flex justify-centent-center align-items-center  mb-lg-5 mb-md-3 mb-2">
               <div className=" flex-grow-1 border borderPrimarySecond "></div>
@@ -164,8 +165,7 @@ const Index = () => {
           </div>
 
         </section> : null}
-
-        </main>
+ 
 
 
       {/* this is video section  */}

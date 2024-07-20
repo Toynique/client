@@ -366,11 +366,11 @@ input[type="radio"]:checked {
     outline: 0;
 }
 
-/* main section css start  */
-.main-section{
+/* home product section section css start  */
+.home-product-section{
   background: url('/assets/img/aboutBg.jpg');
 }
-/* main section css end  */
+/* home product section section css end  */
 
 
 
