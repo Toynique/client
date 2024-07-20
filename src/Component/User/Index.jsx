@@ -41,6 +41,7 @@ const Index = () => {
       <Navbar />
       <HeaderSlider />
 
+      <main className='main-section'>
       <section className='py-md-0 py-4'>
         <div className="container">
           <div className="row align-items-center">
@@ -138,8 +139,8 @@ const Index = () => {
             <div className="row">
               {blogAllData && blogAllData.slice(0, 3).map((blogValue, index) => {
                 return (
-                  <div className='col-lg-3 col-sm-4 col-6 p-2' key={blogValue._id}>
-                    <div className=' '>
+                  <div className='col-lg-3 col-sm-4 col-6 ' key={blogValue._id}>
+                    <div className=' shadow'>
 
                       <Link to={`/blog/${blogValue.title}/${blogValue._id}`}>
                         <img src={blogValue.image} alt={blogValue.altTag} className='img-fluid' />
@@ -164,7 +165,7 @@ const Index = () => {
 
         </section> : null}
 
-
+        </main>
 
 
       {/* this is video section  */}

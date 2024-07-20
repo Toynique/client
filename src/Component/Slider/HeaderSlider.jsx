@@ -18,13 +18,12 @@ const HeaderSlider = () => {
     pauseOnFocus: false,
   };
 
-  const imgArr = ["banner1.jpg", "banner1.jpg"]
-  // const imgSmArr = ["banner-sm1.jpg"] 
+  const imgArr = ["banner1.jpg", "banner1.jpg"] 
   const imgSmArr = ["banner-sm1.jpg", "banner-sm1.jpg"]
   const imgmdArr = ["banner-md1.jpg", "banner-md1.jpg"]
 
   return (
-    <>
+    <> 
       <section className='position-relative slider-header-wrap w-100'>
         {/* <Slider {...settings} className='w-100'>
           {imgArr.map((img, i) => {
@@ -32,9 +31,9 @@ const HeaderSlider = () => {
               <div className='header-slider' key={i}>
                 <div key={i} className=''> 
                   <picture> 
-                    <source srcSet={`./assets/img/${imgSmArr[i]}`} media="(max-width: 476px)" />
-                    <source srcSet={`./assets/img/${imgmdArr[i]}`} media="(max-width: 768px)" />
-                    <img src={`./assets/img/${img}`} alt="Banner Image" loading='lazy' className='img-fluid w-100' />
+                    <source srcSet={`/assets/img/${imgSmArr[i]}`} media="(max-width: 476px)" />
+                    <source srcSet={`/assets/img/${imgmdArr[i]}`} media="(max-width: 768px)" />
+                    <img src={`/assets/img/${img}`} alt="Banner Image" loading='lazy' className='img-fluid w-100' />
                   </picture>
 
                 </div>
@@ -45,15 +44,13 @@ const HeaderSlider = () => {
         <Slider {...settings} className='w-100'>
           {bannerAllData.map((bannerValue, i) => { 
             return (
-              <div className='header-slider' key={i}>
-                <div key={i} className=''> 
-                  <picture> 
-                    
-                    
-                    <source srcSet={bannerValue.bannerSm} media="(max-width: 576px)" />
-                    <source srcSet={bannerValue.bannerMd} media="(max-width: 768px)" />
-                    <img src={bannerValue.bannerLg} alt="Banner Image" loading='lazy' className='img-fluid w-100' /> 
-                  </picture>
+              <div className='header-sliderLL' key={bannerValue._id}>
+                <div className=''> 
+                <picture>
+                  <source srcSet={`${bannerValue.bannerSm}`} media="(max-width: 476px)" />
+                  <source srcSet={`${bannerValue.bannerMd}`} media="(max-width: 768px)" />
+                  <img src={bannerValue.bannerLg} alt="Banner Image" loading='lazy' className='img-fluid' />
+                </picture>
 
                 </div>
               </div>

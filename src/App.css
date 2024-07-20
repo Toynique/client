@@ -366,6 +366,12 @@ input[type="radio"]:checked {
     outline: 0;
 }
 
+/* main section css start  */
+.main-section{
+  background: url('/assets/img/aboutBg.jpg');
+}
+/* main section css end  */
+
 
 
 /* navbar css start  */
@@ -455,9 +461,9 @@ input[type="radio"]:checked {
   display: none;
 }
 
-.header-slider{
+/* .header-slider{
   position: relative;
-} 
+}  */
 .logo-box{
   background-color: transparent;
 }
