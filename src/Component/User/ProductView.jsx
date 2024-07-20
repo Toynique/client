@@ -32,7 +32,7 @@ const ProductView = () => {
   const [product, setProduct] = useState();
   const [rating, setRating] = useState([]);
   const [ratingData, setRatingData] = useState();
-  const [auth, setAuth]= useState(false)
+  const [auth, setAuth] = useState(false)
   const stringToSlug = (str) => {
     return str
       .toLowerCase()
@@ -42,33 +42,34 @@ const ProductView = () => {
       .trim();
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     authCheck()
-  },[])
+  }, [])
 
-  const authCheck = ()=>{
-    const userdata = localStorage.getItem('userdata') 
-      const usertoken = localStorage.getItem('usertoken')
-      if(userdata && usertoken){
-        setAuth(true)
-      }
-      else{
-        setAuth(false)
-      }
+  const authCheck = () => {
+    const userdata = localStorage.getItem('userdata')
+    const usertoken = localStorage.getItem('usertoken')
+    if (userdata && usertoken) {
+      setAuth(true)
+    }
+    else {
+      setAuth(false)
+    }
   }
 
   const addtocart = async (productDetails) => {
-    if(productDetails.totalProduct > 0){
-    const userdata = localStorage.getItem("userdata");
-    if (userdata) {
-      const userdataobj = JSON.parse(userdata);
-      const userId = userdataobj._id;
-      await addCartApi(userId, productId).then(() => {
-        dispatch(cartdata(userId));
-      });
-    }}
-    else{
-      toast.warning("Product Out Of Stock",  {autoClose: 1500,})
+    if (productDetails.totalProduct > 0) {
+      const userdata = localStorage.getItem("userdata");
+      if (userdata) {
+        const userdataobj = JSON.parse(userdata);
+        const userId = userdataobj._id;
+        await addCartApi(userId, productId).then(() => {
+          dispatch(cartdata(userId));
+        });
+      }
+    }
+    else {
+      toast.warning("Product Out Of Stock", { autoClose: 1500, })
     }
   };
 
@@ -83,28 +84,28 @@ const ProductView = () => {
     }
   };
 
-  const addMyCart = async(product)=>{ 
-    if(product){
-      const products= localStorage.getItem('cartProducts')
-      if(products ){
-        const allProducts = await JSON.parse(products) 
-        const isAlready = await allProducts.find(d=>d._id === product._id) 
-        if(!isAlready){ 
-          allProducts.push({...product, quantity : 1})
-          localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
-          toast.success("Product add to cart",  {autoClose: 1500,})
+  const addMyCart = async (product) => {
+    if (product) {
+      const products = localStorage.getItem('cartProducts')
+      if (products) {
+        const allProducts = await JSON.parse(products)
+        const isAlready = await allProducts.find(d => d._id === product._id)
+        if (!isAlready) {
+          allProducts.push({ ...product, quantity: 1 })
+          localStorage.setItem('cartProducts', JSON.stringify(allProducts))
+          toast.success("Product add to cart", { autoClose: 1500, })
         }
-        else{
+        else {
           console.log("already axist");
-          toast.warning("Product already in cart",  {autoClose: 1500,})
+          toast.warning("Product already in cart", { autoClose: 1500, })
         }
       }
-      else{
-        let productArr = [{...product, quantity: 1}]
-        productArr = await JSON.stringify(productArr) 
-        localStorage.setItem('cartProducts',productArr ) 
-        toast.success("Product add to cart",  {autoClose: 1500,})
-      } 
+      else {
+        let productArr = [{ ...product, quantity: 1 }]
+        productArr = await JSON.stringify(productArr)
+        localStorage.setItem('cartProducts', productArr)
+        toast.success("Product add to cart", { autoClose: 1500, })
+      }
     }
   }
 
@@ -148,26 +149,25 @@ const ProductView = () => {
                           <i className="fa-solid fa-house"></i> Home
                         </Link>
                       </MDBBreadcrumbItem>
-                      <MDBBreadcrumbItem>  
-                      {/* products/category/category-one ?subcategory=subcategory-one */}
-                        <Link to={product?.category ? `/products/category/${product?.category }` : ''}> 
+                      <MDBBreadcrumbItem>
+                        <Link to={product?.category ? `/products/category/${product?.category}` : ''}>
                           {product && product.category}
                         </Link>
                       </MDBBreadcrumbItem>
                       <MDBBreadcrumbItem>
                         <Link
-                          to={product?.category && product?.subcategory ? `/products/category/${product?.category}?subcategory=${product?.subcategory }` : ''} > 
+                          to={product?.category && product?.subcategory ? `/products/category/${product?.category}?subcategory=${product?.subcategory}` : ''} >
                           {product && product?.subcategory}
                         </Link>
                       </MDBBreadcrumbItem>
                       <MDBBreadcrumbItem>
-                        <Link to={product?.character ?`/products/character/${product?.character }` : ""}> 
+                        <Link to={product?.character ? `/products/character/${product?.character}` : ""}>
                           {product && product.character}
                         </Link>
                       </MDBBreadcrumbItem>
                       <MDBBreadcrumbItem>
                         <Link
-                          to={product?.character && product?.subcharacter?`/products/character/${product?.character}?subcategory=${product?.subcharacter}` : ""} > 
+                          to={product?.character && product?.subcharacter ? `/products/character/${product?.character}?subcategory=${product?.subcharacter}` : ""} >
                           {product && product.subcharacter}
                         </Link>
                       </MDBBreadcrumbItem>
@@ -180,16 +180,16 @@ const ProductView = () => {
                 </div>
                 <div className="col-xl-5 col-lg-5 col-md-6 col-12">
                   <div className="">
-                    <div className="iconbox text-end">
+                    {/* <div className="iconbox text-end">
                       {auth &&
-                      <button
-                        className="btn border-0"
-                        onClick={() => addWishlistFunc(product._id)}
-                      >
-                        <i className="fa-regular text-muted fa-heart fa-lg me-2"></i>
-                      </button>}
+                        <button
+                          className="btn border-0"
+                          onClick={() => addWishlistFunc(product._id)}
+                        >
+                          <i className="fa-regular text-muted fa-heart fa-lg me-2"></i>
+                        </button>}
                       <i className="fa-solid fa-share fa-lg cl-blue"></i>
-                    </div>
+                    </div> */}
                     <p className="cl-blue text-uppercase">
                       {product.subcharacter}
                     </p>
@@ -225,9 +225,9 @@ const ProductView = () => {
                         Rs.{" "}
                         {product.discount > 0
                           ? product.salePrice -
-                            Math.ceil(
-                              (product.salePrice * product.discount) / 100
-                            )
+                          Math.ceil(
+                            (product.salePrice * product.discount) / 100
+                          )
                           : product.salePrice}
                       </p>
 
@@ -238,47 +238,44 @@ const ProductView = () => {
                       )}
                     </div>
                     {product.totalProduct > 0 ?
-                    <div className="my-3">
-                      {false ? (
-                        <Link className="btn btn-blue  me-3 fw-bold" to="/cart">
-                          Go to cart{" "}
-                          <i className="fa-solid fa-cart-shopping"></i>
-                        </Link>
-                      ) : auth? (
-                        <button
-                          className="btn btn-blue  me-3 fw-bold"
-                          onClick={() => addtocart(product)}
-                        >
-                          Add to cart{" "}
-                          <i className="fa-solid fa-cart-shopping"></i>
-                        </button>
-                      ) :(
-                        <button
-                          className="btn btn-blue  me-3 fw-bold"
-                          onClick={() => addMyCart(product)}
-                        >
-                          Add to cart{" "}
-                          <i className="fa-solid fa-cart-shopping"></i>
-                        </button>
-                      )
-                      
-                      }
-                      {auth?
-                      <Link className="btn btn-outline-blue fw-bold" to={'/cart'} onClick={() => addtocart(product)}>
-                        Buy Now <i className="fa-solid fa-bag-shopping"></i>
-                      </Link>:
-                      <Link className="btn btn-outline-blue fw-bold" to={`/checkout?productId=${product._id}`} >
-                        Buy Now <i className="fa-solid fa-bag-shopping"></i>
-                      </Link>}
-                    </div> : <button
-                          className="btn btn-blue my-2  me-3 fw-bold"
-                          onClick={() => addtocart(product)}
-                        >
-                          Notify Me 
-                        </button> }
-                    {/* <p className="cl-pink">
-                      Expected delivery on Sun, 28 May - Tue, 30 May
-                    </p> */}
+                      <div className="my-3">
+                        {false ? (
+                          <Link className="btn btn-blue  me-3 fw-bold" to="/cart">
+                            Go to cart{" "}
+                            <i className="fa-solid fa-cart-shopping"></i>
+                          </Link>
+                        ) : auth ? (
+                          <button
+                            className="btn btn-blue  me-3 fw-bold"
+                            onClick={() => addtocart(product)}
+                          >
+                            Add to cart{" "}
+                            <i className="fa-solid fa-cart-shopping"></i>
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-blue  me-3 fw-bold"
+                            onClick={() => addMyCart(product)}
+                          >
+                            Add to cart{" "}
+                            <i className="fa-solid fa-cart-shopping"></i>
+                          </button>
+                        )
+
+                        }
+                        {auth ?
+                          <Link className="btn btn-outline-blue fw-bold" to={'/cart'} onClick={() => addtocart(product)}>
+                            Buy Now <i className="fa-solid fa-bag-shopping"></i>
+                          </Link> :
+                          <Link className="btn btn-outline-blue fw-bold" to={`/checkout?productId=${product._id}`} >
+                            Buy Now <i className="fa-solid fa-bag-shopping"></i>
+                          </Link>}
+                      </div> : <button
+                        className="btn btn-blue my-2  me-3 fw-bold"
+                        onClick={() => addtocart(product)}
+                      >
+                        Notify Me
+                      </button>}
                     {product &&
                       product.totalProduct > 0 &&
                       product.totalProduct < 10 && (
@@ -287,7 +284,7 @@ const ProductView = () => {
                         </p>
                       )}
                     {product &&
-                      product.totalProduct <= 0  && (
+                      product.totalProduct <= 0 && (
                         <p className="textDanger">
                           Out Of Stock
                         </p>
@@ -354,9 +351,8 @@ const ProductView = () => {
               </div>
               <div className="text-center mt-4">
                 <Link
-                  to={`/products/character/${
-                    product && stringToSlug(product.character)
-                  }`}
+                  to={`/products/character/${product && stringToSlug(product.character)
+                    }`}
                   className="homebtn"
                 >
                   Show More

@@ -258,7 +258,7 @@ export default function CheckoutWithoutAuth() {
                     // setOffer(0)
                     // setTotalCheckout(0)
                     // setGuestAddress(userDefaultValue)
-                    navigate('/profile')
+                    navigate('/')
                 }
                 else {
                     toast.warning("warning else", { autoClose: 1500, })

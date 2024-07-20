@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs, Mousewheel } from "swiper";
 import "../../Css/ViewImage.css"
 import "swiper/css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactImageMagnify from 'react-image-magnify'; 
 
  
@@ -11,34 +11,34 @@ export default function ViewImage(props) {
   const {images } = props  
 
 
-  const smallSlideBox = async()=>{ 
-    if(window.innerWidth > 1025){
-    let box = document.getElementsByClassName('swiper-slide')
-    let length = box.length
-    for(let i=0; i < length; i++){
-      let elem = box[i];
-      let elemheight = await elem.offsetHeight;
-      elem.style.width = `${elemheight}px`
+ 
+   
+  const smallSlideBox =  ()=>{
+    const adjustSlides = () => {
+      const boxes = document.getElementsByClassName('swiper-slide');
+      const length = boxes.length; 
+      for (let i = 0; i < length; i++) {
+        let elem = boxes[i]; 
+        if (window.innerWidth > 1025) {
+          if (elem && elem.offsetHeight) {
+            elem.style.width = `${elem.offsetHeight}px`; 
+          }
+        } else {
+          if (elem && elem.offsetWidth) {
+            elem.style.height = `${elem.offsetWidth}px`; 
+          }
+        }
+      }
     }
-    }
-    else{
-      let box = document.getElementsByClassName('swiper-slide')
-    let length = box.length
-    for(let i=0; i < length; i++){
-      let elem = box[i];
-      let elemheight = await elem.offsetWidth;
-      elem.style.height = `${elemheight}px`
-    }
-
-    }
-  }
+    adjustSlides();
+};
   
   const [imagesNavSlider, setImagesNavSlider] = useState([]);
   const [slideSrc, setSlideSrc] = useState('') 
 
   useEffect(()=>{
     smallSlideBox()
-  })
+  }, [images])
   useEffect(()=>{
     setSlideSrc(( images && `${images.images[0]}`))
   }, [images])

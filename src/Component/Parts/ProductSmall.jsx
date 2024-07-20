@@ -88,7 +88,7 @@ const ProductSmall = (props) => {
           if(!isAlready){ 
             allProducts.push({...product, quantity : 1})
             localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
-            toast.success("Product add to cart",  {autoClose: 1500,})
+            toast.success("Product added to cart",  {autoClose: 1500,})
           }
           else{
             console.log("already axist");
@@ -99,7 +99,7 @@ const ProductSmall = (props) => {
           let productArr = [{...product, quantity: 1}]
           productArr = await JSON.stringify(productArr) 
           localStorage.setItem('cartProducts',productArr ) 
-          toast.success("Product add to cart",  {autoClose: 1500,})
+          toast.success("Product added to cart",  {autoClose: 1500,})
         } 
       }
     }

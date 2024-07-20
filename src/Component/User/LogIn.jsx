@@ -20,6 +20,9 @@ import { adduser } from '../../redux/slice/user';
 // import image/icons 
 import sideBanner from '/assets/img/sidebanner.jpg'
 import logoImg from '/assets/img/logo-dark.png'
+import { Url } from '../../url/url';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const defaultTheme = createTheme();
@@ -36,14 +39,29 @@ export default function LogIn() {
 
   const auth = localStorage.getItem('usertoken')
 
+  const loginSuccess = async(resp)=>{
+    const token = resp.data.token
+    const userId = resp.data.responsedata._id
+    let userdata = resp.data.responsedata
+    userdata = JSON.stringify(userdata);
+    localStorage.setItem("usertoken", token);
+    localStorage.setItem("userdata", userdata);
+    const locationHistory = localStorage.getItem("locationHistory")
+    navigate(`${locationHistory ? locationHistory : '/'}`)
+    dispatch(cartdata(userId))
+    dispatch(wishlistdata(userId))
+    dispatch(adduser(resp.data.responsedata))
+    setIsLoading(false)
+    locationHistory ? localStorage.removeItem("locationHistory") : null;
+  }
+
+
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); 
     setIsLoading(true)
     setErrMsg('')
     const data = new FormData(event.currentTarget);
-    const logindata = { "email": data.get('email'), "password": data.get('password') }
-    
-
+    const logindata = { "email": data.get('email'), "password": data.get('password'), "otp": data.get('otp') } 
     if(!loginWithOTP){
       const resp = await loginUser(logindata)
     if (resp) {
@@ -62,19 +80,7 @@ export default function LogIn() {
         navigate(`/user-verification-check/${id}`)
       }
       else if (status === 200) {
-        const token = resp.data.token
-        const userId = resp.data.responsedata._id
-        let userdata = resp.data.responsedata
-        userdata = JSON.stringify(userdata);
-        localStorage.setItem("usertoken", token);
-        localStorage.setItem("userdata", userdata);
-        const locationHistory = localStorage.getItem("locationHistory")
-        navigate(`${locationHistory ? locationHistory : '/'}`)
-        dispatch(cartdata(userId))
-        dispatch(wishlistdata(userId))
-        dispatch(adduser(resp.data.responsedata))
-        setIsLoading(false)
-        locationHistory ? localStorage.removeItem("locationHistory") : null;
+        loginSuccess(resp)
       }
       else {
         setIsLoading(false) 
@@ -87,13 +93,44 @@ export default function LogIn() {
     else {
       setIsLoading(false) 
     }}
-    else{
-      if(logindata?.email){
-        console.log("email",logindata.email)
+    else{ 
+      
+      if(logindata?.email && logindata?.otp){ 
+        const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata)
+        console.log("response verifyOTP", response);
+        setIsLoading(false)
+        if(response.status === 200){
+          loginSuccess(response)
+        }
+        else if(response.status === 204){
+          setErrMsg('Wrong OTP ')
+        }
+        else{
+          setErrMsg('Something server error try again later')
+        }
+      }
+      else if(logindata?.email){  
+        console.log("hit for otp");
+        const response = await axios.post(`${Url}/user/createOTP`, logindata) 
+        setIsLoading(false)
+        setOTP(true)
+        console.log("setOtp true", response);
+        if(response.status === 200){
+          toast.info("OTP Send" , {autoClose: 1500,});
+        }
+        else if(response.status === 204){
+          setErrMsg('Wrong Email Address')
+        }
+        else{
+          setIsLoading(false)
+          setErrMsg('Something server error try again later')
+        }
       }
       else{
-        setOTP(true)
+        setIsLoading(false)
+        setErrMsg('Email not found') 
       }
+      setIsLoading(false)
     }
 
   };
@@ -108,6 +145,7 @@ export default function LogIn() {
   return (
 
     <>
+    <ToastContainer />
       <section>
         <div className="row min-vh-100">
           <div className="col-md-6 col-12 sm-none">
@@ -141,6 +179,7 @@ export default function LogIn() {
                     </Typography>
                     
                     <Box component="form" onSubmit={event => handleSubmit(event)} noValidate sx={{ mt: 1 }}>
+                    {/* <Box component="form" noValidate sx={{ mt: 1 }}> */}
                     <small className='fs-12 text-danger'>{errMsg}</small>
                       <TextField
                         margin="normal"
@@ -152,27 +191,20 @@ export default function LogIn() {
                         autoComplete="email"
                         autoFocus
                       />
-                      { sendOTP ? 
+                      <div className='text-end'>
+                      { sendOTP && loginWithOTP ? 
                       <Button
-                        type="submit" 
+                        type="submit"  
                         variant="contained"
                         disabled={isLoading}
                         sx={{ mt: 1, mb: 1 }}
-                        className='bgPrimary btn-sm fs-10'
+                        className='bgPrimary btn-sm fs-10' 
                       >
                         Resend OTP
-                      </Button> :
-                      loginWithOTP ?
-                      <Button
-                        type="submit" 
-                        fullWidth
-                        variant="contained"
-                        disabled={isLoading}
-                        sx={{ mt: 3, mb: 2 }}
-                        className='bgPrimary '
-                      >
-                        Send OTP
                       </Button> : "" }
+                      </div>
+
+
                       {!loginWithOTP &&
                       <TextField
                         margin="normal" 
@@ -191,9 +223,9 @@ export default function LogIn() {
                         label="OTP"
                         type="number"
                         id="otp"
-                        autoComplete="current-password"
+                        // autoComplete="current-password"
                       />} 
-                      { loginWithOTP && sendOTP ?
+                      
                       <Button
                         type="submit"
                         fullWidth
@@ -201,18 +233,10 @@ export default function LogIn() {
                         disabled={isLoading}
                         sx={{ mt: 3, mb: 2 }}
                         className='bgPrimary'
+                        // onClick={(e)=>handleSubmit(e)}
                       >
-                        Log In
-                      </Button>  : !loginWithOTP && !sendOTP ?  <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        disabled={isLoading}
-                        sx={{ mt: 3, mb: 2 }}
-                        className='bgPrimary'
-                      >
-                        Log In
-                      </Button> :""}
+                        {isLoading ? "Waiting..." : loginWithOTP && !sendOTP ? 'Send OTP' : "Log In"}
+                      </Button>  
                       <div className='text-end mb-2'>
                         {!loginWithOTP ?
                         <span className='fs-14 text-primary pointer' onClick={()=>setLoginWithOTP(!loginWithOTP)}>Login with OTP</span> :

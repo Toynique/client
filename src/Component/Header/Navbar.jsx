@@ -183,7 +183,7 @@ const Navbar = () => {
                       </div>
                     </div>
                   </li>
-                  <li className={`nav-item `} >
+                  {/* <li className={`nav-item `} >
                     <span className='text-capitalize cl-darkLight'>Shop </span>
                     <div className='dropdown-character shadow-sm border-bottom pt-lg-4 mt-lg-0 mt-2'>
                       <div className="border-top bg-white pt-lg-4 pt-2">
@@ -216,6 +216,9 @@ const Navbar = () => {
                       </div>
 
                     </div>
+                  </li> */}
+                  <li className={`nav-item `} >
+                    <Link className='text-capitalize cl-darkLight item-link' to={"/products"}>Products</Link>
                   </li>
                   <li className={`nav-item `} onClick={() => dropdownFunc("")}>
                     <Link className='text-capitalize cl-darkLight item-link' to={"/blog"}>Blog</Link>

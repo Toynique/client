@@ -74,7 +74,7 @@ const BlogView = () => {
                                         <div className='recent-blog-img-box m-auto'>
                                             <img src={`${blogValue.image} `} alt={blogValue.altTag} className=' img-fluid ' />
                                         </div>
-                                        <h6>{blogValue.title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio quis accusantium nesciunt? </h6>
+                                        <h6>{blogValue.title} </h6>
                                     </div>
                                 )
                             })}
