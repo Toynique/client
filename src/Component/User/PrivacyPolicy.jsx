@@ -8,18 +8,18 @@ const PrivacyPolicy = () => {
       <Navbar />
       <section className="py-5">
         <div className="container">
-          <h1>This Privacy Policy applies to Doozie Do</h1>
+          <h1>This Privacy Policy applies to Toynique</h1>
           <p>
-            Doozie-do.com recognises the importance of maintaining your privacy.
+            toyniquetoys.com recognises the importance of maintaining your privacy.
             We value your privacy and appreciate your trust in us. This Policy
             describes how we treat user information we collect on
-            http://www.doozie-do.com and other offline sources. This Privacy
+            http://www.toyniquetoys.com and other offline sources. This Privacy
             Policy applies to current and former visitors to our website and to
             our online customers. By visiting and/or using our website, you
             agree to this Privacy Policy.
           </p>
           <p>
-            Doozie-do.com is a property of THINK CMYK STUDIOS a partnership firm
+            toyniquetoys.com is a property of THINK CMYK STUDIOS a partnership firm
             having its registered office at C-26, Sector -65. NOIDA – 201301.
             Uttar Pradesh the exclusive rights of which has been assigned to
             PIKOLI DESING CONSULTANCY LLP, a Limited liability partnership firm
@@ -43,7 +43,7 @@ const PrivacyPolicy = () => {
           <p>
             Information you post. We collect information you post in a public
             space on our website or on a third-party social media site belonging
-            to Doozie-do.com.
+            to toyniquetoys.com.
           </p>
           <p>
             Demographic information. We may collect demographic information
@@ -153,7 +153,7 @@ const PrivacyPolicy = () => {
           </p>
           <h2 className="mt-3">Email Opt-Out</h2>
           <p></p>You can opt out of receiving our marketing emails. To stop
-          receiving our promotional emails, please email support@doozie-do.com.
+          receiving our promotional emails, please email support@toyniquetoys.com.
           It may take about ten days to process your request. Even if you opt
           out of getting marketing messages, we will still be sending you
           transactional messages through email and SMS about your purchases.
@@ -170,9 +170,9 @@ const PrivacyPolicy = () => {
             In accordance with Information Technology Act 2000 and rules made
             there under, the name and contact details of the Grievance Officer
             are provided below: Ms. Mishra C-26, Sector 65 NOIDA- 201301 Phone:
-            +91-7838130078 Email: support@doozie-do.com If you have any
+            +91-7838130078 Email: support@toyniquetoys.com If you have any
             questions about this Policy or other privacy concerns, you can also
-            email us at support@doozie-do.com
+            email us at support@toyniquetoys.com
           </p>
           <h2 className="mt-3">Updates to this policy</h2>
           <p>

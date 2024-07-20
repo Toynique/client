@@ -10,7 +10,7 @@ const ShipingPolicy = () => {
         <div className="container">
           <h3 className="mt-3">1. Shipping Methods and Times</h3>
           <p>
-            At Doozie-Do.com, we strive to ensure that your orders are delivered
+            At toyniquetoys.com, we strive to ensure that your orders are delivered
             to you in a timely and efficient manner. We currently offer the
             following shipping methods:
           </p>
@@ -73,7 +73,7 @@ const ShipingPolicy = () => {
           <h3 className="mt-3">9. Contact Information</h3>
           <p>
             If you have any questions or concerns regarding our shipping policy,
-            please contact our customer service team at support@doozie-do.com
+            please contact our customer service team at support@toyniquetoys.com
           </p>
         </div>
       </section>
