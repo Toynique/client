@@ -167,7 +167,7 @@ const Navbar = () => {
                                     <div className="row">
                                       {subcharacteralldata && subcharacteralldata.filter(data => data.character === characterValue.character).map(subcharacterValue => {
                                         return (
-                                          <div className="col-6" key={subcharacterValue._id}>
+                                          <div className="col-12" key={subcharacterValue._id}>
                                             <Link to={`/products/character/${stringToSlug(characterValue.character)}?subcharacter=${stringToSlug(subcharacterValue.subcharacter)}`} onClick={() => dropdownFunc('')} className='text-capitalize'>{subcharacterValue.subcharacter}</Link>
                                           </div>
                                         )
