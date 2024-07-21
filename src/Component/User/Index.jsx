@@ -47,9 +47,9 @@ const Index = () => {
             <div className="col-lg-6 col-md-6 col-12 mb-md-0 mb-2">
               <div>
                 <h2 className='textPrimary'>
-                  Tounique's Tiny Smiles, big hugs
+                Toynique's Tiny Hugs & Big Smiles
                 </h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aliquid tempore dolores obcaecati modi distinctio officia autem ipsam dolorem, dignissimos saepe facere delectus, amet consequuntur quos maiores animi ducimus deserunt expedita repellat quo natus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius fugiat maiores voluptatem! Saepe alias placeat voluptates architecto accusamus earum, sequi, pariatur fuga vitae vel voluptatibus corrupti quo corporis aut aperiam eius numquam tempore necessitatibus provident. Optio.</p>
+                <p>Soft toys are not just toys anymore, they are a medium to express your love, care and support for your little one, all through their growing years. A soft toy promises to be a snuggly companion, a casual tag along, a quick chat buddy and an occassional pillow under the head or near your child's chest, soothing them away to sleep or for a relaxed playtime. Toynique promises to be that super soft cuddler who is sure to spread a big smile on your child's face. And what joy it is to see your star kid surrounded by huggable lovelies we call the cradel cuddlers. Collect them all. Love Toynique.</p>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 mb-md-0 ">

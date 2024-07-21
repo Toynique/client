@@ -15,8 +15,8 @@ const Cta = () => {
                         <div className="row ">
                             <div className="col-lg-5 col-md-6 col-12">
                                 <div className=''>
-                                    <h2 className='textPrimary'>Discover the prefect cuddle campaion for your little one</h2>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti laborum voluptates quia? Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam aliquid provident quisquam.</p>
+                                    <h2 className='textPrimary'>Discover the perfect Cuddle Companion for your little ones</h2>
+                                    <p>Toyniue brings in the collectible range of 10 charachetr cradle cuddler range, available in Pet and Wild line. Tell your little one a lullaby or let them discover the habits and habitats of these toy animal characters, encouraging cognitive development, enhancing motor skills, encouracing hand eye corrdination, that too with the comfort of super soft luxurious plush friend we love to call teh Cradel Cuddlers. Collect them all. Love Toynique.</p>
                                     {/* <p className="text-uppercase cta-line1 ">Discover the prefect cuddle campaion for your little one</p> */}
                                     {/* <p className="text-uppercase cta-line2 ">army to save</p> */}
                                     {/* <p className="text-uppercase cta-line3  cl-pink">planet</p>  */}
