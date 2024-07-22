@@ -90,9 +90,7 @@ function App() {
         <Route path="productview/:slug/:productId" element={<ProductView/>} />
         <Route path="products/category/:category" element={<ProductsCategory/>} />
         <Route path="products/character/:character" element={<ProductsCharacter/>} />
-        <Route path="products" element={<ProductsPage/>} />  
-
-
+        <Route path="products" element={<ProductsPage/>} />   
       </Route> 
 
       <Route path="/my-cart" element={<CartWithoutAuth/>} />

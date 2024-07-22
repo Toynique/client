@@ -28,6 +28,7 @@ export default function Cart() {
   const userdata = localStorage.getItem("userdata")
   const [checkoutProductList, setCheckoutProductList] = useState()
   const [showCheckOutPopup, setShowCheckOutPopup] = useState(false);
+
   const [showAddressModel, setShowAddressModel] = useState(false);
  
   const handleShowAddressModel = () =>{
@@ -35,6 +36,7 @@ export default function Cart() {
     setShowAddressModel(true)
   }; 
   const handleCloseCheckOutPopup = () => setShowCheckOutPopup(false) 
+  
   const handleCloseAddressModel = () => setShowAddressModel(false) 
 
 

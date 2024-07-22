@@ -218,7 +218,7 @@ const Navbar = () => {
                     </div>
                   </li> */}
                   <li className={`nav-item `} >
-                    <Link className='text-capitalize cl-darkLight item-link' to={"/products"}>Products</Link>
+                    <Link className='text-capitalize cl-darkLight item-link' to={"/products"}>shop</Link>
                   </li>
                   <li className={`nav-item `} onClick={() => dropdownFunc("")}>
                     <Link className='text-capitalize cl-darkLight item-link' to={"/blog"}>Blog</Link>

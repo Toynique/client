@@ -195,7 +195,7 @@ const ProductView = () => {
                     </p>
                     <h2>{product && product.productName}</h2>
                     {ratingData && (
-                      <div className="d-flex align-items-center ">
+                      <div className="d-flex align-items-center product-view-rating">
                         <Rating
                           name="half-rating-read"
                           defaultValue={ratingData.avrageRating}

@@ -109,7 +109,7 @@ const Index = () => {
               <div className="row">
                 {productAllData && productAllData.filter(val => val.totalProduct > 0).map((cv, index) => {
                   return (
-                    <div key={index} className='col-lg-3 col-sm-4 col-6 p-2'>
+                    <div key={index} className='col-lg-3 col-sm-4 col-6 p-2 mb-2'>
                       <ProductSmall productData={cv} />
                     </div>
                   )

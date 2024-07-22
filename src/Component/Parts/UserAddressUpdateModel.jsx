@@ -29,6 +29,7 @@ const UserAddressUpdateModel = ({ show, handleClose, showAddAddress  }) => {
             localStorage.setItem("userdata", userStr);
             dispatch(adduser(data))
             toast.success("Address Changed",  {autoClose: 1500,})
+            handleClose()
         }
     }
 
@@ -65,8 +66,8 @@ const UserAddressUpdateModel = ({ show, handleClose, showAddAddress  }) => {
                     <div className="d-flex align-items-center gap-3 py-1 border-bottom border-bottom-not-last border-1" key={addressValue._id}>
                         <input type="radio" name="addressSelect" checked={address ? address._id === addressValue._id : false}  onChange={e=>changeAddressFunc(addressValue)} />
                         <div onClick={e=>changeAddressFunc(addressValue)}> 
-                        <p>{addressValue.receiver}</p>
-                        <p>{addressValue.address} , {addressValue.state  }, {addressValue.pincode}</p>
+                        <p className='text-capitalize'>{addressValue.receiver}</p>
+                        <p>{addressValue.address}, {addressValue.city  }, , {addressValue.state  }, {addressValue.pincode}</p>
                         <small className='fs-12 '>{addressValue.primaryNumber} , {addressValue.secondaryNumber}</small>
                         </div>
                     </div>
@@ -74,11 +75,11 @@ const UserAddressUpdateModel = ({ show, handleClose, showAddAddress  }) => {
             })}
             </div>
           </div> 
-          <div className="text-end"> 
+          {/* <div className="text-end"> 
           <Button variant="secondary" onClick={handleClose}>
             update
           </Button> 
-          </div> 
+          </div>  */}
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
