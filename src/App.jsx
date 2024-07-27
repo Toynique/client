@@ -46,6 +46,7 @@ import { ratingdata } from './redux/slice/rating';
 import CartWithoutAuth from './Component/User/CartWithoutAuth';
 import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
 import { bannerdata } from './redux/slice/banner';
+import ConfirmOrder from './Component/User/ConfirmOrder';
 
 function App() {
   const dispatch = useDispatch()
@@ -93,6 +94,7 @@ function App() {
         <Route path="products" element={<ProductsPage/>} />   
       </Route> 
 
+      <Route path="/order-confirmed/:orderId" element={<ConfirmOrder/>} />
       <Route path="/my-cart" element={<CartWithoutAuth/>} />
       <Route path="/checkout" element={<CheckoutWithoutAuth/>} />
       <Route path="/privacy-policy" element={<PrivacyPolicy/>} />

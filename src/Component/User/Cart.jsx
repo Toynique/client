@@ -62,8 +62,8 @@ export default function Cart() {
   let totalSalePrice = 0; 
   let totalCheckOut = 0;
   let offerDiscount = 0;
-  let gst = 5;
-  let diliveryCharge = 30;
+  let gst = 0;
+  let diliveryCharge = 0; 
 
   cartAllData.map(cartItem => {
     const productInCart = productAllData.find(p => p._id === cartItem.productId); 
@@ -72,7 +72,7 @@ export default function Cart() {
       totalDiscount += (productInCart.mrp - productInCart.salePrice)*(cartItem.quantity);
       totalSalePrice += (productInCart.salePrice) *(cartItem.quantity)
       offerDiscount +=   Math.ceil(productInCart.salePrice * (productInCart.discount)/100) *(cartItem.quantity)
-      totalCheckOut = totalSalePrice + diliveryCharge + Math.floor(totalSalePrice * gst/100) - offerDiscount 
+      totalCheckOut = totalSalePrice + diliveryCharge - offerDiscount 
     } 
     return null;
   }); 
@@ -229,7 +229,7 @@ export default function Cart() {
                         <MDBCardBody>
                           <div className="d-flex justify-content-between align-items-center mb-4">
                             <MDBTypography tag="h5" className="mb-0 cl-pink"> 
-                              CheckOut ({cartAllData.length} Items)
+                              Checkout ({cartAllData.length} Items)
                             </MDBTypography>
                           </div>
 
@@ -260,18 +260,12 @@ export default function Cart() {
                              - <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {offerDiscount}
                             </p> 
                           </div> : null }
+ 
 
                           <div className="d-flex justify-content-between">
-                            <p className="mb-2">GST <sapn className="text-muted">({gst}%)</sapn> </p>
-                            <p className="mb-2">  
-                              <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {Math.floor(totalSalePrice * gst/100)}
-                            </p> 
-                          </div>
-
-                          <div className="d-flex justify-content-between">
-                            <p className="mb-2">Shiping Charge</p>
-                            <p className="mb-2">  
-                              <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {diliveryCharge}
+                            <p className="mb-2">Shipping</p>
+                            <p className="mb-2">   
+                              {diliveryCharge ? diliveryCharge : "free"}
                             </p> 
                           </div> 
                           <hr />
@@ -282,7 +276,7 @@ export default function Cart() {
                           </div>
                           <hr />
                           <div className="mb-2"> 
-                            <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>CheckOut <i className="fa-solid fa-arrow-right-long"></i></button> 
+                            <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout <i className="fa-solid fa-arrow-right-long"></i></button> 
                           </div>
 
                           

@@ -17,18 +17,25 @@ const AddAddressModel = ({ show, handleClose }) => {
 
     const [inputValue, setInputValue] = useState(defaultValueObj)  
   const allStateArr = [
+    "Andaman and Nicobar Islands",
     "Andhra Pradesh",
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
-    "Chhattisgarh",
+    "Chandigarh",
+    "Chhattisgarh", 
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
     "Goa",
     "Gujarat",
     "Haryana",
     "Himachal Pradesh",
+    "Jammu and Kashmir",
     "Jharkhand",
     "Karnataka",
     "Kerala",
+    "Ladakh",
+    "Lakshadweep",
     "Madhya Pradesh",
     "Maharashtra",
     "Manipur",
@@ -36,6 +43,7 @@ const AddAddressModel = ({ show, handleClose }) => {
     "Mizoram",
     "Nagaland",
     "Odisha",
+    "Puducherry",
     "Punjab",
     "Rajasthan",
     "Sikkim",
@@ -44,15 +52,7 @@ const AddAddressModel = ({ show, handleClose }) => {
     "Tripura",
     "Uttar Pradesh",
     "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Lakshadweep",
-    "Delhi",
-    "Puducherry",
-    "Jammu and Kashmir",
-    "Ladakh",
+    "West Bengal", 
   ];
   const inputHandle = (e)=>{
     const name = e.target.name;
@@ -94,6 +94,12 @@ const AddAddressModel = ({ show, handleClose }) => {
     }
     // console.log("Add Address submit function", inputValue);
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+    }
+  };
 
   const countryOptions = Object.keys(countries)
 
@@ -222,7 +228,7 @@ const AddAddressModel = ({ show, handleClose }) => {
                         })} 
                     </select>
                     <input 
-                        type="number"
+                        type="phone"
                         name="primaryNumber"
                         className="form-control border-0 shadow-sm outline-none border-none"
                         id="primaryNumber"
@@ -243,7 +249,7 @@ const AddAddressModel = ({ show, handleClose }) => {
                   secondary Number <small className="text-muted fs-12">(Optional)</small>
                 </label>
                 <input
-                  type="number"
+                  type="phone" 
                   name="secondaryNumber"
                   className="form-control shadow-sm outline-none border-none"
                   id="secondaryNumber"
@@ -252,6 +258,7 @@ const AddAddressModel = ({ show, handleClose }) => {
                   maxLength={10} 
                   value={inputValue.secondaryNumber}
                   onChange={e=>inputHandle(e)}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
               <Modal.Footer>

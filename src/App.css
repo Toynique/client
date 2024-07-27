@@ -44,6 +44,15 @@ h1, h2, h3, h4, h5, h6, p, ul{
   margin: 0px;
   padding: 0px
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+}
 
 
 a{
@@ -55,6 +64,12 @@ a:hover{
 }
 .cl-darkLight{
   color: var(--dark-lignt) !important;
+}
+.bg-darkLight{
+  background-color: var(--dark-lignt) !important;
+}
+.bg-darkLight{
+  background-color: var(--dark-lignt) !important;
 }
 .textPrimary{
   color: var(--primary) !important;
@@ -283,6 +298,9 @@ input[type="radio"]:checked {
 .fs-14{
   font-size: 14px !important;
 }
+.fs-16{
+  font-size: 16px !important;
+}
 .fs-20{
   font-size: 20px !important;
 }
@@ -326,6 +344,9 @@ input[type="radio"]:checked {
   .fs-sm-24{
     font-size: 24px !important;
   } 
+  .fs-sm-32{
+    font-size: 24px !important;
+  } 
 }
 @media (max-width:567px){
   .no-product-wrap{
@@ -345,6 +366,12 @@ input[type="radio"]:checked {
   }
   .fs-xs-14{
     font-size: 14px !important;
+  }
+  .fs-xs-20{
+    font-size: 20px !important;
+  }
+  .fs-xs-24{
+    font-size: 24px !important;
   }
 }
 
@@ -857,3 +884,20 @@ input[type="radio"]:checked {
     width: 40px;
   }
 }
+
+
+/* confirm order page css start  */
+.confirm-order-product-wrap{
+  margin-top: -7px;
+}
+.order-confirm-product-img{
+  width: 70px;
+  height: 70px;
+}
+@media (max-width : 768px){
+  .order-confirm-product-img{
+    width: 50px;
+    height: 50px;
+  }
+}
+/* confirm order page css end  */

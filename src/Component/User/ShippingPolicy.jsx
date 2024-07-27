@@ -73,7 +73,7 @@ const ShipingPolicy = () => {
           <h3 className="mt-3">9. Contact Information</h3>
           <p>
             If you have any questions or concerns regarding our shipping policy,
-            please contact our customer service team at support@toyniquetoys.com
+            please contact our customer service team at communications@toyniquetoys.com
           </p>
         </div>
       </section>

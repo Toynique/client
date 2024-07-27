@@ -19,12 +19,10 @@ const PrivacyPolicy = () => {
             agree to this Privacy Policy.
           </p>
           <p>
-            toyniquetoys.com is a property of THINK CMYK STUDIOS a partnership firm
-            having its registered office at C-26, Sector -65. NOIDA – 201301.
+            toyniquetoys.com is a property of Rudved Enterprises (OPC) Privet Limited a partnership firm
+            having its registered office at K 11081 16th Avenue Gaur city 2 Noida Extension, Uttar Pradesh – 201301.
             Uttar Pradesh the exclusive rights of which has been assigned to
-            PIKOLI DESING CONSULTANCY LLP, a Limited liability partnership firm
-            having its registered registered office at C-26, Sector -65. NOIDA –
-            201301. Uttar Pradesh{" "}
+            
           </p>
           <h2 className="mt-3">Information we collect</h2>
           <p>
@@ -153,7 +151,7 @@ const PrivacyPolicy = () => {
           </p>
           <h2 className="mt-3">Email Opt-Out</h2>
           <p></p>You can opt out of receiving our marketing emails. To stop
-          receiving our promotional emails, please email support@toyniquetoys.com.
+          receiving our promotional emails, please email communications@toyniquetoys.com.
           It may take about ten days to process your request. Even if you opt
           out of getting marketing messages, we will still be sending you
           transactional messages through email and SMS about your purchases.
@@ -169,10 +167,10 @@ const PrivacyPolicy = () => {
           <p>
             In accordance with Information Technology Act 2000 and rules made
             there under, the name and contact details of the Grievance Officer
-            are provided below: Ms. Mishra C-26, Sector 65 NOIDA- 201301 Phone:
-            +91-7838130078 Email: support@toyniquetoys.com If you have any
+            are provided below: Ms. Mishra K 11081 16th Avenue Gaur city 2 Noida Extension, Uttar Pradesh – 201301, Phone:
+            +91-7011397408 Email: communications@toyniquetoys.com If you have any
             questions about this Policy or other privacy concerns, you can also
-            email us at support@toyniquetoys.com
+            email us at communications@toyniquetoys.com
           </p>
           <h2 className="mt-3">Updates to this policy</h2>
           <p>

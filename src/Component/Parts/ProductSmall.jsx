@@ -125,13 +125,13 @@ const ProductSmall = (props) => {
             <button className=' btn border-0 p-1 lh-1 text-muted wishicon d-block' onClick={()=>addWishlistFunc(productData._id)} > 
               <img src={wishlistIcon} alt="image" />
               </button>}
-              {auth? 
+              {/* {auth? 
             <button className=' btn border-0 p-1 lh-1 text-muted carticon d-block' onClick={()=>addtocart(productData)}> 
               <img src={cartIcon} alt="image" />
               </button> : 
             <button className=' btn border-0 p-1 lh-1 text-muted carticon d-block' onClick={()=>addMyCart(productData)}> 
               <img src={cartIcon} alt="image" />
-              </button> }
+              </button> } */}
             </div>
 
             {newActive && <div className="newIcon position-absolute top-0 start-0 bgPrimary text-white py-0 px-1 fs-12 text-uppercase"> 

@@ -279,14 +279,10 @@ const Profile = () => {
                                 {orderValue?.paymentStatus}
                               </p>
                               <p className="mb-1">
-                                Shipping Fee : &#8377;{orderValue?.diliveryCharge}
+                                Shipping Fee :  {orderValue?.diliveryCharge ? <>&#8377; {orderValue?.diliveryCharge} </> : 'Free'}
                               </p>
-                              {orderValue?.totalGst &&
-                                <p className="mb-1">
-                                  GST : &#8377;{orderValue?.totalGst}
-                                </p>}
                               <p className="mb-1">
-                                Product Price : &#8377;{orderValue?.totalproductPrice - orderValue?.offerDiscount}
+                                Product Price : &#8377; {orderValue?.totalproductPrice - orderValue?.offerDiscount}
                               </p>
                             </div>
                           </div>

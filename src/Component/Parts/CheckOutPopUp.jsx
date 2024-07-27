@@ -100,11 +100,7 @@ const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHa
             <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
               <p className='cl-blue'>Offer Discount (&#x20B9;)</p>
               <p><span className='text-muted'>- &#x20B9; </span>{cartData.offerDiscount}</p>
-            </div>}
-            <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
-              <p className='cl-blue'>GST (5%)</p>
-              <p><span className='text-muted'> &#x20B9; </span>{cartData.totalGst}</p>
-            </div>
+            </div>} 
             <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
               <p className='cl-blue'>Dilivery Charge</p>
               <p><span className='text-muted'> &#x20B9; </span>{cartData.diliveryCharge}</p>
