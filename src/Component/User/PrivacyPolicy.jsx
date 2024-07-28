@@ -19,8 +19,8 @@ const PrivacyPolicy = () => {
             agree to this Privacy Policy.
           </p>
           <p>
-            toyniquetoys.com is a property of Rudved Enterprises (OPC) Privet Limited a partnership firm
-            having its registered office at K 11081 16th Avenue Gaur city 2 Noida Extension, Uttar Pradesh – 201301.
+            toyniquetoys.com is a property of Rudved Enterprises (OPC) Private Limited a partnership firm
+            having its registered office at 9112A, 09th Floor, Gaur City Mall, Greater Noida West, Gautambuddh Nagar, Uttar Pradesh- 201304.
             Uttar Pradesh the exclusive rights of which has been assigned to
             
           </p>
@@ -167,7 +167,7 @@ const PrivacyPolicy = () => {
           <p>
             In accordance with Information Technology Act 2000 and rules made
             there under, the name and contact details of the Grievance Officer
-            are provided below: Ms. Mishra K 11081 16th Avenue Gaur city 2 Noida Extension, Uttar Pradesh – 201301, Phone:
+            are provided below: Ms. Mishra 9112A, 09th Floor, Gaur City Mall, Greater Noida West, Gautambuddh Nagar, Uttar Pradesh- 201304, Phone:
             +91-7011397408 Email: communications@toyniquetoys.com If you have any
             questions about this Policy or other privacy concerns, you can also
             email us at communications@toyniquetoys.com

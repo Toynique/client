@@ -265,13 +265,13 @@ export default function Cart() {
                           <div className="d-flex justify-content-between">
                             <p className="mb-2">Shipping</p>
                             <p className="mb-2">   
-                              {diliveryCharge ? diliveryCharge : "free"}
+                              {diliveryCharge ? diliveryCharge : "Free"}
                             </p> 
                           </div> 
                           <hr />
 
                           <div className="d-flex justify-content-between">
-                            <p className="mb-2">Total(Incl. taxes)</p>
+                            <p className="mb-2">Total(Incl. Taxes)</p>
                             <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckOut} </p>
                           </div>
                           <hr />
@@ -281,7 +281,7 @@ export default function Cart() {
 
                           
 
-                          <p className="small">Card type</p>
+                          <p className="small">Card Type</p>
                           <a href="#!" type="submit" className="">
                             <MDBIcon fab icon="cc-mastercard fa-2x me-2" />
                           </a>

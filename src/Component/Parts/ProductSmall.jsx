@@ -91,7 +91,7 @@ const ProductSmall = (props) => {
           if(!isAlready){ 
             allProducts.push({...product, quantity : 1})
             localStorage.setItem('cartProducts',JSON.stringify(allProducts) ) 
-            toast.success("Product added to cart",  {autoClose: 1500,})
+            toast.success("Product Added to cart",  {autoClose: 1500,})
           }
           else{
             console.log("already axist");
@@ -102,7 +102,7 @@ const ProductSmall = (props) => {
           let productArr = [{...product, quantity: 1}]
           productArr = await JSON.stringify(productArr) 
           localStorage.setItem('cartProducts',productArr ) 
-          toast.success("Product added to cart",  {autoClose: 1500,})
+          toast.success("Product Added to cart",  {autoClose: 1500,})
         } 
       }
       else{
@@ -118,7 +118,7 @@ const ProductSmall = (props) => {
     <div className=" p-2 "> 
         <div className='text-center d-block product-img-box'>
             <Link to={`/productview/${productData.slug}/${productData._id}`}>
-                <img src={`${productData.thumbnailImage}`} alt={productData.altTag || "image"} className='img-fluid h-100 w-100'/>
+                <img src={`${productData.thumbnailImage}`} alt={productData.altTag || "image"} className='border img-fluid h-100 w-100'/>
             </Link>
             <div className="saveicon">
               {auth &&

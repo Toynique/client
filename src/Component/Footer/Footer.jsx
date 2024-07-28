@@ -56,9 +56,9 @@ const Footer = () => {
                 <div className="col-lg-3 col-md-6 col-12">
                     {/* <h3>Heading</h3> */}
                     <ul className='text-white'> 
-                        <li className='d-flex gap-2'><p className=' max-width'><i className="fa-solid fa-location-dot text-white"></i> : </p> <p className=''> Sector - 65, Noida, Uttar Pradesh (INDIA)</p></li>
-                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-envelope text-white"></i> :</p> <p className=''>support@gmail.com</p></li>
-                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-phone text-white"></i>  : </p> <p className=''>+91 0000000000</p></li> 
+                        {/* <li className='d-flex gap-2'><p className=' max-width'><i className="fa-solid fa-location-dot text-white"></i> : </p> <p className=''> Sector - 65, Noida, Uttar Pradesh (INDIA)</p></li> */}
+                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-envelope text-white"></i> :</p> <p className=''>happiness@toyniquetoys.com</p></li>
+                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-phone text-white"></i>  : </p> <p className=''>+91 70113 97408</p></li> 
                     </ul>
                 </div>
             </div>
@@ -67,7 +67,7 @@ const Footer = () => {
     <section className="footer-bottom-wrap bg-black">
         <div className="container">
             <div className="text-center text-white py-2">
-                <p className='mb-0'>&copy;Copyright; All right reserved  | Design & Developed By <a href="http://teamlans.com" className='text-primary' target="_blank" rel="noopener noreferrer">Teamlans</a>  </p>
+                <p className='mb-0'>&copy;Copyright; All right reserved | Toynique </p>
             </div>
         </div>
     </section>

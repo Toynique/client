@@ -116,7 +116,7 @@ export default function LogIn() {
         setOTP(true)
         console.log("setOtp true", response);
         if(response.status === 200){
-          toast.info("OTP Send" , {autoClose: 1500,});
+          toast.info("OTP Sent" , {autoClose: 1500,});
         }
         else if(response.status === 204){
           setErrMsg('Wrong Email Address')

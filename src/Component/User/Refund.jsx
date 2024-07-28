@@ -70,7 +70,7 @@ or otherwise, as adjusted with any credits/discount/offers, will be refunded to
 you. Refunds will be processed based on the mode of payment and Toynique team will
 credit your refunds directly into your source of payment. Refunds will be subject
 to the following: <br />
-(a) Orders paid online will be refunded with in 10-20 bussiness days through the source of
+(a) Orders paid online will be refunded with in 5-7 bussiness days through the source of
 payment; <br />
 (b) For Cash on Delivery payments, the amount will be refunded into the
 bank account provided by you; <br />

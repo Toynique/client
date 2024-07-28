@@ -20,7 +20,7 @@ const allStateArr = [
     "Assam",
     "Bihar",
     "Chandigarh",
-    "Chhattisgarh", 
+    "Chhattisgarh",
     "Dadra and Nagar Haveli and Daman and Diu",
     "Delhi",
     "Goa",
@@ -49,8 +49,8 @@ const allStateArr = [
     "Tripura",
     "Uttar Pradesh",
     "Uttarakhand",
-    "West Bengal", 
-  ];
+    "West Bengal",
+];
 export default function CheckoutWithoutAuth() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -79,47 +79,57 @@ export default function CheckoutWithoutAuth() {
     const [guestAddress, setGuestAddress] = useState(userDefaultValue)
     const [user, setUser] = useState()
     const [paymentType, setPaymentType] = useState('')
+    const [address, setAddress] = useState()
 
-    const authCheckFunc = async()=>{
-        const userdata = localStorage.getItem('userdata') 
-        if(userdata){
+
+
+    const authCheckFunc = async () => {
+        const userdata = localStorage.getItem('userdata')
+        if (userdata) {
             const userValue = await JSON.parse(userdata)
             setOTPSuccess(true)
-                setSHowOTP(false)
+            setSHowOTP(false)
             setUser(userValue)
-            console.log("my all address", addressAllData);
-            console.log("user Value", userValue);
-            setGuestAddress({ ...guestAddress, receiver: userValue?.name, country: userValue?.country, primaryNumber: userValue?.phone })
+            if (addressAllData.length > 0) {
+                const filterAddress = addressAllData.find(d => d._id === userValue?.address)
+                if (filterAddress) {
+                    setGuestAddress({ ...filterAddress })
+                    setAddress(filterAddress)
+                }
+                else {
+                    setGuestAddress({ ...guestAddress, receiver: userValue?.name, country: userValue?.country, primaryNumber: userValue?.phone })
+                }
+            }
         }
-        
+
     }
-    const cartProductsFunc = async()=>{
+    const cartProductsFunc = async () => {
         const products = localStorage.getItem('cartProducts')
         if (products) {
-            const productsArr = await JSON.parse(products)  
+            const productsArr = await JSON.parse(products)
             setCartAllData(productsArr)
             priceUpdateFunc()
         }
     }
-    const findCartData = async () => { 
-        if (productId && productAllData) { 
-            const product = await productAllData.filter(data => data._id === productId) 
-            if(product?.length > 0){
-                const quantityProducts = product.map(d=>{ return {...d, quantity :1}})
-            setCartAllData(quantityProducts) 
-            priceUpdateFunc()
+    const findCartData = async () => {
+        if (productId && productAllData) {
+            const product = await productAllData.filter(data => data._id === productId)
+            if (product?.length > 0) {
+                const quantityProducts = product.map(d => { return { ...d, quantity: 1 } })
+                setCartAllData(quantityProducts)
+                priceUpdateFunc()
             }
-            else{
+            else {
                 await cartProductsFunc()
             }
         }
-        else{
+        else {
             await cartProductsFunc()
         }
-        
+
         const guestUser = localStorage.getItem('guestUser')
         const guestUserAddress = localStorage.getItem('guestUserAddress')
-        
+
         if (guestUser) {
             const userData = await JSON.parse(guestUser)
             setUser(userData)
@@ -158,12 +168,12 @@ export default function CheckoutWithoutAuth() {
         );
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
         findCartData()
-    }; 
+    };
     const removeProduct = (id) => {
-        const updatedProducts = cartAllData.filter(product => product._id !== id); 
+        const updatedProducts = cartAllData.filter(product => product._id !== id);
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
         findCartData()
-      };
+    };
 
     const inputUserHandle = (e) => {
         const name = e.target.name;
@@ -256,17 +266,17 @@ export default function CheckoutWithoutAuth() {
                 const responseOrder = await axios.post(`${Url}/api/order/checkoutcod`, { ...checkoutProductList, userId: user._id, address: { ...guestAddress, userId: user._id } })
                 if (responseOrder?.status == 200) {
                     toast.success("Order placed successfully", { autoClose: 1500, })
-                    console.log("data token received", responseOrder); 
+                    console.log("data token received", responseOrder);
                     const userStr = JSON.stringify(user);
                     localStorage.setItem("usertoken", responseOrder?.data.token);
                     localStorage.setItem("userdata", userStr);
                     localStorage.removeItem('cartProducts')
                     localStorage.removeItem('guestUser')
-                    localStorage.removeItem('guestUserAddress') 
+                    localStorage.removeItem('guestUserAddress')
                     navigate(`/order-confirmed/${responseOrder.data.orderID}`)
                 }
                 else {
-                    toast.warning("warning else", { autoClose: 1500, })
+                    toast.warning("something went wrong", { autoClose: 1500, })
                 }
             }
             else {
@@ -275,7 +285,14 @@ export default function CheckoutWithoutAuth() {
         } catch (error) {
             toast.error("error", { autoClose: 1500, })
         }
-    } 
+    }
+
+    const changeAddressFunc = (addressValue) => {
+        console.log("onchange Address", addressValue);
+        
+        setAddress(addressValue)
+        setGuestAddress(addressValue)
+    }
 
     useEffect(() => {
         findCartData()
@@ -284,9 +301,9 @@ export default function CheckoutWithoutAuth() {
         priceUpdateFunc()
     }, [cartAllData])
 
-    useEffect(()=>{
+    useEffect(() => {
         authCheckFunc()
-    }, [])
+    }, [addressAllData])
 
 
 
@@ -307,6 +324,23 @@ export default function CheckoutWithoutAuth() {
 
                                                 <MDBCard className="mb-3">
                                                     <MDBCardBody>
+                                                        <div className="pb-3 mb-3 border-bottom">
+                                                            {addressAllData.length > 0 && addressAllData.map((addressValue) => {
+                                                                return (
+                                                                    <div className="d-flex align-items-center gap-3 py-1 border-bottom border-bottom-not-last border-1" key={addressValue._id}>
+                                                                        <input type="radio" name="addressSelect" checked={address ? address._id === addressValue._id : false} onChange={e => changeAddressFunc(addressValue)} />
+                                                                        <div onClick={e => changeAddressFunc(addressValue)}>
+
+                                                                            <p className="mb-1 fs-14">{addressValue.address}, {addressValue.city},  {addressValue.state}, {addressValue.pincode}</p>
+                                                                            <div className="d-flex flex-wrap align-items-center gap-3">
+                                                                                <p className='text-capitalize mb-0 fs-14'>{addressValue.receiver}</p>
+                                                                                <small className='fs-12 mb-0 '>{addressValue.primaryNumber} , {addressValue.secondaryNumber}</small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
                                                         {!otpSuccess &&
                                                             <form onSubmit={(e) => submitUserProfile(e)}>
                                                                 <div className="row align-items-end">
@@ -360,7 +394,7 @@ export default function CheckoutWithoutAuth() {
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
 
                                                                         <label htmlFor="otp">Enter OTP</label>
-                                                                        <input type="phone" name="otp" className="form-control"  onChange={e => setOTP(e.target.value)} required />
+                                                                        <input type="phone" name="otp" className="form-control" onChange={e => setOTP(e.target.value)} required />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <button className="btn btn-success me-3" type="submit">Sumbit</button>
@@ -373,13 +407,13 @@ export default function CheckoutWithoutAuth() {
                                                             <form action="" onSubmit={e => guestAddressFunc(e)}>
                                                                 <div className="row">
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="receiver">Receiver Name</label>
+                                                                        <label htmlFor="receiver">Receiver Name <span className="text-danger">*</span></label>
                                                                         <input type="text" name="receiver" value={guestAddress?.receiver} className="form-control" onChange={e => handleGuestUser(e)} required />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <div className="form-group">
                                                                             <label htmlFor="primaryNumber" className=" text-capitalize  " >
-                                                                                Primary number
+                                                                                Primary number <span className="text-danger">*</span>
                                                                             </label>
 
                                                                             <div className="d-flex align-item-center p-0 overflow-hidden form-control">
@@ -406,18 +440,18 @@ export default function CheckoutWithoutAuth() {
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.secondaryNumber} />
+                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ?  guestAddress.secondaryNumber : ""} />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="text" name="nearBy" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.nearBy} />
+                                                                        <input type="text" name="nearBy" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.nearBy ? guestAddress.nearBy : ""} />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="address">Full Address</label>
+                                                                        <label htmlFor="address">Full Address <span className="text-danger">*</span></label>
                                                                         <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.address} />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="pincode">Pincode</label>
+                                                                        <label htmlFor="pincode">Pincode <span className="text-danger">*</span></label>
                                                                         <input type="phone" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.pincode} />
                                                                     </div>
                                                                     {/* <div className="col-lg-6 col-md-6 col-12 mb-2">
@@ -425,7 +459,7 @@ export default function CheckoutWithoutAuth() {
                                                                         <input type="text" name="state" className="form-control" onChange={e => handleGuestUser(e)} required  value={guestAddress?.state}/>
                                                                     </div> */}
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="state">State</label>
+                                                                        <label htmlFor="state">State <span className="text-danger">*</span></label>
                                                                         <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress?.state} required >
                                                                             <option className="text-muted" disabled={guestAddress?.state}>choose</option>
                                                                             {allStateArr.map((stateName) => {
@@ -436,7 +470,7 @@ export default function CheckoutWithoutAuth() {
                                                                         </select>
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-4">
-                                                                        <label htmlFor="city">City</label>
+                                                                        <label htmlFor="city">City <span className="text-danger">*</span></label>
                                                                         <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.city} required />
                                                                     </div>
                                                                     <div className="d-flex align-items-center mb-2">
@@ -490,8 +524,8 @@ export default function CheckoutWithoutAuth() {
                                                                                 <button className="btn  btn-sm p-1 fs-8 btn-blue btn-outline-blue ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
                                                                                     <i className="fa-solid fa-plus "></i>
                                                                                 </button>
-                                                                            </div> 
-                                                                            <span  className="text-danger pointer" onClick={()=>removeProduct(productValue._id)}>Remove</span>
+                                                                            </div>
+                                                                            <span className="text-danger pointer" onClick={() => removeProduct(productValue._id)}>Remove</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -521,7 +555,7 @@ export default function CheckoutWithoutAuth() {
                                                         <div className="d-flex justify-content-between">
                                                             <p className="mb-2">Shipping Charge</p>
                                                             <p className="mb-2">
-                                                                <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {diliveryCharge? diliveryCharge : "Free" }
+                                                                <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {diliveryCharge ? diliveryCharge : "Free"}
                                                             </p>
                                                         </div>
                                                         <hr />

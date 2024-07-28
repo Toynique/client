@@ -17,6 +17,7 @@ import { CSSTransition } from "react-transition-group";
 import { Button, Modal } from "react-bootstrap";
 import { Rating } from "@mui/material";
 import { ratingdata } from "../../redux/slice/rating";
+import Swal from "sweetalert2";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -135,6 +136,39 @@ const Profile = () => {
     }
   };
 
+  const removeAddressFunc = async(addressId)=>{
+    // console.log("addressId", addressId);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes"
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${Url}/api/address/${addressId}`)
+          dispatch(addressdata(userId))
+        } catch (error) {
+          console.log(error);
+        }
+        // Swal.fire({
+        //   title: "Removed!",
+        //   text: "Your file has been deleted.",
+        //   icon: "success"
+        // });
+      }
+    });
+
+
+
+
+    
+  }
+
   const handleShowUpdateAddressModel = () => {
     setShowUpdateAddressModel(true)
   };
@@ -206,8 +240,8 @@ const Profile = () => {
                             <p className="mb-1">{addressValue.address}, {addressValue.city}, {addressValue.state}, {addressValue.pincode}</p>
                             <p className="fs-14 mb-1">{addressValue.primaryNumber} , {addressValue.secondaryNumber}</p>
                             <div>
-                              <button className="btn py-0 px-1 me-3  btn-sm btn-blue btn-outline-blue fs-12">Edit</button>
-                              <button className="btn py-0 px-1  btn-sm btn-dange btn-outline-danger  fs-12">remove</button>
+                              {/* <button className="btn py-0 px-1 me-3  btn-sm btn-blue btn-outline-blue fs-12">Edit</button> */}
+                              <button className="btn py-0 px-1  btn-sm btn-dange btn-outline-danger  fs-12" onClick={()=>removeAddressFunc(addressValue._id)}>remove</button>
                             </div>
                           </div>
                         );
