@@ -150,7 +150,7 @@ export const productQuantityCart = async(cartId, quantity)=>{
 export const addWishlistApi = async (userId, productId)=>{
     try {
         const data = await axios.post(`${Url}/wishlist/add`, {productId, userId}) 
-        toast.success("added to wishlist",  {autoClose: 1500,})
+        toast.success("Added to Wishlist",  {autoClose: 1500,})
         return data
     } catch (error) { 
         if(error.response.status === 401){
@@ -177,9 +177,9 @@ export const checkoutApi = async (obj)=>{
     const formData = new FormData();
     formData.append("product name", "mobile");
     try {
-
+    
         await axios.post(`${Url}/payment`, obj) 
-        toast.success("added to wishlist",  {autoClose: 1500,})
+        toast.success("Added to Wishlist",  {autoClose: 1500,})
         return true
     } catch (error) {  
         console.log("api payment error", error);
@@ -188,7 +188,7 @@ export const checkoutApi = async (obj)=>{
         
     }
 }
-
+ 
 
 
 

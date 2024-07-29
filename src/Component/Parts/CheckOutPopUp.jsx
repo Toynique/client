@@ -44,8 +44,8 @@ const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHa
           
           <div className="text-end d-flex align-items-center justify-content-end gap-3"> 
           {!addressDisplay ?
-            <small className='cl-blue pointer' onClick={()=>setAddressDisplay(true)}>change address</small>:null} 
-            <small className='cl-blue pointer' onClick={()=>showAddAddress(true)}>add new address</small> 
+            <small className='cl-blue pointer' onClick={()=>setAddressDisplay(true)}>Change Address</small>:null} 
+            <small className='cl-blue pointer' onClick={()=>showAddAddress(true)}>Add New Address</small> 
           </div>
           {addressDisplay?
           <div className=" position-relative">
@@ -93,28 +93,28 @@ const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHa
 
           <div className='border-bottom mb-2'>
             <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
-              <p className='cl-blue'>Total Selling Price</p>
+              <p className='cl-blue'>Total Selling Amount</p>
               <p><span className='text-muted'> &#x20B9; </span>{cartData.totalproductPrice}</p>
             </div>
-            {cartData.offerDiscount &&
+            {cartData.offerDiscount ?
             <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
               <p className='cl-blue'>Offer Discount (&#x20B9;)</p>
               <p><span className='text-muted'>- &#x20B9; </span>{cartData.offerDiscount}</p>
-            </div>} 
+            </div> : null} 
             <div className="d-flex mb-1 px-2 align-items-center justify-content-between">
-              <p className='cl-blue'>Dilivery Charge</p>
-              <p><span className='text-muted'> &#x20B9; </span>{cartData.diliveryCharge}</p>
+              <p className='cl-blue'>Delivery Charges</p>
+              <p><span className='text-muted'> </span>{cartData.diliveryCharge ? cartData.diliveryCharge : "Free"}</p>
             </div>
           </div>
           <div>
           <div className="d-flex px-2 align-items-center justify-content-between">
-              <p className='cl-blue fw-bold'>Total</p>
+              <p className='textPrimary fw-bold'>Total Amount (Incl. all taxes)</p>
               <p><span className='text-muted'> &#x20B9; </span> {cartData.totalCheckOut}</p>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={()=>checkoutHandle(address)}>
+          <Button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1" onClick={()=>checkoutHandle(address)}>
             Place Order
           </Button> 
         </Modal.Footer>

@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Rating from '@mui/material/Rating';
 import { Modal, Button } from 'react-bootstrap'; 
 import { CSSTransition } from 'react-transition-group'; 
-import { Link, useNavigate } from 'react-router-dom' 
-import { ImageUrl } from '../../url/url'
+import { Link, useNavigate } from 'react-router-dom'  
 import { addCartApi, addWishlistApi } from '../../Api/api'
 import { wishlistdata } from '../../redux/slice/wishlist';
 import { cartdata } from '../../redux/slice/cart';
@@ -39,7 +38,7 @@ const ProductSmall = (props) => {
     const addWishlistFunc = async(productId)=>{ 
         const userdata = localStorage.getItem('userdata')  
         const usertoken = localStorage.getItem('usertoken')  
-        if(userdata && usertoken){
+        if(userdata && usertoken){ 
             const userdataobj = JSON.parse(userdata) 
             const userId = userdataobj._id   
             await addWishlistApi(userId, productId).then(()=>{ 
@@ -161,8 +160,8 @@ const ProductSmall = (props) => {
             {productData.discount > 0 && <p className='mb-0 fw-normal textPrimarySecond fs-14 fs-xs-10'>({productData.discount} % off)</p>   } 
         </div>
         <div className='text-end gap-lg-3 gap-1 d-flex justify-content-between align-items-center'> 
-          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" onClick={()=>addMyCart(productData)} >Add to cart</button>
-          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`/checkout?productId=${productData._id}`} >Quick buy</Link>
+          <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" onClick={()=>addMyCart(productData)} >Add to Cart</button>
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`/checkout?productId=${productData._id}`} >Quick Buy</Link>
         </div>
 
         {ratingData &&

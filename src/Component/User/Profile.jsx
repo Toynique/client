@@ -136,8 +136,7 @@ const Profile = () => {
     }
   };
 
-  const removeAddressFunc = async(addressId)=>{
-    // console.log("addressId", addressId);
+  const removeAddressFunc = async(addressId)=>{ 
 
     Swal.fire({
       title: "Are you sure?",
@@ -154,21 +153,16 @@ const Profile = () => {
           dispatch(addressdata(userId))
         } catch (error) {
           console.log(error);
-        }
-        // Swal.fire({
-        //   title: "Removed!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success"
-        // });
+        } 
       }
-    });
-
-
-
-
-    
+    }); 
   }
 
+  const formatDate = (isoDate) => {
+    const dateObj = new Date(isoDate);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObj.toLocaleDateString(undefined, options);
+  }; 
   const handleShowUpdateAddressModel = () => {
     setShowUpdateAddressModel(true)
   };
@@ -241,7 +235,7 @@ const Profile = () => {
                             <p className="fs-14 mb-1">{addressValue.primaryNumber} , {addressValue.secondaryNumber}</p>
                             <div>
                               {/* <button className="btn py-0 px-1 me-3  btn-sm btn-blue btn-outline-blue fs-12">Edit</button> */}
-                              <button className="btn py-0 px-1  btn-sm btn-dange btn-outline-danger  fs-12" onClick={()=>removeAddressFunc(addressValue._id)}>remove</button>
+                              <button className="btn py-0 px-1  btn-sm btn-dange btn-outline-danger  fs-12" onClick={()=>removeAddressFunc(addressValue._id)}>Remove</button>
                             </div>
                           </div>
                         );
@@ -262,15 +256,15 @@ const Profile = () => {
                           <div className="d-flex align-items-center justify-content-between gap-3 border-bottom pb-3">
                             <div>
                               <p className="mb-1">Order Id :- {orderValue._id}</p>
-                              <p className="mb-1">Order Date :- {orderValue.createdAt}</p>
+                              <p className="mb-1">Order Date :- {formatDate(orderValue.createdAt)}</p>
                             </div>
                             <div>
                               <div className="text-end mb-2">
 
-                                <button className="btn btn-primary  btn-sm" onClick={() => ratingProduct(orderValue?.product)} >Give us rating</button>
+                                <button className="btn btn-primary  btn-sm" onClick={() => ratingProduct(orderValue?.product)} >Give us Rating</button>
                               </div>
                               {orderValue?.paymentType == 'cod' ?
-                                <p className="mb-1">Payment Status :- Cash On Delivery</p>
+                                <p className="mb-1">Payment Status :- Cash on Delivery</p>
                                 : <p className="mb-1">Payment Status :- <span > {orderValue.paymentStatus} </span></p>}
                             </div>
                           </div>

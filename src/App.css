@@ -5,41 +5,28 @@
 }
 
 
+
 /* @font-face {
-  font-family: 'helvetica';
-  src: url('/assets/font/helvetica-neue') format('otf');
-  font-weight: normal;
-  font-style: normal;
-} */
-@font-face {
   font-family: 'interpaid';
   src: url('/assets/font/Intrepid.ttf') format('');
   font-weight: normal;
   font-style: normal;
-}
-
-/* body, li, a, p{ 
-  letter-spacing: 1px; 
-  font-family: helvetica, "Quicksand", sans-serif;
-  font-optical-sizing: auto; 
+}  */
+@font-face {
+  font-family: 'futura';
+  src: url('/assets/font/Futura.ttf') format('ttf');
+  font-weight: normal;
   font-style: normal;
-  font-weight: 400;
 } 
-h1, h2, h3, h4, h5, h6{ 
-  font-family: helvetica, "Quicksand", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600 !important;
-  font-style: normal;
-} */
-body, li, a, p{ 
+body, li, a, p, span, div{ 
   letter-spacing: 1px; 
-  font-family: interpaid, "Quicksand" ;
+  font-family: futura, "Quicksand" ;
   font-optical-sizing: auto; 
   font-style: normal;
   font-weight: 100;
 } 
 h1, h2, h3, h4, h5, h6{ 
-  font-family: interpaid, "Quicksand";
+  font-family: futura, "Quicksand";
   font-optical-sizing: auto;
   font-weight: 500 !important;
   font-style: normal;
@@ -53,7 +40,7 @@ h3{
 
 :root{ 
   --blue : #896790  ;
-  --primary : #501A0E  ; 
+  --primary : #511d10  ; 
   --primaryLight : #4e2c24 ;
   --primarySecond : #896790  ;
   --primarySecondLight : #8a6d90  ;
@@ -65,7 +52,7 @@ h3{
   --light-gray : #d8d8d8 ;
   --welcome : #896790;
   --welcome-hover : #98799e;
-  --dark-lignt: #4B4B4B;
+  --dark-lignt: #4B4B4B; 
 }
 h1, h2, h3, h4, h5, h6, p, ul{
   margin: 0px;

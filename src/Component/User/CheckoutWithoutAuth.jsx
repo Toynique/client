@@ -479,11 +479,11 @@ export default function CheckoutWithoutAuth() {
                                                                     </div>
                                                                     <div className="d-flex align-items-center mb-2 pb-2">
                                                                         <input type="radio" name="paymentType" value={"online"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'online'} required />
-                                                                        <label htmlFor="paymentType">Pay now</label>
+                                                                        <label htmlFor="paymentType">Pay Now</label>
                                                                     </div>
                                                                     <hr />
                                                                     <div>
-                                                                        <button className="btn btn-blu btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
+                                                                        <button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -517,15 +517,15 @@ export default function CheckoutWithoutAuth() {
                                                                         </div>
                                                                         <div className="d-flex flex-row align-items-center justify-content-center">
                                                                             <div className="d-flex align-items-center me-3">
-                                                                                <button className="btn  btn-sm p-1 fs-8 btn-blue btn-outline-blue me-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) - 1))}>
+                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary me-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) - 1))}>
                                                                                     <i className="fa-solid fa-minus "></i>
                                                                                 </button>
                                                                                 <p className="px-2 mb-0 fw-bold">{productValue.quantity}</p>
-                                                                                <button className="btn  btn-sm p-1 fs-8 btn-blue btn-outline-blue ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
+                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
                                                                                     <i className="fa-solid fa-plus "></i>
                                                                                 </button>
                                                                             </div>
-                                                                            <span className="text-danger pointer" onClick={() => removeProduct(productValue._id)}>Remove</span>
+                                                                            <span className="textPrimary pointer" onClick={() => removeProduct(productValue._id)}>Remove</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -554,14 +554,14 @@ export default function CheckoutWithoutAuth() {
 
                                                         <div className="d-flex justify-content-between">
                                                             <p className="mb-2">Shipping Charge</p>
-                                                            <p className="mb-2">
-                                                                <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {diliveryCharge ? diliveryCharge : "Free"}
+                                                            <p className="mb-2"> 
+                                                                 {diliveryCharge ? diliveryCharge : "Free"}
                                                             </p>
                                                         </div>
                                                         <hr />
 
                                                         <div className="d-flex justify-content-between">
-                                                            <p className="mb-2">Total(Incl. taxes)</p>
+                                                            <p className="mb-2">Total Amount (Incl. all taxes)</p>
                                                             <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckout} </p>
                                                         </div>
                                                         {/* <hr /> */}

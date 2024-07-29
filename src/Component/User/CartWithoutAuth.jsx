@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../Header/Navbar";
 import Footer from "../Footer/Footer";
-import { ImageUrl, Url } from "../../url/url";
+import { Url } from "../../url/url";
 import { cartdata } from "../../redux/slice/cart";
 import { productQuantityCart, removeCartProduct } from "../../Api/api";
 import axios from "axios";
@@ -28,7 +28,7 @@ export default function CartWithoutAuth() {
   const [salePrice, setSalePrice] = useState(0)
   const [discount, setDiscount] = useState(0)
   const [offer, setOffer] = useState(0)
-  const [diliveryCharge, setDiliveryCharge] = useState(50)
+  const [diliveryCharge, setDiliveryCharge] = useState(0)
   const [totalCheckout, setTotalCheckout] = useState(0)
 
   const findCartData = async () => {
@@ -103,7 +103,7 @@ export default function CartWithoutAuth() {
                         <MDBTypography tag="h5">
                           <Link to="/" className="text-body">
                             <MDBIcon fas icon="long-arrow-alt-left me-2" />{" "}
-                            Continue shopping
+                            Continue Shopping
                           </Link>
                         </MDBTypography>
 
@@ -137,11 +137,11 @@ export default function CartWithoutAuth() {
                                     </div>
                                     <div className="d-flex flex-row align-items-center justify-content-center">
                                       <div className="d-flex align-items-center me-3">
-                                        <button className="btn  btn-sm btn-blue btn-outline-blue me-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) - 1))}>
+                                        <button className="btn  btn-sm btn-primary btn-outline-primary me-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) - 1))}>
                                           <i className="fa-solid fa-minus "></i>
                                         </button>
                                         <h5 className="px-2">{productValue.quantity}</h5>
-                                        <button className="btn  btn-sm btn-blue btn-outline-blue ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
+                                        <button className="btn  btn-sm btn-primary btn-outline-primary ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
                                           <i className="fa-solid fa-plus "></i>
                                         </button>
                                       </div>
@@ -155,7 +155,7 @@ export default function CartWithoutAuth() {
                                         <MDBIcon
                                           fas
                                           icon="trash-alt"
-                                          className="text-danger"
+                                          className="textPrimary"
                                         />
                                       </a>
                                     </div>
@@ -172,8 +172,8 @@ export default function CartWithoutAuth() {
                         <MDBCard className="bg-primar bg-lightgra bg-white rounded-3">
                           <MDBCardBody>
                             <div className="d-flex justify-content-between align-items-center mb-4">
-                              <MDBTypography tag="h5" className="mb-0 cl-pink">
-                                CheckOut ({cartAllData.length} Items)
+                              <MDBTypography tag="h5" className="mb-0 textPrimary">
+                                Checkout ({cartAllData.length} Items)
                               </MDBTypography>
                             </div>
 
@@ -213,13 +213,13 @@ export default function CartWithoutAuth() {
                             <div className="d-flex justify-content-between">
                               <p className="mb-2">Shiping Charge</p>
                               <p className="mb-2">
-                                <i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {diliveryCharge}
+                                 {diliveryCharge? diliveryCharge : "Free"}
                               </p>
                             </div>
                             <hr />
 
                             <div className="d-flex justify-content-between">
-                              <p className="mb-2">Total(Incl. taxes)</p>
+                              <p className="mb-2">Total Amount (Incl. all taxes)</p>
                               <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckout} </p>
                             </div>
                             <hr />
@@ -227,7 +227,7 @@ export default function CartWithoutAuth() {
                               <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e => checkoutModel()}>CheckOut <i className="fa-solid fa-arrow-right-long"></i></button>
                             </div> */}
                             <div className="mb-4">
-                              <Link className="btn btn-blu btn-outline-primary  px-2 me-3 py-1" to={"/checkout"}  >CheckOut <i className="fa-solid fa-arrow-right-long"></i></Link>
+                              <Link className="btn btn-blu btn-outline-primary  px-2 me-3 py-1" to={"/checkout"}  >Checkout <i className="fa-solid fa-arrow-right-long"></i></Link>
                             </div>
 
 

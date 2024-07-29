@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../Header/Navbar";
 import Footer from "../Footer/Footer";
-import { ImageUrl, Url } from "../../url/url";
+import { Url } from "../../url/url";
 import { cartdata } from "../../redux/slice/cart";
 import { productQuantityCart, removeCartProduct } from "../../Api/api"; 
 import axios from "axios";
@@ -156,7 +156,7 @@ export default function Cart() {
                       <MDBTypography tag="h5">
                         <Link to="/" className="text-body">
                           <MDBIcon fas icon="long-arrow-alt-left me-2" />{" "}
-                          Continue shopping
+                          Continue Shopping
                         </Link>
                       </MDBTypography>
 
@@ -193,11 +193,11 @@ export default function Cart() {
                             </div>
                             <div className="d-flex flex-row align-items-center justify-content-center">
                               <div className="d-flex align-items-center me-3">
-                                <button className="btn  btn-sm btn-blue btn-outline-blue me-2" onClick={()=> quantitychange(cv._id, (+(cv.quantity)-1)) }>
+                                <button className="btn  btn-sm btn-primary btn-outline-primary me-2" onClick={()=> quantitychange(cv._id, (+(cv.quantity)-1)) }>
                                   <i className="fa-solid fa-minus "></i>
                                 </button>
                                 <h5 className="px-2">{cv.quantity}</h5>
-                                <button className="btn  btn-sm btn-blue btn-outline-blue ms-2" onClick={()=> quantitychange(cv._id, (+(cv.quantity)+1)) }> 
+                                <button className="btn  btn-sm btn-primary btn-outline-primary ms-2" onClick={()=> quantitychange(cv._id, (+(cv.quantity)+1)) }> 
                                   <i className="fa-solid fa-plus "></i>
                                 </button>
                               </div>
@@ -211,7 +211,7 @@ export default function Cart() {
                                 <MDBIcon
                                   fas
                                   icon="trash-alt"
-                                  className="text-danger"
+                                  className="textPrimary"
                                 />
                               </a>
                             </div>
@@ -228,7 +228,7 @@ export default function Cart() {
                       <MDBCard className="bg-primar bg-lightgra bg-white rounded-3">
                         <MDBCardBody>
                           <div className="d-flex justify-content-between align-items-center mb-4">
-                            <MDBTypography tag="h5" className="mb-0 cl-pink"> 
+                            <MDBTypography tag="h5" className="mb-0 textPrimary"> 
                               Checkout ({cartAllData.length} Items)
                             </MDBTypography>
                           </div>
@@ -271,7 +271,7 @@ export default function Cart() {
                           <hr />
 
                           <div className="d-flex justify-content-between">
-                            <p className="mb-2">Total(Incl. Taxes)</p>
+                            <p className="mb-2">Total Amount (Incl. all taxes)</p>
                             <p className="mb-2  "><i className="fa-solid fa-indian-rupee-sign fa-sm"></i> {totalCheckOut} </p>
                           </div>
                           <hr />

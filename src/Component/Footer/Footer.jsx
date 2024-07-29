@@ -9,70 +9,57 @@ import phoneImg from '/assets/icon/phone.png'
 const Footer = () => {
     const categoryAllData = useSelector(store => store.category.data)
     const characterAllData = useSelector(store => store.character.data)
-  return (
-    <>
-    <section className='footer-top-wrap bg-dark pt-5 pb-4 '>
-        <div className="container">
-            <div className="row">
-                <div className="col-lg-3 col-md-6 col-12">
-                    {/* <h3>Heading</h3> */}
-                    <ul className='text-white'>
-                        <li><Link className='text-white' to="/privacy-policy">Privacy Policy</Link></li>
-                        <li><Link className='text-white' to="/term">Terms of Service</Link></li>
-                        <li><Link className='text-white' to="/refund-cancellation">Cancellation & Refund Policy</Link></li>
-                        <li><Link className='text-white' to="/shipping-policy" >Shipping Policy</Link></li> 
-                        <li><Link className='text-white' to="/blog" >blog</Link></li> 
-                    </ul>
+    const subCharacterAllData = useSelector(store => store.subcharacter.data)
+    return (
+        <>
+            <section className='footer-top-wrap bgPrimary pt-5 pb-4 '>
+                <div className="container">
+                    <div className="row align-items-center mb-lg-5 mb-3"> 
+                        <div className="col-lg-4 mb-lg-0 mb-3">
+                            <img src="/assets/img/logo-white.png" alt="logo" className='img-fluid' width={200} />
+                        </div>
+                        <div className="col-lg-8 col-12">
+                            <div className="row align-items-center justify-content-between">
+                                <div className="col-md-6 col-12 mb-lg-0 mb-3">
+                                    <ul className='p-0'>
+                                        {subCharacterAllData && subCharacterAllData.map((cv, i) => {
+                                            let characterSlug = (cv.character).toLowerCase().replace(/\s+/g, '-');
+                                            characterSlug = characterSlug.replace(/[^\w-]/g, '');
+                                            characterSlug = characterSlug.replace(/--+/g, '-');
+                                            characterSlug = characterSlug.replace(/^-+|-+$/g, '');
+                                            return (
+                                                <li key={i}><Link className='text-white text-uppercase' to={`/products/character/${characterSlug}?subcharacter=${cv.subcharacter}`}>{cv.subcharacter}</Link></li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                                <div className="col-md-6 col-12">
+                                    <ul className='text-white p-0'>
+                                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-envelope text-white"></i> :</p> <p className=''>happiness@toyniquetoys.com</p></li>
+                                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-phone text-white"></i>  : </p> <p className=''>+91 70113 97408</p></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='d-flex align-items-center justify-content-center gap-lg-5 gap-2 flex-wrap'>
+                        <Link className='text-white' to="/privacy-policy">Privacy Policy</Link>
+                        <Link className='text-white' to="/term">Terms of Service</Link>
+                        <Link className='text-white' to="/refund-cancellation">Cancellation & Refund Policy</Link>
+                        <Link className='text-white' to="/shipping-policy" >Shipping Policy</Link>
+                        <Link className='text-white' to="/blog" >Blog</Link>
+                    </div>
                 </div>
-                <div className="col-lg-3 col-md-6 col-12">
-                    {/* <h3>Heading</h3> */}
-                    <ul>
-                        {characterAllData && characterAllData.map((cv, i)=>{ 
-                            let characterSlug = (cv.character).toLowerCase().replace(/\s+/g, '-'); 
-                                characterSlug = characterSlug.replace(/[^\w-]/g, ''); 
-                                characterSlug = characterSlug.replace(/--+/g, '-'); 
-                                characterSlug = characterSlug.replace(/^-+|-+$/g, '');  
-                            return(
-                                <li key={i}><Link className='text-white text-uppercase' to={`/products/character/${characterSlug}`}>{cv.character}</Link></li>
-                            )
-                        })} 
-                    </ul>
+            </section>
+            <section className="footer-bottom-wrap bg-black">
+                <div className="container">
+                    <div className="text-center text-white py-2">
+                        <p className='mb-0'>&copy;Copyright; All right reserved | Toynique </p>
+                    </div>
                 </div>
-                <div className="col-lg-3 col-md-6 col-12">
-                    {/* <h3>Heading</h3> */}
-                    <ul>
-                        {categoryAllData && categoryAllData.map((cv, i)=>{ 
-                            let categorySlug = (cv.category).toLowerCase().replace(/\s+/g, '-'); 
-                                categorySlug = categorySlug.replace(/[^\w-]/g, ''); 
-                                categorySlug = categorySlug.replace(/--+/g, '-'); 
-                                categorySlug = categorySlug.replace(/^-+|-+$/g, ''); 
-                                // return categorySlug;
-                            return(
-                                <li key={i}><Link className='text-white text-uppercase' to={`/products/category/${categorySlug}`}>{cv.category}</Link></li>
-                            )
-                        })} 
-                    </ul>
-                </div>
-                <div className="col-lg-3 col-md-6 col-12">
-                    {/* <h3>Heading</h3> */}
-                    <ul className='text-white'> 
-                        {/* <li className='d-flex gap-2'><p className=' max-width'><i className="fa-solid fa-location-dot text-white"></i> : </p> <p className=''> Sector - 65, Noida, Uttar Pradesh (INDIA)</p></li> */}
-                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-envelope text-white"></i> :</p> <p className=''>happiness@toyniquetoys.com</p></li>
-                        <li className='d-flex gap-2'><p className=''><i className="fa-solid fa-phone text-white"></i>  : </p> <p className=''>+91 70113 97408</p></li> 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section className="footer-bottom-wrap bg-black">
-        <div className="container">
-            <div className="text-center text-white py-2">
-                <p className='mb-0'>&copy;Copyright; All right reserved | Toynique </p>
-            </div>
-        </div>
-    </section>
-    </>
-  )
+            </section>
+        </>
+    )
 }
 
 export default Footer

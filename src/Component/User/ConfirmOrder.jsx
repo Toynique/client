@@ -29,7 +29,7 @@ const ConfirmOrder = () => {
                                     <div className=''>
                                         <h2 className='fs-42 fs-sm-32 fs-xs-24 textPrimary'>Thank you for your Purchase!</h2>
                                         <p className='fs-14'>Your order will be processed within 24 hours during working days. We will
-                                            notify you by email and Phone once your order has been shipped.</p>
+                                            notify you by Email and Phone once your order has been shipped.</p>
                                         <div className='mb-4'>
                                             <h3>Billing Address</h3>
                                             <table>
@@ -63,7 +63,7 @@ const ConfirmOrder = () => {
                                             </table>
                                         </div>
                                         <div className="text-center">
-                                            <Link className='btn btn-danger px-4 py-1 rounded-pill text-light' to={'/profile'}>Track Your Order</Link>
+                                            <Link className='btn btn-primary px-4 py-1 rounded-pill text-light' to={'/profile'}>Track Your Order</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -72,7 +72,8 @@ const ConfirmOrder = () => {
                                         <div className="py-2 bg-lightgray rounded-pill w-100 d-md-block d-none"></div>
                                         <div className="  w-100 px-md-3 px-0">
                                             <div className='bg-light p-md-3 p-1 confirm-order-product-wrap'>
-                                                <h2 className='border-bottom pb-2 mb-2 fs-32 fs-sm-24 fs-xs-20'>Order Summary</h2>
+                                                <h2 className=' mb-2 fs-32 fs-sm-24 fs-xs-20'>Order Summary</h2>
+                                                <p className='border-bottom pb-2 mb-2' ><span>Order Id : </span> {orderId}</p>
 
                                                 {order.product.map((productValue) => {
                                                     const product = productAllData.find(data => data._id === productValue.productId)
@@ -106,7 +107,7 @@ const ConfirmOrder = () => {
                                                     </div> 
                                                 </div>
                                                 <div className="d-flex justify-content-between">
-                                                    <span>Order total</span>
+                                                    <span>Total Amount (Incl. all taxes)</span>
                                                     <span>&#8377; {order.totalproductPrice - Number(order.offerDiscount)}</span>
                                                 </div>
                                             </div>

@@ -10,7 +10,7 @@ import Footer from '../Footer/Footer';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { addCartApi, removeWishlist } from '../../Api/api';
-import { ImageUrl, Url } from '../../url/url';
+import {  Url } from '../../url/url';
 import {wishlistdata} from '../../redux/slice/wishlist'
 import { ToastContainer, toast } from 'react-toastify';
 import { cartdata } from '../../redux/slice/cart';
