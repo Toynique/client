@@ -11,6 +11,7 @@ import UserAddressUpdateModel from './UserAddressUpdateModel';
 import cartIcon from '/assets/icon/cart_icon.svg'
 import wishlistIcon from '/assets/icon/wishlist_icon.svg'
 import { toast } from 'react-toastify';
+import Slider from 'react-slick';
 
 
 const ProductSmall = (props) => {
@@ -20,6 +21,26 @@ const ProductSmall = (props) => {
     const {productData, newActive, saleActive=true} = props
     const [showModal, setShowModal] = useState(false)
     const [auth, setAuth]= useState(false)
+    const [showSlider, setShowSlider] = useState(false)
+
+    var settings = {
+      autoplay: true,
+      autoplaySpeed: 1500,
+      dots: false,
+      infinite: true,
+      speed: 1000,
+      slidesToShow: 1,
+      slidesToScroll: 1, 
+      pauseOnHover: false,
+    pauseOnFocus: false,
+    };
+
+    const productMouseEnter = ()=>{ 
+      setShowSlider(true)
+    }
+    const productMouseExist = ()=>{ 
+      setShowSlider(false)
+    }
 
     useEffect(()=>{
       authCheck()
@@ -116,8 +137,15 @@ const ProductSmall = (props) => {
   return (
     <div className=" p-2 "> 
         <div className='text-center d-block product-img-box'>
-            <Link to={`/productview/${productData.slug}/${productData._id}`}>
-                <img src={`${productData.thumbnailImage}`} alt={productData.altTag || "image"} className='border img-fluid h-100 w-100'/>
+            <Link to={`/productview/${productData.slug}/${productData._id}`} onMouseEnter={productMouseEnter} onMouseLeave={productMouseExist} > 
+                <Slider {...settings} className='w-100' >
+                {!showSlider ? 
+                <img src={`${productData.thumbnailImage}`} alt={productData.altTag || "product"} className='border img-fluid h-100 w-100' /> :
+                  productData.images?.map((productImage, i)=>(
+                    <img src={`${productImage}`} alt={productData.altTag || "product"} className='border img-fluid h-100 w-100'/>
+                  )) 
+                  }
+                </Slider>  
             </Link>
             <div className="saveicon">
               {auth &&
