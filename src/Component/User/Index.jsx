@@ -102,7 +102,7 @@ const Index = () => {
           <div className="container">
             <div className="d-flex justify-centent-center align-items-center  mb-lg-5 mb-md-3 mb-2">
               <div className=" flex-grow-1 border borderPrimarySecond "></div>
-              <h2 className="  text-center px-2 text-uppercase fw-bold fs-42 fs-sm-24 cl-welcome">cradle cuddlers</h2>
+              <h2 className="  text-center px-2 text-uppercase fw-bold fs-42 fs-sm-24 textPrimary">cradle cuddlers</h2>
               <div className=" flex-grow-1 border borderPrimarySecond"></div>
             </div>
             <div className="row">
