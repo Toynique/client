@@ -247,7 +247,7 @@ const Navbar = () => {
                       <div className=" rounded-3 overflow-auto shadow" style={{ "maxHeight": "350px", "width": "200px" }}>
                         <ul className="list-group">
                           {searchData?.map((productValue) => (
-                            <li className='list-group-item list-group-item-action d-flex align-ites-top gap-2'>
+                            <li className='list-group-item list-group-item-action d-flex align-ites-top gap-2' key={productValue._id}>
                               <Link to={`/productview/${productValue.slug}/${productValue._id}`} onClick={removeSearchFunc}>
                                 <img src={productValue.thumbnailImage} alt={productValue.altTag} width={40} />
                               </Link>

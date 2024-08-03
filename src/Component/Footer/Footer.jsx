@@ -21,7 +21,7 @@ const Footer = () => {
                         <div className="col-lg-8 col-12">
                             <div className="row align-items-center justify-content-between">
                                 <div className="col-md-6 col-12 mb-lg-0 mb-3">
-                                    <ul className='p-0'>
+                                    {/* <ul className='p-0'>
                                         {subCharacterAllData && subCharacterAllData.map((cv, i) => {
                                             let characterSlug = (cv.character).toLowerCase().replace(/\s+/g, '-');
                                             characterSlug = characterSlug.replace(/[^\w-]/g, '');
@@ -31,7 +31,7 @@ const Footer = () => {
                                                 <li key={i}><Link className='text-white text-uppercase' to={`/products/character/${characterSlug}?subcharacter=${cv.subcharacter}`}>{cv.subcharacter}</Link></li>
                                             )
                                         })}
-                                    </ul>
+                                    </ul> */}
                                 </div>
                                 <div className="col-md-6 col-12">
                                     <ul className='text-white p-0'>

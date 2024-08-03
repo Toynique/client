@@ -211,7 +211,7 @@ const ProductView = () => {
                     <p className="mb-3">
                       {product && product.shortDescription}
                     </p>
-                    <div className="d-flex align-items-center gap-2 text-dark mb-2"> <span> Size : </span> <small className="mb-0 textPrimary">{product.productSize.height} * {product.productSize.width} * {product.productSize.depth}</small>  <span className="text-capitalize textPrimarySecond">{product.productSize.measurement} </span> </div>
+                    <div className="d-flex align-items-center gap-2 text-dark mb-2"> <span> Size : </span> <small className="mb-0 textPrimary">{product.productSize.height} x {product.productSize.width} x {product.productSize.depth}</small>  <span className="text-capitalize textPrimarySecond">{product.productSize.measurement} </span> </div>
 
                     <div className="d-flex align-items-center gap-3">
                       {product.discount > 0 && (
