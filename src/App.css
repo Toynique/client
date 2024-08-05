@@ -13,16 +13,16 @@
   font-weight: normal;
   font-style: normal;
 } 
-body, li, a, p, span, div{ 
+body, li, a, p, span, div, Link{ 
   letter-spacing: 1px; 
   font-family: "Roboto", sans-serif ;
   font-optical-sizing: auto; 
   /* font-style: normal; */
-  /* font-weight: 100; */
+  font-weight: 300 !important;
 } 
-p{
+/* p{
   font-weight: 200;
-}
+} */
 h1, h2, h3, h4, h5, h6{ 
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
