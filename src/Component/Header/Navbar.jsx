@@ -234,6 +234,7 @@ const Navbar = () => {
             <div className='d-flex nav-user-side ms-md-2 gap-3 align-items-top'>
               <div className='d-flex gap-sm-5 gap-2  align-items-center '>
                 <div className='border rounded-pill px-2 position-relative'>
+                  <div className="d-flex">
                   <input type="text" name="" value={searchValue} onChange={e => searchProduct(e)} className='border-0 no-input-focus search-input' />
 
                   <span className={`${searchValue && 'd-none'}`}>
@@ -242,6 +243,8 @@ const Navbar = () => {
                   <span className={`${!searchValue && 'd-none'}`} onClick={removeSearchFunc}>
                     <i className={`fa-solid fa-x`} ></i>
                   </span>
+                  </div>
+
                   <div className="position-absolute " style={{ zIndex: '999' }}>
                     <div className="pt-3">
                       <div className=" rounded-3 overflow-auto shadow" style={{ "maxHeight": "350px", "width": "200px" }}>
@@ -271,16 +274,17 @@ const Navbar = () => {
                       {wishlistalldata.length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill textPrimary ">{wishlistalldata.length} </span>}
                     </span >
                     <span className='d-sm-block d-none'>
-                    Wishlist
+                      Wishlist
                     </span>
                   </Link>}
+                  
                 {isLogin &&
                   <Link to='/cart' className='d-flex gap-1'>
                     <span className="position-relative">
                       <img src={cartIcon} alt="image" />
                       {cartAlldata.length > 0 && <span className="position-absolute top-0 tart-100 translate-middle badge rounded-pill textPrimary ">{cartAlldata.length} </span>}
                     </span>
-                    <span className='d-sm-block d-none'> 
+                    <span className='d-sm-block d-none'>
                       Cart
                     </span>
                   </Link>}
@@ -292,28 +296,30 @@ const Navbar = () => {
                       {cartProducts?.length > 0 && <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill textPrimary ">{cartProducts?.length} </span>}
                     </span>
                     <span className='d-sm-block d-none'>
-                    Cart
+                      Cart
                     </span>
-                  </Link>} 
+                  </Link>}
 
-             
+                {!isLogin ?
+                  <Link to={'/login'} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={lockOpenIcon} alt="image" /> Login</Link>
+                  : null}
 
-              <div className='position-relative nav-user-wrap justify-content-center'>
-                <div className="navUserIconWrappe nav-use bg-white d-flex align-items-center gap-1 fs-16 mb-0">
-                  <img src={userIcon} alt="" className='img-fluid' />
-                  <span className='d-sm-block d-none'>
-                  {isLogin ? "User": "Login"} 
-                  </span>
-                </div> 
-                <div className='position-absolute  pt-3 end-0 nav-user-drop-wrap '>
-                  <div className="nav-user-drop-box list-group">
-                    {isLogin ? <>
-                      <Link to={'/profile'} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={userIcon} alt="image" /> Profile</Link>
-                      <button onClick={e => logout(e)} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={lockIcon} alt="image" /> Log Out</button> </> :
-                      <Link to={'/login'} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={lockOpenIcon} alt="image" /> Login</Link>}
+                  {isLogin ?
+                <div className='position-relative nav-user-wrap justify-content-center'>
+                  <div className="navUserIconWrappe nav-use bg-white d-flex align-items-center gap-1 fs-16 mb-0">
+                    <img src={userIcon} alt="" className='img-fluid' />
+                    <span className='d-sm-block d-none'> User </span>
                   </div>
-                </div> 
-              </div>
+                  <div className='position-absolute  pt-3 end-0 nav-user-drop-wrap '>
+                    <div className="nav-user-drop-box list-group">
+                      {isLogin ? <>
+                        <Link to={'/profile'} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={userIcon} alt="image" /> Profile</Link>
+                        <button onClick={e => logout(e)} className="list-group-item py-1 list-group-item-action d-flex flex-no-wrap align-items-center gap-2"><img src={lockIcon} alt="image" /> Log Out</button> </> : null}
+                    </div>
+                  </div>
+                </div> : null}
+
+
               </div>
 
             </div>

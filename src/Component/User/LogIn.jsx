@@ -244,13 +244,13 @@ export default function LogIn() {
                       </div>
                       <Grid container>
                         <Grid item xs>
-                          <Link to="/forgot-password" variant="body2" className='link-design'>
+                          <Link to="/forgot-password" variant="body2" className='link-design me-3'>
                             Forgot password?
                           </Link>
                         </Grid>
                         <Grid item>
                           <Link to="/signup" variant="body2" className='link-design'>
-                            {"Don't have an account? Sign Up"}
+                            Don't have an account? <span className='text-primary'>Sign Up </span>
                           </Link>
                         </Grid>
                       </Grid>

@@ -141,7 +141,7 @@ const ProductView = () => {
             <div className="container">
               <div className="row">
                 <div className="col-xl-7 col-lg-7 col-md-6 col-12">
-                  <div>
+                  {/* <div>
                     <MDBBreadcrumb>
                       <MDBBreadcrumbItem>
                         <Link to="/">
@@ -175,7 +175,7 @@ const ProductView = () => {
                         {product && product.productName}
                       </MDBBreadcrumbItem>
                     </MDBBreadcrumb>
-                  </div>
+                  </div> */}
                   {product ? <ViewImage images={product} /> : null}
                 </div>
                 <div className="col-xl-5 col-lg-5 col-md-6 col-12">
@@ -190,9 +190,9 @@ const ProductView = () => {
                         </button>}
                       <i className="fa-solid fa-share fa-lg cl-blue"></i>
                     </div> */}
-                    <p className="cl-blue text-uppercase">
+                    {/* <p className="cl-blue text-uppercase">
                       {product.subcharacter}
-                    </p>
+                    </p> */}
                     <h2>{product && product.productName}</h2>
                     {ratingData && (
                       <div className="d-flex align-items-center product-view-rating">
