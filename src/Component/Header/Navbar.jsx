@@ -148,7 +148,8 @@ const Navbar = () => {
 
               <div className='flex-grow-1 navbar-list-wrap  '>
                 <ul className='navbar-list-box align-items-end flex-grow-1 gap-4 w-100 mb-0'>
-                  <li className={`nav-item `} >
+                  {/* this is plush toys dropdown please don't remove this  */}
+                  {/* <li className={`nav-item `} >
                     <span className='text-capitalize cl-darkLight '>Plush Toys</span>
                     <div className='dropdown-character shadow-sm border-bottom pt-lg-4 mt-lg-0 mt-2'>
                       <div className="border-top bg-white pt-lg-4 pt-2">
@@ -182,7 +183,7 @@ const Navbar = () => {
                         </div>
                       </div>
                     </div>
-                  </li>
+                  </li> */}
                   {/* <li className={`nav-item `} >
                     <span className='text-capitalize cl-darkLight'>Shop </span>
                     <div className='dropdown-character shadow-sm border-bottom pt-lg-4 mt-lg-0 mt-2'>
