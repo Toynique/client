@@ -67,7 +67,7 @@ export default function Cart() {
 
   cartAllData.map(cartItem => {
     const productInCart = productAllData.find(p => p._id === cartItem.productId); 
-    if (productInCart) {
+    if (productInCart) { 
       totalMrp += (productInCart.mrp)*(cartItem.quantity);
       totalDiscount += (productInCart.mrp - productInCart.salePrice)*(cartItem.quantity);
       totalSalePrice += (productInCart.salePrice) *(cartItem.quantity)
@@ -95,7 +95,21 @@ export default function Cart() {
     setShowAddressModel(false)
     setShowCheckOutPopup(true) 
   }  
-  const checkoutHandle = async(address)=>{  
+
+  const checkoutHandle = async(address, paymentType)=>{  
+    console.log("paymentType: " , paymentType);
+    console.log("checkoutProductList", checkoutProductList);
+    if(checkoutProductList){
+      console.log("checkoutProduct done");
+      const {data} =  await axios.post(`${Url}/api/order/payment`, {...checkoutProductList, address, paymentType})  
+      console.log("data response", data);
+    }
+  }
+
+
+  const checkoutHandle2 = async(address, paymentType)=>{  
+    console.log("paymentType: " , paymentType);
+    console.log("checkoutProductList", checkoutProductList);  
     if(checkoutProductList){
     try {
       const {data} =  await axios.post(`${Url}/api/order/checkout`, {...checkoutProductList, address})   
@@ -277,6 +291,7 @@ export default function Cart() {
                           <hr />
                           <div className="mb-2"> 
                             <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout <i className="fa-solid fa-arrow-right-long"></i></button> 
+                            <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout PhonePay <i className="fa-solid fa-arrow-right-long"></i></button> 
                           </div>
 
                           

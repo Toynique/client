@@ -39,10 +39,10 @@ export default function LogIn() {
 
   const auth = localStorage.getItem('usertoken')
 
-  const loginSuccess = async(resp)=>{
+  const loginSuccess = async(resp)=>{ 
     const token = resp.data.token
     const userId = resp.data.responsedata._id
-    let userdata = resp.data.responsedata
+    let userdata = resp.data.responsedata  
     userdata = JSON.stringify(userdata);
     localStorage.setItem("usertoken", token);
     localStorage.setItem("userdata", userdata);
@@ -96,8 +96,7 @@ export default function LogIn() {
     else{ 
       
       if(logindata?.email && logindata?.otp){ 
-        const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata)
-        console.log("response verifyOTP", response);
+        const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata) 
         setIsLoading(false)
         if(response.status === 200){
           loginSuccess(response)
@@ -109,12 +108,10 @@ export default function LogIn() {
           setErrMsg('Something server error try again later')
         }
       }
-      else if(logindata?.email){  
-        console.log("hit for otp");
+      else if(logindata?.email){   
         const response = await axios.post(`${Url}/user/createOTP`, logindata) 
         setIsLoading(false)
-        setOTP(true)
-        console.log("setOtp true", response);
+        setOTP(true) 
         if(response.status === 200){
           toast.info("OTP Sent" , {autoClose: 1500,});
         }

@@ -6,6 +6,7 @@ import { CSSTransition } from 'react-transition-group';
 const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHandle  }) => { 
     const [addressDisplay, setAddressDisplay] = useState(false)
     const [address, setAddress] = useState()  
+    const [paymentType, setPaymentType] = useState("cod")
     const user = useSelector(store=>store.user[0]) 
     const addressAllData = useSelector(store=>store.address.data) 
     const productAllData = useSelector(store=>store.product.data) 
@@ -16,6 +17,10 @@ const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHa
     const changeAddressFunc = (addressValue)=>{ 
         setAddress(addressValue)
         setAddressDisplay(false) 
+    }
+
+    const handlePaymentType = (e)=>{ 
+      setPaymentType(e.target.value) 
     }
 
     useEffect(()=>{ 
@@ -112,9 +117,22 @@ const CheckOutPopUp = ({ show, handleClose, showAddAddress, cartData, checkoutHa
               <p><span className='text-muted'> &#x20B9; </span> {cartData.totalCheckOut}</p>
             </div>
           </div>
+
+          <div>
+            <div className=" form-check">
+              <input type="radio" name="paymentType" value="cod" checked={paymentType === 'cod'} className='form-check-input' onChange={handlePaymentType} />
+              <label htmlFor="">Cash on Delivery</label>
+            </div>
+            <div className=" form-check">
+              <input type="radio" name="paymentType" value="prepaid" checked={paymentType === 'prepaid'} className='form-check-input' onChange={handlePaymentType} />
+              <label htmlFor="">Pay Now</label>
+            </div>
+          </div>
+
         </Modal.Body>
         <Modal.Footer>
-          <Button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1" onClick={()=>checkoutHandle(address)}>
+          
+          <Button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1" onClick={()=>checkoutHandle(address, paymentType)}>
             Place Order
           </Button> 
         </Modal.Footer>

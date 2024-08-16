@@ -221,7 +221,8 @@ a:hover{
 }
 
 .no-outline:focus, .no-outline:focus-visible {
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
 } 
 .border-bottom-not-last:last-child{
   border: none !important ; 
