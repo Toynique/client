@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import savePlanetImg from '/assets/img/save-planet.avif'
+import { Link } from 'react-router-dom' 
 
 
 const Cta = () => {

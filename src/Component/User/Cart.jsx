@@ -101,8 +101,16 @@ export default function Cart() {
     console.log("checkoutProductList", checkoutProductList);
     if(checkoutProductList){
       console.log("checkoutProduct done");
-      const {data} =  await axios.post(`${Url}/api/order/payment`, {...checkoutProductList, address, paymentType})  
-      console.log("data response", data);
+      // const res =  await axios.post(`${Url}/api/order/payment`, {...checkoutProductList, address, paymentType})  
+      const res =  await axios.post(`${Url}/api/order`, {...checkoutProductList, address, paymentType}) 
+      if(res.status === 201 && paymentType === 'cod') {
+        navigate(`/order-confirmed/${res.data._id}`)
+      } 
+      console.log("data response", res);
+
+      if(res.data.success === true){
+        window.location.href = res.data.data.instrumentResponse.redirectInfo.url
+      }
     }
   }
 
@@ -291,7 +299,7 @@ export default function Cart() {
                           <hr />
                           <div className="mb-2"> 
                             <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout <i className="fa-solid fa-arrow-right-long"></i></button> 
-                            <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout PhonePay <i className="fa-solid fa-arrow-right-long"></i></button> 
+                            {/* <button className="btn btn-blue btn-outline-blue  px-2 me-3 py-1" onClick={e=>checkoutModel()}>Checkout PhonePay <i className="fa-solid fa-arrow-right-long"></i></button>  */}
                           </div>
 
                           
