@@ -47,7 +47,7 @@ import CartWithoutAuth from './Component/User/CartWithoutAuth';
 import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
 import { bannerdata } from './redux/slice/banner';
 import ConfirmOrder from './Component/User/ConfirmOrder';
-import PaymentFailed from './Component/User/paymentFailed';
+import PaymentFailed from './Component/User/PaymentFailed';
 
 function App() {
   const dispatch = useDispatch()
