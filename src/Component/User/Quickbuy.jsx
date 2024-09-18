@@ -1,6 +1,9 @@
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBRow, MDBTypography } from "mdb-react-ui-kit";
+
+
+
+import {  MDBCard, MDBCardBody,  MDBCol, MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,10 +54,9 @@ const allStateArr = [
     "Uttarakhand",
     "West Bengal",
 ];
-export default function CheckoutWithoutAuth() {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const productId = queryParams.get('productId');
+export default function Quickbuy() { 
+    const {productId} = useParams() 
+    
     const productAllData = useSelector(d => d.product.data)
     const addressAllData = useSelector(d => d.address.data)
 
@@ -67,15 +69,9 @@ export default function CheckoutWithoutAuth() {
     const [discount, setDiscount] = useState(0)
     const [offer, setOffer] = useState(0)
     const [diliveryCharge, setDiliveryCharge] = useState(0)
-    const [totalCheckout, setTotalCheckout] = useState(0)
+    const [totalCheckout, setTotalCheckout] = useState(0) 
 
 
-    const [userValue, setUserValue] = useState(userDefaultValue)
-    const [showOTP, setSHowOTP] = useState(false)
-    const [otp, setOTP] = useState('')
-    const [otpSuccess, setOTPSuccess] = useState(false)
-    const [loadingVerify, setLoadingVerify] = useState(false)
-    const [otpError, setOTPError] = useState("")
     const [guestAddress, setGuestAddress] = useState(userDefaultValue)
     const [user, setUser] = useState()
     const [paymentType, setPaymentType] = useState('')
@@ -86,48 +82,25 @@ export default function CheckoutWithoutAuth() {
     const authCheckFunc = async () => {
         const userdata = localStorage.getItem('userdata')
         if (userdata) {
-            const userValue = await JSON.parse(userdata)
-            setOTPSuccess(true)
-            setSHowOTP(false)
+            const userValue = await JSON.parse(userdata) 
             setUser(userValue)
             if (addressAllData.length > 0) {
-                const filterAddress = addressAllData.find(d => d._id === userValue?.address)
-                if (filterAddress) {
-                    setGuestAddress({ ...filterAddress })
+                const filterAddress = addressAllData.find(d => d._id === userValue?.address) 
+                if (filterAddress) { 
                     setAddress(filterAddress)
-                }
-                else {
-                    setGuestAddress({ ...guestAddress, receiver: userValue?.name, country: userValue?.country, primaryNumber: userValue?.phone })
-                }
+                } 
             }
-        }
-
-
-        const guestUser = localStorage.getItem('guestUser')
-        const guestUserAddress = localStorage.getItem('guestUserAddress')
-
-        if (guestUser) {
-            const guestUserData = await JSON.parse(guestUser)
-            console.log("guestUserData", guestUserData);
-            setUser(guestUserData)
-            setOTPSuccess(true)
-            setSHowOTP(false)
-        }
-        if (guestUserAddress) {
-            const userAddressData = await JSON.parse(guestUserAddress)
-            setGuestAddress(userAddressData)
-        }
-
+        }  
     }
 
-    const cartProductsFunc = async () => {
-        const products = localStorage.getItem('cartProducts')
-        if (products) {
-            const productsArr = await JSON.parse(products)
-            setCartAllData(productsArr)
-            priceUpdateFunc()
-        }
-    }
+    // const cartProductsFunc = async () => {
+    //     const products = localStorage.getItem('cartProducts')
+    //     if (products) {
+    //         const productsArr = await JSON.parse(products)
+    //         setCartAllData(productsArr)
+    //         priceUpdateFunc()
+    //     }
+    // }
     const findCartData = async () => {
         if (productId && productAllData) {
             const product = await productAllData.filter(data => data._id === productId)
@@ -136,25 +109,14 @@ export default function CheckoutWithoutAuth() {
                 setCartAllData(quantityProducts)
                 priceUpdateFunc()
             }
-            else {
-                await cartProductsFunc()
-            }
-        }
-        else {
-            await cartProductsFunc()
-        }
 
-        const guestUser = localStorage.getItem('guestUser')
-        const guestUserAddress = localStorage.getItem('guestUserAddress')
-
-        if (guestUser) {
-            const userData = await JSON.parse(guestUser)
-            setUser(userData)
+            // else {
+            //     await cartProductsFunc()
+            // }
         }
-        if (guestUserAddress) {
-            const userAddressData = await JSON.parse(guestUserAddress)
-            setGuestAddress(userAddressData)
-        }
+        // else {
+        //     await cartProductsFunc()
+        // } 
     }
 
     const priceUpdateFunc = () => {
@@ -179,12 +141,14 @@ export default function CheckoutWithoutAuth() {
     }
 
     const quantitychange = (id, quantity) => {
-        console.log("quantitychange", id, quantity);
+        // console.log("quantitychange", id, quantity);
         const updatedProducts = cartAllData.map(product =>
             product._id === id ? quantity < 1 ? product : { ...product, quantity } : product
         );
+        console.log("cartAllData", cartAllData);
+        
         setCartAllData(updatedProducts)
-        localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
+        // localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
     };
 
     const removeProduct = (id) => {
@@ -192,17 +156,7 @@ export default function CheckoutWithoutAuth() {
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
         findCartData()
     };
-
-    const inputUserHandle = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setUserValue({ ...userValue, [name]: value });
-    }
-
-    const handleCountryChange = (selectedCountry) => {
-        const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
-        setUserValue({ ...userValue, ['country']: countryObj });
-    };
+ 
     const handleCountryGuest = (selectedCountry) => {
         const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
         setGuestAddress({ ...guestAddress, ['country']: countryObj });
@@ -212,60 +166,7 @@ export default function CheckoutWithoutAuth() {
         const value = e.target.value;
         setGuestAddress({ ...guestAddress, [name]: value });
     }
-
-    const submitUserProfile = async (e) => {
-        e.preventDefault()
-        setSHowOTP(false)
-        setLoadingVerify(true)
-        // console.log("userValue", userValue);
-        try {
-            const response = await axios.post(`${Url}/user/create`, userValue)
-            if (response) {
-                toast.success("OTP has send your Phone", { autoClose: 1500, })
-                setLoadingVerify(false)
-                setSHowOTP(true)
-            }
-            setLoadingVerify(false)
-        } catch (error) {
-            setSHowOTP(false)
-            setLoadingVerify(false)
-            console.log(error);
-        }
-    }
-    const checkOTPFunc = async (e) => {
-        e.preventDefault()
-        setOTPError('')
-        setOTPSuccess(false)
-        try {
-            const response = await axios.post(`${Url}/user/verifyOTP`, { ...userValue, otp })
-            console.log("response checkotp", response);
-            console.log("response status", response.status);
-            if (response.status === 200) {
-                console.log("otp success", response);
-                const responseString = JSON.stringify(response.data);
-                localStorage.setItem("guestUser", responseString);
-                toast.success("Mobile number verified", { autoClose: 1500, })
-                setGuestAddress({ ...guestAddress, receiver: userValue?.name, country: userValue?.country, primaryNumber: userValue?.phone })
-                setOTPSuccess(true)
-                setSHowOTP(false)
-                setUser(response.data)
-            }
-            else if (response.status === 204) {
-                console.log("otp not match");
-                setOTPError('Wrong OTP ')
-            }
-            else {
-                console.log("otp other error");
-            }
-            setOTP('')
-        } catch (error) {
-            setOTPError('')
-            setOTP('')
-            console.log(error);
-            console.log("error status", error.status);
-        }
-
-    }
+ 
     const buyProductSubmitFunc = async (e) => {
         e.preventDefault()
         const product = await cartAllData.map((productValue) => {
@@ -363,70 +264,8 @@ export default function CheckoutWithoutAuth() {
                                                                     </div>
                                                                 )
                                                             })}
-                                                        </div>
-                                                        {!otpSuccess &&
-                                                            <form onSubmit={(e) => submitUserProfile(e)}>
-                                                                <div className="row align-items-end">
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="name">Full Name</label>
-                                                                        <input type="text" name="name" className="form-control" onChange={e => inputUserHandle(e)} required />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="name">Email</label>
-                                                                        <input type="email" name="email" className="form-control" onChange={e => inputUserHandle(e)} required />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <div className="form-group">
-                                                                            <label htmlFor="primaryNumber" className="text-muted mb-1 text-capitalize fs-14" >
-                                                                                phone number
-                                                                            </label>
-                                                                            <div className="d-flex align-item-center p-0 overflow-hidden form-control">
-                                                                                <select name="" id="" value={userValue.country.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryChange(e.target.value)} required>
-                                                                                    {countryOptions.map((countryCode) => {
-                                                                                        return (
-                                                                                            <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
-                                                                                        )
-                                                                                    })}
-                                                                                </select>
-                                                                                <input
-                                                                                    type="phone"
-                                                                                    name="phone"
-                                                                                    className="form-control border-0 shadow-sm outline-none border-none"
-                                                                                    placeholder="Number"
-                                                                                    onChange={e => inputUserHandle(e)}
-                                                                                    value={userValue.phone}
-                                                                                    minLength={10}
-                                                                                    maxLength={10}
-                                                                                    required
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    {!showOTP &&
-                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2 ">
-                                                                            <button className="btn btn-primary" type="submit" disabled={loadingVerify}>Verify your number</button>
-                                                                        </div>}
-
-                                                                </div>
-                                                            </form>
-                                                        }
-                                                        {showOTP &&
-                                                            <form action="" onSubmit={(e) => checkOTPFunc(e)}>
-                                                                <small className="text-danger fs-12">{otpError}</small>
-                                                                <div className="row align-items-end">
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-
-                                                                        <label htmlFor="otp">Enter OTP</label>
-                                                                        <input type="phone" name="otp" className="form-control" onChange={e => setOTP(e.target.value)} required />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <button className="btn btn-success me-3" type="submit">Sumbit</button>
-                                                                        <span className="border-0 no-border bg-transparent pointer">resend OTP</span>
-                                                                    </div>
-                                                                </div>
-                                                            </form>}
-
-                                                        {otpSuccess &&
+                                                        </div>  
+                                                        {
                                                             <form action="" onSubmit={e => buyProductSubmitFunc(e)}>
                                                                 <div className="row">
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">

@@ -48,6 +48,7 @@ import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
 import { bannerdata } from './redux/slice/banner';
 import ConfirmOrder from './Component/User/ConfirmOrder';
 import PaymentFailed from './Component/User/PaymentFailed';
+import Quickbuy from './Component/User/quickbuy';
 
 function App() {
   const dispatch = useDispatch()
@@ -96,6 +97,7 @@ function App() {
       </Route> 
 
       <Route path="/order-confirmed/:orderId" element={<ConfirmOrder/>} />
+      <Route path="/quick-buy/:productId" element={<Quickbuy/>} />
       <Route path="/payment-failed" element={<PaymentFailed/>} />
       <Route path="/my-cart" element={<CartWithoutAuth/>} />
       <Route path="/checkout" element={<CheckoutWithoutAuth/>} />

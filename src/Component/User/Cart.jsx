@@ -81,7 +81,7 @@ export default function Cart() {
     let productArr = []
     await cartAllData.map( cartValue=>{
       const filterValue =  productAllData.find(d=>d._id === cartValue.productId)
-      productArr.push({productId:cartValue.productId, productQuantity: cartValue.quantity, price: filterValue.salePrice - Math.ceil(filterValue.salePrice * filterValue.discount/100)})
+      productArr.push({productName: filterValue.productName ,productId:cartValue.productId, productQuantity: cartValue.quantity, price: filterValue.salePrice - Math.ceil(filterValue.salePrice * filterValue.discount/100)})
     }) 
     const productObj = {product:productArr, paymentStatus:"pending", totalproductPrice : totalSalePrice,
     totalDiscount,

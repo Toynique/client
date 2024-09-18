@@ -102,24 +102,8 @@ export default function CheckoutWithoutAuth() {
             }
         }
 
-
-        const guestUser = localStorage.getItem('guestUser')
-        const guestUserAddress = localStorage.getItem('guestUserAddress')
-
-        if (guestUser) {
-            const guestUserData = await JSON.parse(guestUser)
-            console.log("guestUserData", guestUserData);
-            setUser(guestUserData)
-            setOTPSuccess(true)
-            setSHowOTP(false)
-        }
-        if (guestUserAddress) {
-            const userAddressData = await JSON.parse(guestUserAddress)
-            setGuestAddress(userAddressData)
-        }
-
     }
-
+    
     const cartProductsFunc = async () => {
         const products = localStorage.getItem('cartProducts')
         if (products) {
@@ -132,7 +116,7 @@ export default function CheckoutWithoutAuth() {
         if (productId && productAllData) {
             const product = await productAllData.filter(data => data._id === productId)
             if (product?.length > 0) {
-                const quantityProducts = product.map(d => { return { ...d, quantity: d.quantity ? d.quantity : 1 } })
+                const quantityProducts = product.map(d => { return { ...d, quantity: 1 } })
                 setCartAllData(quantityProducts)
                 priceUpdateFunc()
             }
@@ -180,12 +164,18 @@ export default function CheckoutWithoutAuth() {
 
     const quantitychange = (id, quantity) => {
         console.log("quantitychange", id, quantity);
+        // const updatedProducts = cartAllData.map(product =>
+        //     product._id === id ? quantity < 1 ? product : { ...product, quantity } : product
+        // );
+        // localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
+        // findCartData()
         const updatedProducts = cartAllData.map(product =>
             product._id === id ? quantity < 1 ? product : { ...product, quantity } : product
         );
-        setCartAllData(updatedProducts)
         localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
+        findCartData()
     };
+
 
     const removeProduct = (id) => {
         const updatedProducts = cartAllData.filter(product => product._id !== id);
@@ -221,7 +211,7 @@ export default function CheckoutWithoutAuth() {
         try {
             const response = await axios.post(`${Url}/user/create`, userValue)
             if (response) {
-                toast.success("OTP has send your Phone", { autoClose: 1500, })
+                toast.success("OTP sent", { autoClose: 1500, })
                 setLoadingVerify(false)
                 setSHowOTP(true)
             }
@@ -237,7 +227,7 @@ export default function CheckoutWithoutAuth() {
         setOTPError('')
         setOTPSuccess(false)
         try {
-            const response = await axios.post(`${Url}/user/verifyOTP`, { ...userValue, otp })
+            const response = await axios.post(`${Url}/user/verifyOTP` , { ...userValue, otp } )  
             console.log("response checkotp", response);
             console.log("response status", response.status);
             if (response.status === 200) {
@@ -266,7 +256,7 @@ export default function CheckoutWithoutAuth() {
         }
 
     }
-    const buyProductSubmitFunc = async (e) => {
+    const guestAddressFunc = async (e) => {
         e.preventDefault()
         const product = await cartAllData.map((productValue) => {
             return {
@@ -300,10 +290,6 @@ export default function CheckoutWithoutAuth() {
             }
             else {
                 console.log("paymentType online", paymentType);
-                // const res = await axios.post(`${Url}/api/order`, { ...checkoutProductList, address, paymentType })
-                // if (res.data.success === true) {
-                //     window.location.href = res.data.data.instrumentResponse.redirectInfo.url
-                // }
             }
         } catch (error) {
             toast.error("error", { autoClose: 1500, })
@@ -312,7 +298,7 @@ export default function CheckoutWithoutAuth() {
 
     const changeAddressFunc = (addressValue) => {
         console.log("onchange Address", addressValue);
-
+        
         setAddress(addressValue)
         setGuestAddress(addressValue)
     }
@@ -427,7 +413,7 @@ export default function CheckoutWithoutAuth() {
                                                             </form>}
 
                                                         {otpSuccess &&
-                                                            <form action="" onSubmit={e => buyProductSubmitFunc(e)}>
+                                                            <form action="" onSubmit={e => guestAddressFunc(e)}>
                                                                 <div className="row">
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="receiver">Receiver Name <span className="text-danger">*</span></label>
@@ -463,7 +449,7 @@ export default function CheckoutWithoutAuth() {
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ? guestAddress.secondaryNumber : ""} />
+                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ?  guestAddress.secondaryNumber : ""} />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
@@ -501,7 +487,7 @@ export default function CheckoutWithoutAuth() {
                                                                         <label htmlFor="paymentType">Cash On Delivery</label>
                                                                     </div>
                                                                     <div className="d-flex align-items-center mb-2 pb-2">
-                                                                        <input type="radio" name="paymentType" value={"prepaid"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'prepaid'} required />
+                                                                        <input type="radio" name="paymentType" value={"online"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'online'} required />
                                                                         <label htmlFor="paymentType">Pay Now</label>
                                                                     </div>
                                                                     <hr />
@@ -540,11 +526,11 @@ export default function CheckoutWithoutAuth() {
                                                                         </div>
                                                                         <div className="d-flex flex-row align-items-center justify-content-center">
                                                                             <div className="d-flex align-items-center me-3">
-                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary me-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) - 1))}>
+                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary me-2" onClick={() => quantitychange(productValue._id, (Number(productValue.quantity) - 1))}>
                                                                                     <i className="fa-solid fa-minus "></i>
                                                                                 </button>
                                                                                 <p className="px-2 mb-0 fw-bold">{productValue.quantity}</p>
-                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary ms-2" onClick={() => quantitychange(productValue._id, (+(productValue.quantity) + 1))}>
+                                                                                <button className="btn  btn-sm p-1 fs-8 btn-primary btn-outline-primary ms-2" onClick={() => quantitychange(productValue._id, (Number(productValue.quantity) + 1))}>
                                                                                     <i className="fa-solid fa-plus "></i>
                                                                                 </button>
                                                                             </div>
@@ -577,8 +563,8 @@ export default function CheckoutWithoutAuth() {
 
                                                         <div className="d-flex justify-content-between">
                                                             <p className="mb-2">Shipping Charge</p>
-                                                            <p className="mb-2">
-                                                                {diliveryCharge ? diliveryCharge : "Free"}
+                                                            <p className="mb-2"> 
+                                                                 {diliveryCharge ? diliveryCharge : "Free"}
                                                             </p>
                                                         </div>
                                                         <hr />

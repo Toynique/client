@@ -24,7 +24,11 @@ const Profile = () => {
   const dispatch = useDispatch();
   const auth = localStorage.getItem("usertoken");
   const userdata = localStorage.getItem("userdata");
+
   const addressList = useSelector(store => store.address.data)
+
+
+
   const user = useSelector(store => store.user[0])
   const productAllData = useSelector(store => store.product.data)
   const [showUpdateAddressModel, setShowUpdateAddressModel] = useState(false);
@@ -35,27 +39,59 @@ const Profile = () => {
   const [myRatingProducts, setMyRatingProducts] = useState([]);
   const [ratingFormValue, setRatingFormValue] = useState()
   const [ratingErr, setRatingErr] = useState('')
-
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
-  const [changePasswordModel, setChangePasswordModel] = useState(false)
   const [createPasswordModel, setCreatePasswordModel] = useState(false)
   const [resetPasswordModel, setResetPasswordModel] = useState(false)
-
   const [passwordFormValue, setPasswordFormValue] = useState()
   const [passwordErr, setPasswordErr] = useState("")
+  const [loading, setLoading] = useState(false)
+
+
+  const [reasonCancel, setReasonCancel] = useState("")
+  const [cancelOrderModal, setCancelOrderModal] = useState(false)
+  const [cancelOrderId, setCancelOrderId] = useState('')
+  const [noCancellError, setNoCancellError] = useState('')
 
   const downloadInvoice = async (orderId) => {
-    const response = await fetch(`/download-invoice/${orderId}`);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'invoice.pdf';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    setLoading(true)
+    try {
+      const response = await fetch(`${Url}/api/invoice/${orderId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setLoading(false)
+
+      if (!response.ok) {
+        throw new Error('Failed to download invoice');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'invoice.pdf');
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup: remove the link and revoke the Blob URL
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setLoading(false)
+      console.error('Error during invoice download:', error);
+    }
+
   };
+
+  const openCancelModule = (orderId) => {
+    setNoCancellError('')
+    setCancelOrderId(orderId)
+    setCancelOrderModal(true)
+  }
+
+
 
 
   const passwordHandle = (e) => {
@@ -127,21 +163,27 @@ const Profile = () => {
       navigate("/login");
     }
   });
+
   const orderListFunc = async () => {
-    const userId = await JSON.parse(userdata)._id;
-    setUserId(userId);
-    const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`);
-    if (data) {
-      setOrderList(data);
+    if (userdata) {
+      const userId = await JSON.parse(userdata)._id;
+      setUserId(userId);
+      const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`);
+      console.log("data", data);
+
+      if (data) {
+        setOrderList(data);
+      }
     }
   };
+
+
   const addressListFunc = async () => {
     const userId = await JSON.parse(userdata)._id;
     if (userId) {
       const { data } = await axios.get(
         `${Url}/api/address/user?userId=${userId}`
-      );
-      //   setAddressList(data);
+      ); 
     }
   };
   const findAddress = (addId) => {
@@ -191,22 +233,22 @@ const Profile = () => {
     try {
       if (!(passwordFormValue.password === passwordFormValue.confirmPassword)) {
         setPasswordErr('Your Password and Confirm Password are not matched')
-        return 
+        return
       }
-      const response = await axios.put(`${Url}/user/createPassword/${user._id}`, passwordFormValue) 
-      setCreatePasswordModel(false)  
-      if (response.status === 200) { 
+      const response = await axios.put(`${Url}/user/createPassword/${user._id}`, passwordFormValue)
+      setCreatePasswordModel(false)
+      if (response.status === 200) {
         let userdata = response.data
         dispatch(adduser(userdata))
         userdata = JSON.stringify(userdata);
         localStorage.setItem("userdata", userdata);
-      } 
+      }
     } catch (error) {
       console.log(error);
 
     }
   }
-  const resetPasswordFunc = async(e)=>{
+  const resetPasswordFunc = async (e) => {
     e.preventDefault();
     setPasswordErr('')
     try {
@@ -214,15 +256,15 @@ const Profile = () => {
         setPasswordErr('Your Password and Confirm Password are not matched')
         return
       }
-      const response = await axios.put(`${Url}/user/resetPassword/${user._id}`, passwordFormValue) 
-      setResetPasswordModel(false)  
-      if (response.status === 200) {  
+      const response = await axios.put(`${Url}/user/resetPassword/${user._id}`, passwordFormValue)
+      setResetPasswordModel(false)
+      if (response.status === 200) {
         toast.success("Password changed successfully", { autoClose: 1500, });
         setResetPasswordModel(false)
-      }  
+      }
 
-    } catch (error) { 
-      if (error?.response?.status === 401){
+    } catch (error) {
+      if (error?.response?.status === 401) {
         setPasswordErr("Your Old Password is incorrect")
         toast.warn("Your Old Password is incorrect", { autoClose: 1500, });
         return
@@ -249,6 +291,48 @@ const Profile = () => {
       dispatch(addressdata(userId))
     }
   }
+
+  const cancelOrder = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.put(`${Url}/api/order/cancel`, { orderId: cancelOrderId, status: 'cancelled', reason: reasonCancel })
+
+      console.log("response", response);
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Order has been cancelled',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      orderListFunc();
+      setCancelOrderModal(false)
+
+    } catch (error) {
+      console.log("cancel response error", error);
+      if (error?.response.status === 401) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: "You can't cancel now because your order has been dispatched",
+          showConfirmButton: false,
+          // timer: 1500
+        })
+        setNoCancellError("You can't cancel this oreder now because it's already dispatched.")
+        orderListFunc();
+        return
+      }
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: "Something Went Wrong",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      orderListFunc();
+    }
+  }
   useEffect(() => {
     cartDispatch()
     orderListFunc();
@@ -273,7 +357,7 @@ const Profile = () => {
                   <h3 className="mb-3">Contact info</h3>
                   <div className="text-end mb-3">
                     {user && user.password ?
-                      <button className="btn btn-primary btn-sm" onClick={()=>setResetPasswordModel(true)}>Change Password</button> :
+                      <button className="btn btn-primary btn-sm" onClick={() => setResetPasswordModel(true)}>Change Password</button> :
                       <button className="btn btn-primary btn-sm" onClick={() => setCreatePasswordModel(true)}>Create Your Password</button>
                     }
                   </div>
@@ -331,6 +415,7 @@ const Profile = () => {
                   <div>
                     <h3>Your Orders</h3>
                     {orderList.map((orderValue) => {
+                      const isShipped = orderValue.orderStatus.some(status => status.status === 'dispatched' || status.status === 'cancelled');
                       return (
                         <div className="p-3 mb-3 border rounded shadow-sm" key={orderValue._id}>
 
@@ -338,16 +423,19 @@ const Profile = () => {
                             <div>
                               <p className="mb-1">Order Id :- {orderValue._id}</p>
                               <p className="mb-1">Order Date :- {formatDate(orderValue.createdAt)}</p>
+                              <p className="mb-1 text-capitalize">Order :- {orderValue.currentOrderStatus}</p>
+                              {!isShipped ?
+                                <button className="text-capitalize btn btn-sm btn-outline-primary" onClick={() => openCancelModule(orderValue._id)}>order cancel</button> : null}
                             </div>
                             <div>
                               <div className="text-end mb-2">
 
                                 <button className="btn btn-primary me-3 btn-sm" onClick={() => ratingProduct(orderValue?.product)} >Give us Rating</button>
-                                <button className="btn btn-primary  btn-sm" onClick={() => downloadInvoice(orderValue._id)} >Download Invoice</button>
+                                <button className="btn btn-primary  btn-sm" onClick={() => downloadInvoice(orderValue._id)} >Download Invoice {loading ? "..." : null}</button>
                               </div>
-                              {orderValue?.paymentType == 'cod' ?
+                              {/* {orderValue?.paymentType == 'cod' ?
                                 <p className="mb-1">Payment Status :- Cash on Delivery</p>
-                                : <p className="mb-1">Payment Status :- <span > {orderValue.paymentStatus} </span></p>}
+                                : <p className="mb-1">Payment Status :- <span > {orderValue.paymentStatus} </span></p>} */}
                             </div>
                           </div>
                           <div className="row py-3 border-bottom">
@@ -370,9 +458,6 @@ const Profile = () => {
                               <span className="text-muted fw-light fs-14">
                                 Shipping Address
                               </span>
-                              {/* <p className="mb-1 text-capitalize">
-                                {orderValue?.address?.country?.label}
-                              </p> */}
                               <p className="mb-1">
                                 {orderValue?.address?.address},  {orderValue?.address?.city}, {orderValue?.address?.state}, {orderValue?.address?.pincode}
                               </p>
@@ -385,12 +470,15 @@ const Profile = () => {
                                 </> : null}
                             </div>
                             <div className="col-lg-4 -col-md-4 col-sm-6 col-12 mb-md-0 mb-3">
-                              <span className="text-muted fw-light fs-14">
-                                Payment
-                              </span>
-                              <p className={`mb-1 text-capitalize ${orderValue?.paymentStatus == "success" ? 'text-success' : orderValue?.paymentStatus == 'pending' ? "text-warning" : 'text-danger'}`}>
-                                {orderValue?.paymentStatus}
+                              <p className=" mb-1">
+                                Payment : {orderValue?.paymentType === 'cod' ? "Cash On Delivery" :
+                                  <span className={`mb-1 text-capitalize ${orderValue?.paymentStatus == "success" ? 'text-success' : orderValue?.paymentStatus == 'pending' ? "text-warning" : 'text-danger'}`}>
+                                    {orderValue?.paymentStatus}
+                                  </span>
+                                }
                               </p>
+
+
                               <p className="mb-1">
                                 Shipping Fee :  {orderValue?.diliveryCharge ? <>&#8377; {orderValue?.diliveryCharge} </> : 'Free'}
                               </p>
@@ -500,7 +588,7 @@ const Profile = () => {
             <Modal.Title>Create Password</Modal.Title>
           </Modal.Header>
 
-          <Modal.Body> 
+          <Modal.Body>
             <div>
               <p className="fs-12 text-danger">{passwordErr}</p>
 
@@ -541,7 +629,7 @@ const Profile = () => {
             <Modal.Title>Reset Your Password</Modal.Title>
           </Modal.Header>
 
-          <Modal.Body> 
+          <Modal.Body>
             <div>
               <p className="fs-12 text-danger">{passwordErr}</p>
 
@@ -564,6 +652,42 @@ const Profile = () => {
                 <div className="text-end">
                   <Button variant="primary" type="submit">
                     Update Password
+                  </Button>
+                </div>
+
+              </form>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </CSSTransition>
+      <CSSTransition
+
+        in={cancelOrderModal}
+        timeout={900}
+        classNames="popup"
+        unmountOnExit
+      >
+        <Modal show={cancelOrderModal} onHide={() => setCancelOrderModal(false)} animation={true}>
+          {/* <Modal.Header closeButton>
+            <Modal.Title>Change Address</Modal.Title>
+          </Modal.Header> */}
+          <Modal.Header  >
+            <Modal.Title >Order Cancel <br /> {cancelOrderId && <span className="fs-12">Order Id : {cancelOrderId}</span>}</Modal.Title>
+
+          </Modal.Header>
+
+          <Modal.Body>
+            <div>
+              <small className="fs-12 text-danger mb-3">{noCancellError}</small>
+              <form onSubmit={e => cancelOrder(e)}>
+                <div className="form-group mb-3">
+
+                  <label htmlFor="reason" className="mb-1">Why are you cancel your order <span className="text-danger">*</span></label>
+                  <textarea rows="3" type="text" name="reason" className="form-control p-2 no-outline w-100 rounded" onChange={e => setReasonCancel(e.target.value)} placeholder="Please type your reason" required />
+                </div>
+                <div className="text-end">
+                  <Button variant="primary" type="submit">
+                    Cancel your Order
                   </Button>
                 </div>
 

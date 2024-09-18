@@ -189,7 +189,8 @@ const ProductSmall = (props) => {
         </div>
         <div className='text-end gap-lg-3 gap-1 d-flex justify-content-between align-items-center'> 
           <button className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" onClick={()=>addMyCart(productData)} >Add to Cart</button>
-          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`/checkout?productId=${productData._id}`} >Quick Buy</Link>
+          {/* <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`/checkout?productId=${productData._id}`} >Quick Buy</Link> */}
+          <Link className="rounded-pill btn btnPrimary py-1 px-3 fs-14 fs-sm-8 flex-grow-1" to={`${auth ? `/quick-buy/${productData._id}` :  `/checkout?productId=${productData._id}` }`} >Quick Buy</Link>
         </div>
 
         {ratingData &&
