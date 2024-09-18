@@ -62,7 +62,8 @@ const Profile = () => {
         },
       });
       setLoading(false)
-
+      console.log("response", response);
+      
       if (!response.ok) {
         throw new Error('Failed to download invoice');
       }

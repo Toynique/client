@@ -48,7 +48,7 @@ import CheckoutWithoutAuth from './Component/User/CheckoutWithoutAuth';
 import { bannerdata } from './redux/slice/banner';
 import ConfirmOrder from './Component/User/ConfirmOrder';
 import PaymentFailed from './Component/User/PaymentFailed';
-import Quickbuy from './Component/User/quickbuy';
+import Quickbuy from './Component/User/Quickbuy';
 
 function App() {
   const dispatch = useDispatch()
