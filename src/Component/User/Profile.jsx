@@ -52,7 +52,7 @@ const Profile = () => {
   const [cancelOrderId, setCancelOrderId] = useState('')
   const [noCancellError, setNoCancellError] = useState('')
 
-  const downloadInvoice = async (orderId) => {
+  const downloadInvoiceFirst = async (orderId) => {
     setLoading(true)
     try {
       const response = await fetch(`${Url}/api/invoice/${orderId}`, {
@@ -84,6 +84,42 @@ const Profile = () => {
     }
 
   };
+
+  const downloadInvoice = async (orderId) => {
+    setLoading(true);
+    try {
+        const response = await fetch(`${Url}/api/invoice/${orderId}`, {
+            method: 'GET', // Changed from 'GET' to 'POST'
+            headers: {
+                'Content-Type': 'application/json',
+            },  // If you need to send additional data, include it here
+            cache: 'no-store', // Prevents the browser from caching the request
+        });
+
+        setLoading(false);
+
+        if (!response.ok) {
+            throw new Error(`Failed to download invoice: ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `invoice-${orderId}.pdf`); // Dynamic filename
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup: remove the link and revoke the Blob URL
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        setLoading(false);
+        console.error('Error during invoice download:', error);
+        // Optionally, display an error message to the user
+    }
+};
+
 
   const openCancelModule = (orderId) => {
     setNoCancellError('')
