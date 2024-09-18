@@ -154,17 +154,18 @@ export default function Quickbuy() {
         }) 
         const chooseAddress = address ? address : guestAddress
         const checkoutProductList = { product, totalproductPrice: mrp - discount, totalDiscount: discount, offerDiscount: offer, diliveryCharge: diliveryCharge, currency: 'INR', paymentType }
-        // console.log({...checkoutProductList, userId: user._id, address: {...chooseAddress, userId: user._id } });
-        
+     
         try { 
-                await axios.post(`${Url}/api/address`, { ...chooseAddress, userId: user._id }) 
+                if(!address){
+                    await axios.post(`${Url}/api/address`, { ...chooseAddress, userId: user._id }) 
+                }
                 const responseOrder = await axios.post(`${Url}/api/order`, {...checkoutProductList, userId: user._id, address: {...chooseAddress, userId: user._id } })
-                if (responseOrder?.status == 200 || responseOrder?.status == 201) {
+                if (responseOrder?.status == 201) {
                     toast.success("Order placed successfully", { autoClose: 1500, })     
                     navigate(`/order-confirmed/${responseOrder.data.orderID}`)
                 }
                 if(responseOrder.data.success === true){
-                    window.location.href = res.data.data.instrumentResponse.redirectInfo.url
+                    window.location.href = responseOrder.data.data.instrumentResponse.redirectInfo.url
                   }
                 else {
                     toast.warning("something went wrong", { autoClose: 1500, })
