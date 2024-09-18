@@ -102,7 +102,7 @@ export default function Cart() {
     if(checkoutProductList){
       console.log("checkoutProduct done");
       // const res =  await axios.post(`${Url}/api/order/payment`, {...checkoutProductList, address, paymentType})  
-      const res =  await axios.post(`${Url}/api/order`, {...checkoutProductList, address, paymentType}) 
+      const res =  await axios.post(`${Url}/api/order` , {...checkoutProductList, address, paymentType}) 
       if(res.status === 201 && paymentType === 'cod') {
         navigate(`/order-confirmed/${res.data._id}`)
       } 

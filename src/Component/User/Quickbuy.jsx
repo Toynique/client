@@ -75,7 +75,7 @@ export default function Quickbuy() {
     const [guestAddress, setGuestAddress] = useState(userDefaultValue)
     const [user, setUser] = useState()
     const [paymentType, setPaymentType] = useState('')
-    const [address, setAddress] = useState()
+    const [address, setAddress] = useState() 
 
 
 
@@ -86,21 +86,14 @@ export default function Quickbuy() {
             setUser(userValue)
             if (addressAllData.length > 0) {
                 const filterAddress = addressAllData.find(d => d._id === userValue?.address) 
+                console.log("filterAddress filterAddress", filterAddress);
+                
                 if (filterAddress) { 
                     setAddress(filterAddress)
                 } 
             }
         }  
-    }
-
-    // const cartProductsFunc = async () => {
-    //     const products = localStorage.getItem('cartProducts')
-    //     if (products) {
-    //         const productsArr = await JSON.parse(products)
-    //         setCartAllData(productsArr)
-    //         priceUpdateFunc()
-    //     }
-    // }
+    } 
     const findCartData = async () => {
         if (productId && productAllData) {
             const product = await productAllData.filter(data => data._id === productId)
@@ -108,15 +101,8 @@ export default function Quickbuy() {
                 const quantityProducts = product.map(d => { return { ...d, quantity: d.quantity ? d.quantity : 1 } })
                 setCartAllData(quantityProducts)
                 priceUpdateFunc()
-            }
-
-            // else {
-            //     await cartProductsFunc()
-            // }
-        }
-        // else {
-        //     await cartProductsFunc()
-        // } 
+            } 
+        } 
     }
 
     const priceUpdateFunc = () => {
@@ -140,23 +126,12 @@ export default function Quickbuy() {
         }
     }
 
-    const quantitychange = (id, quantity) => {
-        // console.log("quantitychange", id, quantity);
+    const quantitychange = (id, quantity) => { 
         const updatedProducts = cartAllData.map(product =>
             product._id === id ? quantity < 1 ? product : { ...product, quantity } : product
-        );
-        console.log("cartAllData", cartAllData);
-        
-        setCartAllData(updatedProducts)
-        // localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
-    };
-
-    const removeProduct = (id) => {
-        const updatedProducts = cartAllData.filter(product => product._id !== id);
-        localStorage.setItem('cartProducts', JSON.stringify(updatedProducts));
-        findCartData()
-    };
- 
+        ); 
+        setCartAllData(updatedProducts) 
+    }; 
     const handleCountryGuest = (selectedCountry) => {
         const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
         setGuestAddress({ ...guestAddress, ['country']: countryObj });
@@ -169,53 +144,45 @@ export default function Quickbuy() {
  
     const buyProductSubmitFunc = async (e) => {
         e.preventDefault()
-        const product = await cartAllData.map((productValue) => {
+        const product = cartAllData.map((productValue) => {
             return {
                 productId: productValue._id,
                 productQuantity: productValue.quantity,
                 price: Math.ceil(productValue.salePrice - ((productValue.salePrice * productValue.discount) / 100)),
                 productName: productValue.productName
             }
-        })
+        }) 
+        const chooseAddress = address ? address : guestAddress
         const checkoutProductList = { product, totalproductPrice: mrp - discount, totalDiscount: discount, offerDiscount: offer, diliveryCharge: diliveryCharge, currency: 'INR', paymentType }
-        try {
-            if (user && paymentType == 'cod') {
-                await axios.post(`${Url}/api/address`, { ...guestAddress, userId: user._id })
-                const addressString = JSON.stringify(guestAddress);
-                localStorage.setItem("guestUserAddress", addressString);
-                const responseOrder = await axios.post(`${Url}/api/order/checkoutcod`, { ...checkoutProductList, userId: user._id, address: { ...guestAddress, userId: user._id } })
-                if (responseOrder?.status == 200) {
-                    toast.success("Order placed successfully", { autoClose: 1500, })
-                    console.log("data token received", responseOrder);
-                    const userStr = JSON.stringify(user);
-                    localStorage.setItem("usertoken", responseOrder?.data.token);
-                    localStorage.setItem("userdata", userStr);
-                    localStorage.removeItem('cartProducts')
-                    localStorage.removeItem('guestUser')
-                    localStorage.removeItem('guestUserAddress')
+        // console.log({...checkoutProductList, userId: user._id, address: {...chooseAddress, userId: user._id } });
+        
+        try { 
+                await axios.post(`${Url}/api/address`, { ...chooseAddress, userId: user._id }) 
+                const responseOrder = await axios.post(`${Url}/api/order`, {...checkoutProductList, userId: user._id, address: {...chooseAddress, userId: user._id } })
+                if (responseOrder?.status == 200 || responseOrder?.status == 201) {
+                    toast.success("Order placed successfully", { autoClose: 1500, })     
                     navigate(`/order-confirmed/${responseOrder.data.orderID}`)
                 }
+                if(responseOrder.data.success === true){
+                    window.location.href = res.data.data.instrumentResponse.redirectInfo.url
+                  }
                 else {
                     toast.warning("something went wrong", { autoClose: 1500, })
-                }
-            }
-            else {
-                console.log("paymentType online", paymentType);
-                // const res = await axios.post(`${Url}/api/order`, { ...checkoutProductList, address, paymentType })
-                // if (res.data.success === true) {
-                //     window.location.href = res.data.data.instrumentResponse.redirectInfo.url
-                // }
-            }
+                } 
         } catch (error) {
             toast.error("error", { autoClose: 1500, })
+            console.log("error", error);
+            
         }
     }
 
-    const changeAddressFunc = (addressValue) => {
-        console.log("onchange Address", addressValue);
-
+    const handleNewAddress = ()=>{
+        setAddress() 
+    }
+    const changeAddressFunc = (addressValue) => { 
         setAddress(addressValue)
-        setGuestAddress(addressValue)
+        setGuestAddress(userDefaultValue)  
+        // setGuestAddress(addressValue)
     }
 
     useEffect(() => {
@@ -264,13 +231,20 @@ export default function Quickbuy() {
                                                                     </div>
                                                                 )
                                                             })}
-                                                        </div>  
-                                                        {
+                                                        </div> 
+                                                        {addressAllData.length == 0 || address ?
+                                                        <div className="mb-3">
+                                                            <button className="btn-primary btn" onClick={handleNewAddress}>Add New Address</button>
+                                                        </div> : null}
+
+                                                        <div>
+                                                        
                                                             <form action="" onSubmit={e => buyProductSubmitFunc(e)}>
+                                                            { !address ?
                                                                 <div className="row">
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="receiver">Receiver Name <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="receiver" value={guestAddress?.receiver} className="form-control" onChange={e => handleGuestUser(e)} required />
+                                                                        <input type="text" name="receiver" value={guestAddress.receiver ? guestAddress.receiver : ""} className="form-control" onChange={e => handleGuestUser(e)} required /> 
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <div className="form-group">
@@ -279,7 +253,7 @@ export default function Quickbuy() {
                                                                             </label>
 
                                                                             <div className="d-flex align-item-center p-0 overflow-hidden form-control">
-                                                                                <select name="" id="" value={guestAddress?.country?.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryGuest(e.target.value)} required>
+                                                                                <select name="" id="" value={guestAddress?.country?.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryGuest(e.target.value)} required> 
                                                                                     {countryOptions.map((countryCode) => {
                                                                                         return (
                                                                                             <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
@@ -290,9 +264,9 @@ export default function Quickbuy() {
                                                                                     type="phone"
                                                                                     name="primaryNumber"
                                                                                     className="form-control border-0 shadow-sm outline-none border-none"
-                                                                                    placeholder="1234567890"
-                                                                                    onChange={e => handleGuestUser(e)}
-                                                                                    value={guestAddress?.primaryNumber}
+                                                                                    placeholder=""
+                                                                                    onChange={e => handleGuestUser(e)} 
+                                                                                    value={guestAddress.primaryNumber ? guestAddress.primaryNumber : ""}
                                                                                     minLength={10}
                                                                                     maxLength={10}
                                                                                     required
@@ -302,7 +276,7 @@ export default function Quickbuy() {
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ? guestAddress.secondaryNumber : ""} />
+                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ? guestAddress.secondaryNumber : ""} /> 
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
@@ -310,19 +284,15 @@ export default function Quickbuy() {
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="address">Full Address <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.address} />
+                                                                        <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.address ? guestAddress.address : ""} />
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="pincode">Pincode <span className="text-danger">*</span></label>
-                                                                        <input type="phone" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress?.pincode} />
-                                                                    </div>
-                                                                    {/* <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="state">State</label>
-                                                                        <input type="text" name="state" className="form-control" onChange={e => handleGuestUser(e)} required  value={guestAddress?.state}/>
-                                                                    </div> */}
+                                                                        <input type="phone" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.pincode ? guestAddress.pincode : ""} />
+                                                                    </div> 
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-2">
                                                                         <label htmlFor="state">State <span className="text-danger">*</span></label>
-                                                                        <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress?.state} required >
+                                                                        <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress.state ? guestAddress.state : ""} required >
                                                                             <option className="text-muted" disabled={guestAddress?.state}>choose</option>
                                                                             {allStateArr.map((stateName) => {
                                                                                 return (
@@ -333,23 +303,26 @@ export default function Quickbuy() {
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-12 mb-4">
                                                                         <label htmlFor="city">City <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress?.city} required />
+                                                                        <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.city ? guestAddress.city : ""} required />
                                                                     </div>
-                                                                    <div className="d-flex align-items-center mb-2">
-                                                                        <input type="radio" name="paymentType" value={"cod"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'cod'} required />
-                                                                        <label htmlFor="paymentType">Cash On Delivery</label>
+                                                                </div> : null }
+
+                                                                <div> 
+                                                                    <div className="d-flex align-items-center mb-2 form-check">
+                                                                        <input className="form-check-input" type="radio" name="paymentType" id="paymentType1" value={"cod"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'cod'} required />
+                                                                        <label className="form-check-label" htmlFor="paymentType1">Cash On Delivery</label>
                                                                     </div>
-                                                                    <div className="d-flex align-items-center mb-2 pb-2">
-                                                                        <input type="radio" name="paymentType" value={"prepaid"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'prepaid'} required />
-                                                                        <label htmlFor="paymentType">Pay Now</label>
+                                                                    <div className="d-flex align-items-center mb-2 pb-2 form-check">
+                                                                        <input className="form-check-input" type="radio" name="paymentType" id="paymentType2" value={"prepaid"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'prepaid'} required />
+                                                                        <label className="form-check-label" htmlFor="paymentType2">Pay Now</label>
                                                                     </div>
                                                                     <hr />
                                                                     <div>
                                                                         <button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
                                                                     </div>
                                                                 </div>
-                                                            </form>
-                                                        }
+                                                            </form> 
+                                                        </div> 
                                                     </MDBCardBody>
                                                 </MDBCard>
 
@@ -387,7 +360,7 @@ export default function Quickbuy() {
                                                                                     <i className="fa-solid fa-plus "></i>
                                                                                 </button>
                                                                             </div>
-                                                                            <span className="textPrimary pointer" onClick={() => removeProduct(productValue._id)}>Remove</span>
+                                                                            {/* <span className="textPrimary pointer" onClick={() => removeProduct(productValue._id)}>Remove</span> */}
                                                                         </div>
                                                                     </div>
                                                                 </div>
