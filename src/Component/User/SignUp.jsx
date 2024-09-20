@@ -21,7 +21,7 @@ import logoImg from '/assets/img/logo-dark.png'
 
 const defaultTheme = createTheme();
 
-const SignUp = ()=>{ 
+const SignUp = ()=>{  
   const navigate = useNavigate()
   const [errMsg, setErrMsg] = useState('')
 
