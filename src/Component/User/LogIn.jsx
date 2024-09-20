@@ -61,7 +61,10 @@ export default function LogIn() {
     setIsLoading(true)
     setErrMsg('')
     const data = new FormData(event.currentTarget);
-    const logindata = { "email": data.get('email'), "password": data.get('password'), "otp": data.get('otp') } 
+    const logindata = { "input": data.get('email'),"email": data.get('email'), "password": data.get('password'), "otp": data.get('otp') } 
+    try {
+      
+   
     if(!loginWithOTP){
       const resp = await loginUser(logindata)
     if (resp) {
@@ -93,8 +96,7 @@ export default function LogIn() {
     else {
       setIsLoading(false) 
     }}
-    else{ 
-      
+    else{  
       if(logindata?.email && logindata?.otp){ 
         const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata) 
         setIsLoading(false)
@@ -110,13 +112,17 @@ export default function LogIn() {
       }
       else if(logindata?.email){   
         const response = await axios.post(`${Url}/user/createOTP`, logindata) 
+        console.log("response create otp time",response.status === 202,  response);
+        
         setIsLoading(false)
         setOTP(true) 
         if(response.status === 200){
           toast.info("OTP Sent" , {autoClose: 1500,});
         }
-        else if(response.status === 204){
-          setErrMsg('Wrong Email Address')
+        else if(response.status === 202){
+          
+          // setErrMsg('Wrong Email Address')
+          setErrMsg(response.data.message)
         }
         else{
           setIsLoading(false)
@@ -125,10 +131,16 @@ export default function LogIn() {
       }
       else{
         setIsLoading(false)
-        setErrMsg('Email not found') 
+        setErrMsg('Please enter an Email or Phone Number') 
       }
       setIsLoading(false)
     }
+  } catch (error) {
+    setIsLoading(false)
+  }
+  finally {
+    setIsLoading(false)
+}
 
   };
 

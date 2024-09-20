@@ -1,7 +1,7 @@
 
 
 
-import {  MDBCard, MDBCardBody,  MDBCol, MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
+import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,9 +54,9 @@ const allStateArr = [
     "Uttarakhand",
     "West Bengal",
 ];
-export default function Quickbuy() { 
-    const {productId} = useParams() 
-    
+export default function Quickbuy() {
+    const { productId } = useParams()
+
     const productAllData = useSelector(d => d.product.data)
     const addressAllData = useSelector(d => d.address.data)
 
@@ -69,31 +69,31 @@ export default function Quickbuy() {
     const [discount, setDiscount] = useState(0)
     const [offer, setOffer] = useState(0)
     const [diliveryCharge, setDiliveryCharge] = useState(0)
-    const [totalCheckout, setTotalCheckout] = useState(0) 
+    const [totalCheckout, setTotalCheckout] = useState(0)
 
 
     const [guestAddress, setGuestAddress] = useState(userDefaultValue)
     const [user, setUser] = useState()
     const [paymentType, setPaymentType] = useState('')
-    const [address, setAddress] = useState() 
+    const [address, setAddress] = useState()
 
 
 
     const authCheckFunc = async () => {
         const userdata = localStorage.getItem('userdata')
         if (userdata) {
-            const userValue = await JSON.parse(userdata) 
+            const userValue = await JSON.parse(userdata)
             setUser(userValue)
             if (addressAllData.length > 0) {
-                const filterAddress = addressAllData.find(d => d._id === userValue?.address) 
+                const filterAddress = addressAllData.find(d => d._id === userValue?.address)
                 console.log("filterAddress filterAddress", filterAddress);
-                
-                if (filterAddress) { 
+
+                if (filterAddress) {
                     setAddress(filterAddress)
-                } 
+                }
             }
-        }  
-    } 
+        }
+    }
     const findCartData = async () => {
         if (productId && productAllData) {
             const product = await productAllData.filter(data => data._id === productId)
@@ -101,8 +101,8 @@ export default function Quickbuy() {
                 const quantityProducts = product.map(d => { return { ...d, quantity: d.quantity ? d.quantity : 1 } })
                 setCartAllData(quantityProducts)
                 priceUpdateFunc()
-            } 
-        } 
+            }
+        }
     }
 
     const priceUpdateFunc = () => {
@@ -126,12 +126,12 @@ export default function Quickbuy() {
         }
     }
 
-    const quantitychange = (id, quantity) => { 
+    const quantitychange = (id, quantity) => {
         const updatedProducts = cartAllData.map(product =>
             product._id === id ? quantity < 1 ? product : { ...product, quantity } : product
-        ); 
-        setCartAllData(updatedProducts) 
-    }; 
+        );
+        setCartAllData(updatedProducts)
+    };
     const handleCountryGuest = (selectedCountry) => {
         const countryObj = { value: selectedCountry, label: countries[selectedCountry].name, code: `+${countries[selectedCountry].phone}` }
         setGuestAddress({ ...guestAddress, ['country']: countryObj });
@@ -141,7 +141,7 @@ export default function Quickbuy() {
         const value = e.target.value;
         setGuestAddress({ ...guestAddress, [name]: value });
     }
- 
+
     const buyProductSubmitFunc = async (e) => {
         e.preventDefault()
         const product = cartAllData.map((productValue) => {
@@ -151,38 +151,38 @@ export default function Quickbuy() {
                 price: Math.ceil(productValue.salePrice - ((productValue.salePrice * productValue.discount) / 100)),
                 productName: productValue.productName
             }
-        }) 
+        })
         const chooseAddress = address ? address : guestAddress
         const checkoutProductList = { product, totalproductPrice: mrp - discount, totalDiscount: discount, offerDiscount: offer, diliveryCharge: diliveryCharge, currency: 'INR', paymentType }
-     
-        try { 
-                if(!address){
-                    await axios.post(`${Url}/api/address`, { ...chooseAddress, userId: user._id }) 
-                }
-                const responseOrder = await axios.post(`${Url}/api/order`, {...checkoutProductList, userId: user._id, address: {...chooseAddress, userId: user._id } })
-                if (responseOrder?.status == 201) {
-                    toast.success("Order placed successfully", { autoClose: 1500, })     
-                    navigate(`/order-confirmed/${responseOrder.data.orderID}`)
-                }
-                if(responseOrder.data.success === true){
-                    window.location.href = responseOrder.data.data.instrumentResponse.redirectInfo.url
-                  }
-                else {
-                    toast.warning("something went wrong", { autoClose: 1500, })
-                } 
+
+        try {
+            if (!address) {
+                await axios.post(`${Url}/api/address`, { ...chooseAddress, userId: user._id })
+            }
+            const responseOrder = await axios.post(`${Url}/api/order`, { ...checkoutProductList, userId: user._id, address: { ...chooseAddress, userId: user._id } })
+            if (responseOrder?.status == 201) {
+                toast.success("Order placed successfully", { autoClose: 1500, })
+                navigate(`/order-confirmed/${responseOrder.data.orderID}`)
+            }
+            if (responseOrder.data.success === true) {
+                window.location.href = responseOrder.data.data.instrumentResponse.redirectInfo.url
+            }
+            else {
+                toast.warning("something went wrong", { autoClose: 1500, })
+            }
         } catch (error) {
             toast.error("error", { autoClose: 1500, })
             console.log("error", error);
-            
+
         }
     }
 
-    const handleNewAddress = ()=>{
-        setAddress() 
+    const handleNewAddress = () => {
+        setAddress()
     }
-    const changeAddressFunc = (addressValue) => { 
+    const changeAddressFunc = (addressValue) => {
         setAddress(addressValue)
-        setGuestAddress(userDefaultValue)  
+        setGuestAddress(userDefaultValue)
         // setGuestAddress(addressValue)
     }
 
@@ -216,99 +216,100 @@ export default function Quickbuy() {
 
                                                 <MDBCard className="mb-3">
                                                     <MDBCardBody>
-                                                        <div className="pb-3 mb-3 border-bottom">
-                                                            {addressAllData.length > 0 && addressAllData.map((addressValue) => {
-                                                                return (
-                                                                    <div className="d-flex align-items-center gap-3 py-1 border-bottom border-bottom-not-last border-1" key={addressValue._id}>
-                                                                        <input type="radio" name="addressSelect" checked={address ? address._id === addressValue._id : false} onChange={e => changeAddressFunc(addressValue)} />
-                                                                        <div onClick={e => changeAddressFunc(addressValue)}>
+                                                        {addressAllData.length > 0 ?
+                                                            <div className="pb-3 mb-3 border-bottom">
+                                                                {addressAllData.map((addressValue) => {
+                                                                    return (
+                                                                        <div className="d-flex align-items-center gap-3 py-1 border-bottom border-bottom-not-last border-1" key={addressValue._id}>
+                                                                            <input type="radio" name="addressSelect" checked={address ? address._id === addressValue._id : false} onChange={e => changeAddressFunc(addressValue)} />
+                                                                            <div onClick={e => changeAddressFunc(addressValue)}>
 
-                                                                            <p className="mb-1 fs-14">{addressValue.address}, {addressValue.city},  {addressValue.state}, {addressValue.pincode}</p>
-                                                                            <div className="d-flex flex-wrap align-items-center gap-3">
-                                                                                <p className='text-capitalize mb-0 fs-14'>{addressValue.receiver}</p>
-                                                                                <small className='fs-12 mb-0 '>{addressValue.primaryNumber} , {addressValue.secondaryNumber}</small>
+                                                                                <p className="mb-1 fs-14">{addressValue.address}, {addressValue.city},  {addressValue.state}, {addressValue.pincode}</p>
+                                                                                <div className="d-flex flex-wrap align-items-center gap-3">
+                                                                                    <p className='text-capitalize mb-0 fs-14'>{addressValue.receiver}</p>
+                                                                                    <small className='fs-12 mb-0 '>{addressValue.primaryNumber} , {addressValue.secondaryNumber}</small>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div> 
-                                                        {addressAllData.length == 0 || address ?
-                                                        <div className="mb-3">
-                                                            <button className="btn-primary btn" onClick={handleNewAddress}>Add New Address</button>
-                                                        </div> : null}
+                                                                    )
+                                                                })}
+                                                            </div> : null}
 
-                                                        <div>
-                                                        
+                                                        {addressAllData.length > 0 && address ?
+                                                            <div className="mb-3">
+                                                                <button className="btn-primary btn" onClick={handleNewAddress}>Add New Address</button>
+                                                            </div> : null}
+
+                                                        <div> 
                                                             <form action="" onSubmit={e => buyProductSubmitFunc(e)}>
-                                                            { !address ?
-                                                                <div className="row">
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="receiver">Receiver Name <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="receiver" value={guestAddress.receiver ? guestAddress.receiver : ""} className="form-control" onChange={e => handleGuestUser(e)} required /> 
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <div className="form-group">
-                                                                            <label htmlFor="primaryNumber" className=" text-capitalize  " >
-                                                                                Primary number <span className="text-danger">*</span>
-                                                                            </label>
+                                                                {!address ?
+                                                                    <div className="row">
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="receiver">Receiver Name <span className="text-danger">*</span></label>
+                                                                            <input type="text" name="receiver" value={guestAddress.receiver ? guestAddress.receiver : ""} className="form-control" onChange={e => handleGuestUser(e)} required />
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <div className="form-group">
+                                                                                <label htmlFor="primaryNumber" className=" text-capitalize  " >
+                                                                                    Primary number <span className="text-danger">*</span>
+                                                                                </label>
 
-                                                                            <div className="d-flex align-item-center p-0 overflow-hidden form-control">
-                                                                                <select name="" id="" value={guestAddress?.country?.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryGuest(e.target.value)} required> 
-                                                                                    {countryOptions.map((countryCode) => {
-                                                                                        return (
-                                                                                            <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
-                                                                                        )
-                                                                                    })}
-                                                                                </select>
-                                                                                <input
-                                                                                    type="phone"
-                                                                                    name="primaryNumber"
-                                                                                    className="form-control border-0 shadow-sm outline-none border-none"
-                                                                                    placeholder=""
-                                                                                    onChange={e => handleGuestUser(e)} 
-                                                                                    value={guestAddress.primaryNumber ? guestAddress.primaryNumber : ""}
-                                                                                    minLength={10}
-                                                                                    maxLength={10}
-                                                                                    required
-                                                                                />
+                                                                                <div className="d-flex align-item-center p-0 overflow-hidden form-control">
+                                                                                    <select name="" id="" value={guestAddress?.country?.value} className="border-0 border-none no-border shadow-none  " onChange={(e) => handleCountryGuest(e.target.value)} required>
+                                                                                        {countryOptions.map((countryCode) => {
+                                                                                            return (
+                                                                                                <option value={countryCode} key={countryCode}><ReactCountryFlag countryCode={countryCode} /> {countryCode} </option>
+                                                                                            )
+                                                                                        })}
+                                                                                    </select>
+                                                                                    <input
+                                                                                        type="phone"
+                                                                                        name="primaryNumber"
+                                                                                        className="form-control border-0 shadow-sm outline-none border-none"
+                                                                                        placeholder=""
+                                                                                        onChange={e => handleGuestUser(e)}
+                                                                                        value={guestAddress.primaryNumber ? guestAddress.primaryNumber : ""}
+                                                                                        minLength={10}
+                                                                                        maxLength={10}
+                                                                                        required
+                                                                                    />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ? guestAddress.secondaryNumber : ""} /> 
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
-                                                                        <input type="text" name="nearBy" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.nearBy ? guestAddress.nearBy : ""} />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="address">Full Address <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.address ? guestAddress.address : ""} />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="pincode">Pincode <span className="text-danger">*</span></label>
-                                                                        <input type="phone" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.pincode ? guestAddress.pincode : ""} />
-                                                                    </div> 
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-2">
-                                                                        <label htmlFor="state">State <span className="text-danger">*</span></label>
-                                                                        <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress.state ? guestAddress.state : ""} required >
-                                                                            <option className="text-muted" disabled={guestAddress?.state}>choose</option>
-                                                                            {allStateArr.map((stateName) => {
-                                                                                return (
-                                                                                    <option value={stateName} key={stateName}>{stateName}</option>
-                                                                                )
-                                                                            })}
-                                                                        </select>
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 col-12 mb-4">
-                                                                        <label htmlFor="city">City <span className="text-danger">*</span></label>
-                                                                        <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.city ? guestAddress.city : ""} required />
-                                                                    </div>
-                                                                </div> : null }
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="secondaryNumber">Secondary Number <span className="fs-12 text-muted">(Optional)</span></label>
+                                                                            <input type="phone" name="secondaryNumber" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.secondaryNumber ? guestAddress.secondaryNumber : ""} />
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="nearBy">Near By <span className="fs-12 text-muted">(Optional)</span></label>
+                                                                            <input type="text" name="nearBy" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.nearBy ? guestAddress.nearBy : ""} />
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="address">Full Address <span className="text-danger">*</span></label>
+                                                                            <input type="text" name="address" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.address ? guestAddress.address : ""} />
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="pincode">Pincode <span className="text-danger">*</span></label>
+                                                                            <input type="phone" name="pincode" className="form-control" onChange={e => handleGuestUser(e)} required value={guestAddress.pincode ? guestAddress.pincode : ""} />
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-2">
+                                                                            <label htmlFor="state">State <span className="text-danger">*</span></label>
+                                                                            <select name="state" className="form-select shadow-sm outline-none border-none" onChange={e => handleGuestUser(e)} value={guestAddress.state ? guestAddress.state : ""} required >
+                                                                                <option className="text-muted" disabled={guestAddress?.state}>choose</option>
+                                                                                {allStateArr.map((stateName) => {
+                                                                                    return (
+                                                                                        <option value={stateName} key={stateName}>{stateName}</option>
+                                                                                    )
+                                                                                })}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div className="col-lg-6 col-md-6 col-12 mb-4">
+                                                                            <label htmlFor="city">City <span className="text-danger">*</span></label>
+                                                                            <input type="text" name="city" className="form-control" onChange={e => handleGuestUser(e)} value={guestAddress.city ? guestAddress.city : ""} required />
+                                                                        </div>
+                                                                    </div> : null}
 
-                                                                <div> 
+                                                                <div>
                                                                     <div className="d-flex align-items-center mb-2 form-check">
                                                                         <input className="form-check-input" type="radio" name="paymentType" id="paymentType1" value={"cod"} onChange={e => setPaymentType(e.target.value)} selected={paymentType == 'cod'} required />
                                                                         <label className="form-check-label" htmlFor="paymentType1">Cash On Delivery</label>
@@ -322,8 +323,8 @@ export default function Quickbuy() {
                                                                         <button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
                                                                     </div>
                                                                 </div>
-                                                            </form> 
-                                                        </div> 
+                                                            </form>
+                                                        </div>
                                                     </MDBCardBody>
                                                 </MDBCard>
 

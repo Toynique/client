@@ -446,9 +446,9 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-9 col-lg-8 col-md-7 col-12">
-              <div className="profile-right">
-                <div className="border shadow rounded p-3">
+            <div className="col-xl-9 col-lg-8 col-md-7 col-12 ">
+              <div className="profile-right border shadow rounded p-3 min-h-100"> 
+                  {orderList.length > 0 ?
                   <div>
                     <h3>Your Orders</h3>
                     {orderList.map((orderValue) => {
@@ -546,8 +546,13 @@ const Profile = () => {
                         </div>
                       );
                     })}
-                  </div>
-                </div>
+                  </div> : 
+                  <div className="">
+                    <div>
+                      <p>Your order history is empty. Place your first order to see it here!</p>
+                    </div>
+                  </div> }
+                
               </div>
             </div>
           </div>
