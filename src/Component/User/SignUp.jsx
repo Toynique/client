@@ -19,7 +19,7 @@ import { Url } from "../../url/url" ;
 import sideBanner from '/assets/img/sidebanner.jpg'  
 import logoImg from '/assets/img/logo-dark.png'
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme(); 
 
 const SignUp = ()=>{  
   const navigate = useNavigate()
@@ -73,8 +73,7 @@ const SignUp = ()=>{
             }) 
           }
       }
-  };
-  // const [formValue, setFormValue] = React.useState({})
+  }; 
  
   const auth = localStorage.getItem('usertoken')
   useEffect(()=>{
