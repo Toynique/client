@@ -11,8 +11,7 @@ import Navbar from "../Header/Navbar";
 import Footer from "../Footer/Footer";
 import { countries } from 'countries-list';
 import ReactCountryFlag from "react-country-flag";
-import axios from "axios";
-// import { Url } from "src/url/url";
+import axios from "axios"; 
 import { Url } from "../../url/url";
 
 const userDefaultValue = { "country": { value: 'IN', label: 'India', code: '+91' } }
