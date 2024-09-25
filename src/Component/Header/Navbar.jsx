@@ -87,7 +87,7 @@ const Navbar = () => {
       setActiveClass("nav-active ")
     }
   }
-
+ 
   const logout = () => {
     localStorage.removeItem("userdata")
     localStorage.removeItem("usertoken")
