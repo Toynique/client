@@ -891,6 +891,10 @@ input[type="radio"]:checked {
 .myCartImg{
   width: 120px;
 } 
+.verify-btn{
+  width: 170px;
+  text-align: center;
+}
 @media (max-width : 768px){
   .myCartImg{
     width: 40px;

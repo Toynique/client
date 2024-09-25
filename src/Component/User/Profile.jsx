@@ -61,9 +61,7 @@ const Profile = () => {
           'Content-Type': 'application/json',
         },
       });
-      setLoading(false)
-      console.log("response", response);
-      
+      setLoading(false) 
       if (!response.ok) {
         throw new Error('Failed to download invoice');
       }
@@ -167,8 +165,7 @@ const Profile = () => {
   }
   const handleRatingProductId = (productId) => {
     setRatingErr('')
-    setRatingFormValue({ ...ratingFormValue, ["productId"]: productId })
-    console.log(productId);
+    setRatingFormValue({ ...ratingFormValue, ["productId"]: productId }) 
   }
 
   const submitRating = async (e) => {
@@ -182,7 +179,7 @@ const Profile = () => {
       }
       try {
         const response = await axios.post(`${Url}/api/rating/create`, { ...ratingFormValue, "userId": user._id, "userName": user.name })
-        console.log("response this response", response);
+       
         if (response) {
           toast.success("successfully", { autoClose: 1500, });
           ratingModalFunc()
@@ -190,7 +187,7 @@ const Profile = () => {
           dispatch(ratingdata())
         }
       } catch (error) {
-        console.log();
+        console.log(error);
       }
     }
   }
@@ -205,8 +202,7 @@ const Profile = () => {
     if (userdata) {
       const userId = await JSON.parse(userdata)._id;
       setUserId(userId);
-      const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`);
-      console.log("data", data);
+      const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`); 
 
       if (data) {
         setOrderList(data);
@@ -230,8 +226,7 @@ const Profile = () => {
     }
   }
   const addressUpdate = async (e, addressId) => {
-    const userId = await JSON.parse(userdata)._id;
-    console.log("jkgjfk", e.target.value);
+    const userId = await JSON.parse(userdata)._id; 
     try {
       const { data } = await axios.post(`${Url}/user/updateAddress`, {
         addressId,
@@ -333,9 +328,7 @@ const Profile = () => {
     e.preventDefault()
     try {
       const response = await axios.put(`${Url}/api/order/cancel`, { orderId: cancelOrderId, status: 'cancelled', reason: reasonCancel })
-
-      console.log("response", response);
-
+ 
       Swal.fire({
         position: 'top-end',
         icon: 'success',
