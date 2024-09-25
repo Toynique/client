@@ -23,6 +23,7 @@ import logoImg from '/assets/img/logo-dark.png'
 import { Url } from '../../url/url';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { addressdata } from '../../redux/slice/address';
 
 
 const defaultTheme = createTheme();
@@ -50,8 +51,9 @@ export default function LogIn() {
     navigate(`${locationHistory ? locationHistory : '/'}`)
     dispatch(cartdata(userId))
     dispatch(wishlistdata(userId))
+    dispatch(addressdata(userId))
     dispatch(adduser(resp.data.responsedata))
-    setIsLoading(false)
+    setIsLoading(false) 
     locationHistory ? localStorage.removeItem("locationHistory") : null;
   }
 
