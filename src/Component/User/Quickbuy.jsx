@@ -85,9 +85,7 @@ export default function Quickbuy() {
             const userValue = await JSON.parse(userdata)
             setUser(userValue)
             if (addressAllData.length > 0) {
-                const filterAddress = addressAllData.find(d => d._id === userValue?.address)
-                console.log("filterAddress filterAddress", filterAddress);
-
+                const filterAddress = addressAllData.find(d => d._id === userValue?.address) 
                 if (filterAddress) {
                     setAddress(filterAddress)
                 }
