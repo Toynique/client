@@ -96,62 +96,18 @@ export default function Cart() {
     setShowCheckOutPopup(true) 
   }  
 
-  const checkoutHandle = async(address, paymentType)=>{  
-    console.log("paymentType: " , paymentType);
-    console.log("checkoutProductList", checkoutProductList);
-    if(checkoutProductList){
-      console.log("checkoutProduct done");
-      // const res =  await axios.post(`${Url}/api/order/payment`, {...checkoutProductList, address, paymentType})  
+  const checkoutHandle = async(address, paymentType)=>{   
+    if(checkoutProductList){ 
       const res =  await axios.post(`${Url}/api/order` , {...checkoutProductList, address, paymentType}) 
       if(res.status === 201 && paymentType === 'cod') {
         navigate(`/order-confirmed/${res.data._id}`)
-      } 
-      console.log("data response", res);
-
+      }  
       if(res.data.success === true){
         window.location.href = res.data.data.instrumentResponse.redirectInfo.url
       }
     }
   }
-
-
-  const checkoutHandle2 = async(address, paymentType)=>{  
-    console.log("paymentType: " , paymentType);
-    console.log("checkoutProductList", checkoutProductList);  
-    if(checkoutProductList){
-    try {
-      const {data} =  await axios.post(`${Url}/api/order/checkout`, {...checkoutProductList, address})   
-      handleCloseCheckOutPopup()
-      const options = {
-        "key": "rzp_test_ju7OQAllDtTHll", 
-        "amount": data.amount,  
-        "currency": data.currency,
-        "name": "Toynique",
-        "description": "Razorpay",
-        "image": favIcon,
-        "order_id": data.id,  
-        "callback_url": `${Url}/api/order/paymentverification?orderId=${data.id}&userId=${checkoutProductList.userId}`,
-        "notes": {
-            "address": "Razorpay Corporate Office"
-        },
-        "theme": {
-            "color": "#3399cc"
-        },
-        "prefill": {
-          "contact": ""
-        }
-    }; 
-    let razor = new window.Razorpay(options);
-    razor.open()
-
-    } catch (error) {
-      console.log(error);
-    }}
-    else{
-      handleCloseCheckOutPopup()
-    }
-  }
-
+ 
   useEffect(() => { 
     if (!auth) { 
       navigate("/login");

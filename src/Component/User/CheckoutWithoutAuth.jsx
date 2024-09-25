@@ -213,7 +213,7 @@ export default function CheckoutWithoutAuth() {
         try {
             const response = await axios.post(`${Url}/user/create`, userValue)
             if (response) {
-                toast.success("OTP has sent.", { autoClose: 1500, })
+                toast.success("OTP Sent.", { autoClose: 1500, })
                 setLoadingVerify(false)
                 setSHowOTP(true)
             }
