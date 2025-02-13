@@ -99,8 +99,11 @@ export default function Cart() {
   const checkoutHandle = async(address, paymentType)=>{   
     if(checkoutProductList){ 
       const res =  await axios.post(`${Url}/api/order` , {...checkoutProductList, address, paymentType}) 
+      console.log("res", res);
+      
       if(res.status === 201 && paymentType === 'cod') {
-        navigate(`/order-confirmed/${res.data._id}`)
+        navigate(`/order-confirmed/${res.data.orderID}`)
+        // navigate(`/order-confirmed/${res.data._id}`)
       }  
       if(res.data.success === true){
         window.location.href = res.data.data.instrumentResponse.redirectInfo.url
