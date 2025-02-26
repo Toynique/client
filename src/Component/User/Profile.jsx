@@ -18,6 +18,8 @@ import { Button, Modal } from "react-bootstrap";
 import { Rating } from "@mui/material";
 import { ratingdata } from "../../redux/slice/rating";
 import Swal from "sweetalert2";
+import UpdateUser from "../Utils/UpdateUser";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ const Profile = () => {
   const [passwordFormValue, setPasswordFormValue] = useState()
   const [passwordErr, setPasswordErr] = useState("")
   const [loading, setLoading] = useState(false)
+  const [cancelLoading, setCancelLoading] = useState(false)
 
 
   const [reasonCancel, setReasonCancel] = useState("")
@@ -61,7 +64,7 @@ const Profile = () => {
           'Content-Type': 'application/json',
         },
       });
-      setLoading(false) 
+      setLoading(false)
       if (!response.ok) {
         throw new Error('Failed to download invoice');
       }
@@ -84,40 +87,40 @@ const Profile = () => {
 
   };
 
-//   const downloadInvoiceWait = async (orderId) => {
-//     setLoading(true);
-//     try {
-//         const response = await fetch(`${Url}/api/invoice/${orderId}`, {
-//             method: 'GET', // Changed from 'GET' to 'POST'
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },  // If you need to send additional data, include it here
-//             cache: 'no-store', // Prevents the browser from caching the request
-//         });
+  //   const downloadInvoiceWait = async (orderId) => {
+  //     setLoading(true);
+  //     try {
+  //         const response = await fetch(`${Url}/api/invoice/${orderId}`, {
+  //             method: 'GET', // Changed from 'GET' to 'POST'
+  //             headers: {
+  //                 'Content-Type': 'application/json',
+  //             },  // If you need to send additional data, include it here
+  //             cache: 'no-store', // Prevents the browser from caching the request
+  //         });
 
-//         setLoading(false);
+  //         setLoading(false);
 
-//         if (!response.ok) {
-//             throw new Error(`Failed to download invoice: ${response.statusText}`);
-//         }
+  //         if (!response.ok) {
+  //             throw new Error(`Failed to download invoice: ${response.statusText}`);
+  //         }
 
-//         const blob = await response.blob();
-//         const url = window.URL.createObjectURL(blob);
-//         const link = document.createElement('a');
-//         link.href = url;
-//         link.setAttribute('download', `invoice-${orderId}.pdf`); // Dynamic filename
-//         document.body.appendChild(link);
-//         link.click();
+  //         const blob = await response.blob();
+  //         const url = window.URL.createObjectURL(blob);
+  //         const link = document.createElement('a');
+  //         link.href = url;
+  //         link.setAttribute('download', `invoice-${orderId}.pdf`); // Dynamic filename
+  //         document.body.appendChild(link);
+  //         link.click();
 
-//         // Cleanup: remove the link and revoke the Blob URL
-//         link.remove();
-//         window.URL.revokeObjectURL(url);
-//     } catch (error) {
-//         setLoading(false);
-//         console.error('Error during invoice download:', error);
-//         // Optionally, display an error message to the user
-//     }
-// };
+  //         // Cleanup: remove the link and revoke the Blob URL
+  //         link.remove();
+  //         window.URL.revokeObjectURL(url);
+  //     } catch (error) {
+  //         setLoading(false);
+  //         console.error('Error during invoice download:', error);
+  //         // Optionally, display an error message to the user
+  //     }
+  // };
 
 
   const openCancelModule = (orderId) => {
@@ -165,7 +168,7 @@ const Profile = () => {
   }
   const handleRatingProductId = (productId) => {
     setRatingErr('')
-    setRatingFormValue({ ...ratingFormValue, ["productId"]: productId }) 
+    setRatingFormValue({ ...ratingFormValue, ["productId"]: productId })
   }
 
   const submitRating = async (e) => {
@@ -179,7 +182,7 @@ const Profile = () => {
       }
       try {
         const response = await axios.post(`${Url}/api/rating/create`, { ...ratingFormValue, "userId": user._id, "userName": user.name })
-       
+
         if (response) {
           toast.success("successfully", { autoClose: 1500, });
           ratingModalFunc()
@@ -202,7 +205,7 @@ const Profile = () => {
     if (userdata) {
       const userId = await JSON.parse(userdata)._id;
       setUserId(userId);
-      const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`); 
+      const { data } = await axios.get(`${Url}/api/order/user?userId=${userId}`);
 
       if (data) {
         setOrderList(data);
@@ -216,7 +219,7 @@ const Profile = () => {
     if (userId) {
       const { data } = await axios.get(
         `${Url}/api/address/user?userId=${userId}`
-      ); 
+      );
     }
   };
   const findAddress = (addId) => {
@@ -226,7 +229,7 @@ const Profile = () => {
     }
   }
   const addressUpdate = async (e, addressId) => {
-    const userId = await JSON.parse(userdata)._id; 
+    const userId = await JSON.parse(userdata)._id;
     try {
       const { data } = await axios.post(`${Url}/user/updateAddress`, {
         addressId,
@@ -251,8 +254,11 @@ const Profile = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${Url}/api/address/${addressId}`)
+          // await axios.delete(`${Url}/api/address/${addressId}`)
+          await axios.delete(`${Url}/api/address/${addressId}/${userId}`)
+          UpdateUser()
           dispatch(addressdata(userId))
+
         } catch (error) {
           console.log(error);
         }
@@ -326,9 +332,10 @@ const Profile = () => {
 
   const cancelOrder = async (e) => {
     e.preventDefault()
+    setCancelLoading(true)
     try {
       const response = await axios.put(`${Url}/api/order/cancel`, { orderId: cancelOrderId, status: 'cancelled', reason: reasonCancel })
- 
+
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -352,7 +359,7 @@ const Profile = () => {
         setNoCancellError("You can't cancel this oreder now because it's already dispatched.")
         orderListFunc();
         return
-      }
+      } 
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -362,12 +369,29 @@ const Profile = () => {
       })
       orderListFunc();
     }
+    finally{
+      setCancelLoading(false)
+    }
   }
+  const updateUserFunc = () => {
+    const userData = localStorage.getItem('userdata')
+    if (userData) {
+      const userJson = JSON.parse(userData)
+      dispatch(adduser(userJson))
+    }
+  }
+
   useEffect(() => {
     cartDispatch()
     orderListFunc();
     addressListFunc();
+    UpdateUser()
+    updateUserFunc()
   }, []);
+
+  useEffect(() => {
+    updateUserFunc()
+  }, [addressList])
 
 
 
@@ -386,10 +410,11 @@ const Profile = () => {
                 <div className="p-3">
                   <h3 className="mb-3">Contact info</h3>
                   <div className="text-end mb-3">
-                    {user && user.password ?
+                    {/* {user && user.password ?
                       <button className="btn btn-primary btn-sm" onClick={() => setResetPasswordModel(true)}>Change Password</button> :
                       <button className="btn btn-primary btn-sm" onClick={() => setCreatePasswordModel(true)}>Create Your Password</button>
-                    }
+                    } */}
+                    <button className="btn btn-primary btn-sm" onClick={() => setResetPasswordModel(true)}>Change Password</button>
                   </div>
                   <div className="table-response">
                     <table className="table ">
@@ -440,8 +465,8 @@ const Profile = () => {
               </div>
             </div>
             <div className="col-xl-9 col-lg-8 col-md-7 col-12 ">
-              <div className="profile-right border shadow rounded p-3 min-h-100"> 
-                  {orderList.length > 0 ?
+              <div className="profile-right border shadow rounded p-3 min-h-100">
+                {orderList.length > 0 ?
                   <div>
                     <h3>Your Orders</h3>
                     {orderList.map((orderValue) => {
@@ -461,7 +486,7 @@ const Profile = () => {
                               <div className="text-end mb-2">
 
                                 <button className="btn btn-primary me-3 btn-sm" onClick={() => ratingProduct(orderValue?.product)} >Give us Rating</button>
-                                <button className="btn btn-primary  btn-sm" onClick={() => downloadInvoice(orderValue._id)} >Download Invoice {loading ? "..." : null}</button>
+                                {/* <button className="btn btn-primary  btn-sm" onClick={() => downloadInvoice(orderValue._id)} >Download Invoice {loading ? "..." : null}</button> */}
                               </div>
                               {/* {orderValue?.paymentType == 'cod' ?
                                 <p className="mb-1">Payment Status :- Cash on Delivery</p>
@@ -539,13 +564,13 @@ const Profile = () => {
                         </div>
                       );
                     })}
-                  </div> : 
+                  </div> :
                   <div className="">
                     <div>
                       <p>Your order history is empty. Place your first order to see it here!</p>
                     </div>
-                  </div> }
-                
+                  </div>}
+
               </div>
             </div>
           </div>
@@ -721,8 +746,9 @@ const Profile = () => {
                   <textarea rows="3" type="text" name="reason" className="form-control p-2 no-outline w-100 rounded" onChange={e => setReasonCancel(e.target.value)} placeholder="Please type your reason" required />
                 </div>
                 <div className="text-end">
-                  <Button variant="primary" type="submit">
+                  <Button variant="primary" type="submit" className="d-flex align-items-center gap-1 btn-outline-primary">
                     Cancel your Order
+                    <ClipLoader  size={16} loading={cancelLoading} />
                   </Button>
                 </div>
 

@@ -42,12 +42,14 @@ export const userVerifyCheck = async(id)=>{
         return response.data
     } catch (error) {
         console.log(error.message)
+        throw new Error(error.message);
+        
     }
 }
 export const userAccountVerify = async(id)=>{
     try {
         const response = await axios.post(`${Url}/user/verify-account/${id}`, {"isVerify" : 1})
-        console.log("verify account user", response);
+        // console.log("verify account user", response);
         Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -91,9 +93,10 @@ export const resendVerifyMail = async(id) => {
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'mail send',
-            showConfirmButton: false,
-            timer: 1500
+            // title: 'mail send',
+            text: "A verification email has been sent to your registered email address. Please check your inbox (and spam folder).",
+            showConfirmButton: true,
+            // timer: 1500
         })
     } catch (error) { 
         Swal.fire({

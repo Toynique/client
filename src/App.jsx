@@ -49,6 +49,7 @@ import { bannerdata } from './redux/slice/banner';
 import ConfirmOrder from './Component/User/ConfirmOrder';
 import PaymentFailed from './Component/User/PaymentFailed';
 import Quickbuy from './Component/User/Quickbuy';
+import UpdateUser from './Component/Utils/UpdateUser';
 
 function App() {
   const dispatch = useDispatch()
@@ -63,10 +64,12 @@ function App() {
       dispatch(wishlistdata(userId))
       dispatch(adduser(userJson))
       dispatch(addressdata(userId))
+      UpdateUser()
     }
   }
 
   useEffect(()=>{
+    
     dispatch(bannerdata())  
     dispatch(categorydata())  
     dispatch(subcategorydata())  

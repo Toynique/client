@@ -3,7 +3,7 @@
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useActionData, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,8 @@ import { countries } from 'countries-list';
 import ReactCountryFlag from "react-country-flag";
 import axios from "axios"; 
 import { Url } from "../../url/url";
+import UpdateUser from "../Utils/UpdateUser";
+import { ClipLoader } from 'react-spinners';
 
 const userDefaultValue = { "country": { value: 'IN', label: 'India', code: '+91' } }
 const allStateArr = [
@@ -75,6 +77,7 @@ export default function Quickbuy() {
     const [user, setUser] = useState()
     const [paymentType, setPaymentType] = useState('')
     const [address, setAddress] = useState()
+    const [loading, setLoading] = useState(false)
 
 
 
@@ -84,7 +87,7 @@ export default function Quickbuy() {
             const userValue = await JSON.parse(userdata)
             setUser(userValue)
             if (addressAllData.length > 0) {
-                const filterAddress = addressAllData.find(d => d._id === userValue?.address) 
+                const filterAddress = addressAllData.find(d => d._id === userValue?.address)  
                 if (filterAddress) {
                     setAddress(filterAddress)
                 }
@@ -141,6 +144,7 @@ export default function Quickbuy() {
 
     const buyProductSubmitFunc = async (e) => {
         e.preventDefault()
+        setLoading(true) 
         const product = cartAllData.map((productValue) => {
             return {
                 productId: productValue._id,
@@ -159,6 +163,7 @@ export default function Quickbuy() {
             const responseOrder = await axios.post(`${Url}/api/order`, { ...checkoutProductList, userId: user._id, address: { ...chooseAddress, userId: user._id } })
             if (responseOrder?.status == 201) {
                 toast.success("Order placed successfully", { autoClose: 1500, })
+                UpdateUser()
                 navigate(`/order-confirmed/${responseOrder.data.orderID}`)
             }
             if (responseOrder.data.success === true) {
@@ -170,7 +175,11 @@ export default function Quickbuy() {
         } catch (error) {
             toast.error("error", { autoClose: 1500, })
             console.log("error", error);
-
+            UpdateUser()
+            setLoading(false) 
+        }
+        finally{
+            setLoading(false)
         }
     }
 
@@ -317,7 +326,15 @@ export default function Quickbuy() {
                                                                     </div>
                                                                     <hr />
                                                                     <div>
-                                                                        <button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1"  >Complete Order <i className="fa-solid fa-arrow-right-long"></i></button>
+                                                                        <button className="btn btn-primary btn-outline-primary  px-2 me-3 py-1 d-flex align-items-center gap-2"  >
+                                                                            Complete Order 
+                                                                            {/* <i className="fa-solid fa-arrow-right-long"></i>  */}
+                                                                            {loading &&
+                                                                         <ClipLoader  size={16} /> }
+
+                                                                        </button>
+
+                                                                        {/* color="#59B25A" */}
                                                                     </div>
                                                                 </div>
                                                             </form>

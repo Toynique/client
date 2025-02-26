@@ -17,8 +17,12 @@ const UserAddressUpdateModel = ({ show, handleClose, showAddAddress  }) => {
 
      
     const updateAddressFunc = async()=>{ 
-        const findAdd = await addressAllData.find(data=> data._id === user.address) 
+      const response = localStorage.getItem('userdata') 
+        // const findAdd = await addressAllData.find(data=> data._id === user.address) 
+        if(response.address){
+        const findAdd = await addressAllData.find(data=> data._id === response.address) 
         setAddress(findAdd)
+        }
     }
     const changeAddressFunc = async(addressValue)=>{ 
         setAddress(addressValue)  

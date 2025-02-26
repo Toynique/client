@@ -25,7 +25,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { addressdata } from '../../redux/slice/address';
 
- 
+
 const defaultTheme = createTheme();
 
 export default function LogIn() {
@@ -36,14 +36,15 @@ export default function LogIn() {
   const [errMsg, setErrMsg] = useState('')
   const [loginWithOTP, setLoginWithOTP] = useState(false)
   const [sendOTP, setOTP] = useState(false)
+  const [userMsg, setUserMsg] = useState("")
   // const [emailOTP, setEmailOTP] = useState('')
 
   const auth = localStorage.getItem('usertoken')
 
-  const loginSuccess = async(resp)=>{ 
+  const loginSuccess = async (resp) => { 
     const token = resp.data.token
     const userId = resp.data.responsedata._id
-    let userdata = resp.data.responsedata  
+    let userdata = resp.data.responsedata
     userdata = JSON.stringify(userdata);
     localStorage.setItem("usertoken", token);
     localStorage.setItem("userdata", userdata);
@@ -53,96 +54,95 @@ export default function LogIn() {
     dispatch(wishlistdata(userId))
     dispatch(addressdata(userId))
     dispatch(adduser(resp.data.responsedata))
-    setIsLoading(false) 
+    setIsLoading(false)
     locationHistory ? localStorage.removeItem("locationHistory") : null;
   }
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     setIsLoading(true)
     setErrMsg('')
+    setUserMsg('')
     const data = new FormData(event.currentTarget);
-    const logindata = { "input": data.get('email'),"email": data.get('email'), "password": data.get('password'), "otp": data.get('otp') } 
+    const logindata = { "input": data.get('email'), "email": data.get('email'), "password": data.get('password'), "otp": data.get('otp') }
     try {
-      
-   
-    if(!loginWithOTP){
-      const resp = await loginUser(logindata)
-    if (resp) {
-      const status = resp?.status
-      if (status === 203) {
-        const userrespdata = resp.data
-        const id = userrespdata._id
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'registation verification is pending',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        setIsLoading(false)
-        navigate(`/user-verification-check/${id}`)
-      }
-      else if (status === 200) {
-        loginSuccess(resp)
+
+
+      if (!loginWithOTP) {
+        const resp = await loginUser(logindata)
+        if (resp) {
+          const status = resp?.status
+          if (status === 203) {
+            const userrespdata = resp.data
+            const id = userrespdata._id
+            Swal.fire({
+              position: 'top-end',
+              icon: 'warning',
+              title: 'registation verification is pending',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setIsLoading(false)
+            navigate(`/user-verification-check/${id}`)
+          }
+          else if (status === 200) {
+            loginSuccess(resp)
+          }
+          else {
+            setIsLoading(false)
+            if (resp?.response?.status === 401) {
+              const message = resp?.response?.data?.message || ''
+              setErrMsg(message)
+            }
+          }
+        }
+        else {
+          setIsLoading(false)
+        }
       }
       else {
-        setIsLoading(false) 
-        if (resp?.response?.status === 401) {
-          const message = resp?.response?.data?.message || ''
-          setErrMsg(message)
-        }
-      }
-    }
-    else {
-      setIsLoading(false) 
-    }}
-    else{  
-      if(logindata?.email && logindata?.otp){ 
-        const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata) 
-        setIsLoading(false)
-        if(response.status === 200){
-          loginSuccess(response)
-        }
-        else if(response.status === 204){
-          setErrMsg('Wrong OTP ')
-        }
-        else{
-          setErrMsg('Something server error try again later')
-        }
-      }
-      else if(logindata?.email){   
-        const response = await axios.post(`${Url}/user/createOTP`, logindata) 
-        console.log("response create otp time",response.status === 202,  response);
-        
-        setIsLoading(false)
-        setOTP(true) 
-        if(response.status === 200){
-          toast.info("OTP Sent" , {autoClose: 1500,});
-        }
-        else if(response.status === 202){
-          
-          // setErrMsg('Wrong Email Address')
-          setErrMsg(response.data.message)
-        }
-        else{
+        if (logindata?.email && logindata?.otp) {
+          const response = await axios.post(`${Url}/user/VerifyOTPWithToken`, logindata)
           setIsLoading(false)
-          setErrMsg('Something server error try again later')
+          if (response.status === 200) {
+            loginSuccess(response)
+          }
+          else if (response.status === 204) {
+            setErrMsg('Wrong OTP ')
+          }
+          else {
+            setErrMsg('Something server error try again later')
+          }
         }
-      }
-      else{
+        else if (logindata?.email) {
+          const response = await axios.post(`${Url}/user/createOTP`, logindata) 
+          setIsLoading(false)
+          setOTP(true)
+          if (response.status === 200) { 
+            setUserMsg(response.data.userMsg)
+            toast.info("OTP Sent", { autoClose: 1500, });
+          }
+          else if (response.status === 202) { 
+            setErrMsg(response.data.message)
+          }
+          else {
+            setIsLoading(false)
+            setErrMsg('Something server error try again later')
+          }
+        }
+        else {
+          setIsLoading(false)
+          setErrMsg('Please enter an Email or Phone Number')
+        }
         setIsLoading(false)
-        setErrMsg('Please enter an Email or Phone Number') 
       }
+    } catch (error) {
       setIsLoading(false)
     }
-  } catch (error) {
-    setIsLoading(false)
-  }
-  finally {
-    setIsLoading(false)
-}
+    finally {
+      setIsLoading(false)
+    }
 
   };
 
@@ -156,7 +156,7 @@ export default function LogIn() {
   return (
 
     <>
-    <ToastContainer />
+      <ToastContainer />
       <section>
         <div className="row min-vh-100">
           <div className="col-md-6 col-12 sm-none">
@@ -188,55 +188,57 @@ export default function LogIn() {
                     <Typography component="h1" variant="h5">
                       Sign in
                     </Typography>
-                    
+
                     <Box component="form" onSubmit={event => handleSubmit(event)} noValidate sx={{ mt: 1 }}>
-                    {/* <Box component="form" noValidate sx={{ mt: 1 }}> */}
-                    <small className='fs-12 text-danger'>{errMsg}</small>
+                      {/* <Box component="form" noValidate sx={{ mt: 1 }}> */}
+                      <small className='fs-12 text-muted mb-1'>{userMsg}</small>
+                      <small className='fs-12 text-danger'>{errMsg}</small>
                       <TextField
                         margin="normal"
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label={`Email  ${loginWithOTP ? " / Phone" : " Address"}`}
+                        // label="Email Address"
                         name="email"
                         autoComplete="email"
                         autoFocus
                       />
                       <div className='text-end'>
-                      { sendOTP && loginWithOTP ? 
-                      <Button
-                        type="submit"  
-                        variant="contained"
-                        disabled={isLoading}
-                        sx={{ mt: 1, mb: 1 }}
-                        className='bgPrimary btn-sm fs-10' 
-                      >
-                        Resend OTP
-                      </Button> : "" }
+                        {sendOTP && loginWithOTP ?
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={isLoading}
+                            sx={{ mt: 1, mb: 1 }}
+                            className='bgPrimary btn-sm fs-10'
+                          >
+                            Resend OTP
+                          </Button> : ""}
                       </div>
 
 
                       {!loginWithOTP &&
-                      <TextField
-                        margin="normal" 
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                      />}
-                      { sendOTP && loginWithOTP &&
-                      <TextField
-                        margin="normal" 
-                        fullWidth
-                        name="otp"
-                        label="OTP"
-                        type="number"
-                        id="otp"
+                        <TextField
+                          margin="normal"
+                          fullWidth
+                          name="password"
+                          label="Password"
+                          type="password"
+                          id="password"
+                          autoComplete="current-password"
+                        />}
+                      {sendOTP && loginWithOTP &&
+                        <TextField
+                          margin="normal"
+                          fullWidth
+                          name="otp"
+                          label="OTP"
+                          type="number"
+                          id="otp"
                         // autoComplete="current-password"
-                      />} 
-                      
+                        />}
+
                       <Button
                         type="submit"
                         fullWidth
@@ -244,14 +246,14 @@ export default function LogIn() {
                         disabled={isLoading}
                         sx={{ mt: 3, mb: 2 }}
                         className='bgPrimary'
-                        // onClick={(e)=>handleSubmit(e)}
+                      // onClick={(e)=>handleSubmit(e)}
                       >
                         {isLoading ? "Waiting..." : loginWithOTP && !sendOTP ? 'Send OTP' : "Log In"}
-                      </Button>  
+                      </Button>
                       <div className='text-end mb-2'>
                         {!loginWithOTP ?
-                        <span className='fs-14 text-primary pointer' onClick={()=>setLoginWithOTP(!loginWithOTP)}>Login with OTP</span> :
-                        <span className='fs-14 text-primary pointer' onClick={()=>setLoginWithOTP(!loginWithOTP)}>Login with Password</span>}
+                          <span className='fs-14 text-primary pointer' onClick={() => setLoginWithOTP(!loginWithOTP)}>Login with OTP</span> :
+                          <span className='fs-14 text-primary pointer' onClick={() => setLoginWithOTP(!loginWithOTP)}>Login with Password</span>}
                       </div>
                       <Grid container>
                         <Grid item xs>

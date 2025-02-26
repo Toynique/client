@@ -8,6 +8,7 @@ import { Url } from "../../url/url";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { addressdata } from "../../redux/slice/address";
+import UpdateUser from "../Utils/UpdateUser";
 
 const defaultValueObj = {"country": { value: 'IN', label: 'India', code: '+91' }, nearBy : "", receiver : "", address : "",  state : "", city : "", pincode : "",  primaryNumber : "", secondaryNumber : "" 
 }
@@ -69,9 +70,7 @@ const AddAddressModel = ({ show, handleClose }) => {
     userData = await JSON.parse(userData) 
     try {
         if(userData){ 
-        const response = await axios.post(`${Url}/api/address`, {...inputValue, userId : userData._id })
-        console.log(response);
-        dispatch(addressdata(userData._id))
+        const response = await axios.post(`${Url}/api/address`, {...inputValue, userId : userData._id }) 
         Swal.fire({
             position: "top-end",
             icon: "success",
@@ -81,6 +80,8 @@ const AddAddressModel = ({ show, handleClose }) => {
           });
         }
         setInputValue(defaultValueObj)
+        UpdateUser()
+        dispatch(addressdata(userData._id))
         handleClose()
     } catch (error) {
         console.log(error);

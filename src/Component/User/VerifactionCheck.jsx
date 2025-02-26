@@ -71,7 +71,8 @@ const VerifactionCheck = ()=>{
                 </Link>
             </div>
                         <h3>Verification Status : <span className='text-warning'>Pending</span></h3>
-                        <p>Please go to the your email and please verify your account</p>
+                        {/* <p>Please go to the your email and please verify your account</p> */}
+                        <p>Your email is not verified yet. Please check your inbox and click the verification link to activate your account. If you didn’t receive the email, check your spam folder or request a new verification email.</p>
                         <button className='btn btn-primary' onClick={e=>resendmail(id)}>Resend </button>
 
                         <div className="text-end mt-3">

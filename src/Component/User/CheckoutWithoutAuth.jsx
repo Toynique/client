@@ -11,6 +11,7 @@ import ReactCountryFlag from "react-country-flag";
 import axios from "axios";
 import { ClipLoader } from 'react-spinners';
 import { Url } from "../../url/url";
+import UpdateUser from "../Utils/UpdateUser";
 
 const userDefaultValue = { "country": { value: 'IN', label: 'India', code: '+91' } }
 const allStateArr = [
@@ -92,6 +93,7 @@ export default function CheckoutWithoutAuth() {
             localStorage.removeItem("userLoginData")
             localStorage.removeItem("guestUser")
             localStorage.removeItem("cartProducts")
+
         }
     }
 
@@ -296,6 +298,9 @@ export default function CheckoutWithoutAuth() {
             toast.error("error", { autoClose: 1500, })
             console.log("error", error);
 
+        }
+        finally{
+            UpdateUser()
         }
     }
 
